@@ -3,31 +3,46 @@ import 'dotenv/config'
 import connDb from './configs/connectdb.js'
 import userRouter from './routes/UserRoute.js'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
+import connectCloudinary from './configs/cloudinaryconnect.js'
+import sellerRouter from './routes/SellerRoute.js'
+import adminRouter from './routes/AdminRoute.js'
 
 const app = express()
-const PORT = process.env.PORT_NUMBER
-app.use()
+const PORT = process.env.PORT_NUMBER || 5000
 
-const multipleOrigins = ["http://localhost:5173"]
+// Middleware
+app.use(express.json()) 
+app.use(cookieParser())
 
-await connDb(cors({
-  origin : multipleOrigins,
-  credentials : true
-}))
+// CORS
+const allowedOrigins = ["http://localhost:5173", "http://localhost:3000"];
 
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
 
+// Connect to DB
+await connDb()
+await connectCloudinary()
 
-app.use('/api/user' , userRouter )
+// Routes
+app.use('/api/user', userRouter)
+app.use( '/api/seller' , sellerRouter )
+app.use('/api/admin' , adminRouter)
 
-
-app.get('/', (req,res)=>{
-  res.send("Sever is working fine")
+app.get('/', (req, res) => {
+  res.send("Server is working fine")
 })
 
-app.listen(PORT , ()=>{
-  console.log(`Server is Listening On PORT ${PORT} `);
+app.listen(PORT, () => {
+  console.log(`Server is Listening On PORT ${PORT}`)
 })
-
-
-
-

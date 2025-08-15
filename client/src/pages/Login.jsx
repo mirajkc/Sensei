@@ -4,33 +4,59 @@ import { useGoogleLogin } from '@react-oauth/google'
 import { toast } from 'react-hot-toast'
 import { FcGoogle } from "react-icons/fc"
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const Login = () => {
   const { theme } = useAppContext()
   const navigate = useNavigate()
+  const[loading, setLoading] = useState(false)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const googleLogin = useGoogleLogin({
-    flow: 'auth-code',
-    onSuccess: async (coderesponse) => {
-      const code = coderesponse.code
-      // handle google auth code here
-    },
-    onError: (error) => toast.error(`Error while Google login: ${error.message}`)
-  })
+const googleLogin = useGoogleLogin({
+  flow: 'auth-code',
+  onSuccess: async (coderesponse) => {
+    const code = coderesponse.code;
+    if (code) {
+      try {
+        setLoading(true);
+        const { data } = await axios.post('/api/user/logingoogle', { code });
+        if (!data.success) return toast.error(data.message);
+        window.location.href = '/home'
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  },
+  onError: (error) => toast.error(`Error while Google login: ${error.message}`)
+});
 
-  const handleSubmit = (e) => {
+
+  const defaultLogin = async(e) => {
     e.preventDefault()
     if (!email || !password) {
       toast.error('Please enter email and password')
       return
     }
-    // TODO: Add your login API call here
 
-    toast.success('Login submitted')
-    // On successful login, navigate or update context
+    try {
+      setLoading(true)
+      const {data} = await axios.post( '/api/user/logindefault' , { email , password }  )
+      if(!data.success){
+        return toast.error( data.message )
+      }else{
+        if(data.success){
+          window.location.href = '/home'
+        }
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }finally{
+      setLoading(fasle)
+    }
   }
 
   return (
@@ -46,7 +72,7 @@ const Login = () => {
       >
         <h1 className="text-2xl font-bold text-center">Welcome to Sensei</h1>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={defaultLogin} className="flex flex-col gap-4">
           {/* Email Field */}
           <div className="flex flex-col gap-2">
             <label className="font-medium" htmlFor="email">Email</label>
@@ -95,8 +121,8 @@ const Login = () => {
 
         {/* Links */}
         <div className="flex justify-between text-sm">
-          <button className="hover:underline" onClick={() => navigate('/home')}>Go to Home</button>
-          <button className="hover:underline" onClick={() => navigate('/signup')}>New in Sensei? Sign up</button>
+          <button className=" text-blue-400 hover:underline  " onClick={() => navigate('/home')}>Go to Home</button>
+          <button className=" text-blue-400 hover:underline" onClick={() => navigate('/signup')}>New in Sensei? Sign up</button>
         </div>
 
         {/* Google Login */}
@@ -109,7 +135,7 @@ const Login = () => {
               : 'bg-white border-gray-300 text-slate-800'}`}
         >
           <FcGoogle className="text-xl" />
-          Sign in with Google
+          Login with Google
         </button>
       </div>
     </div>

@@ -1,9 +1,29 @@
 import express from 'express'
-import { signIn } from '../controller/UserController.js'
+import {  defaultServerLogin, defaultServerSignUP, GoogleSignIn, loginWithGoogle } from '../controller/UserController.js'
+import multer from 'multer'
+import verifyUser from '../middleware/UserMiddleware.js'
+
+const upload = multer({ dest: 'uploads/' }) 
 const userRouter = express.Router()
 
-//* sign in user using the google
-userRouter.post('/signingoogle' , signIn )
+//* Sign in user using Google
+userRouter.post('/signingoogle', GoogleSignIn)
 
+//* Sign in using default server login
+//* Multer expects field name "image"
+userRouter.post('/signindefault', upload.single('image'), defaultServerSignUP)
+userRouter.post('/logingoogle' , loginWithGoogle )
+userRouter.post('/logindefault' , defaultServerLogin )
+
+userRouter.get( '/verifyUser' , verifyUser , (req,res)=>{
+  res.status(200).json({
+    success : true,
+    user : {
+      id : req.user._id,
+      name : req.user.name,
+      email : req.user.email
+    }
+  })
+})
 
 export default userRouter

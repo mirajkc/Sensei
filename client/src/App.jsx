@@ -6,19 +6,37 @@ import Navbar from './components/Navbar'
 import Landing from './pages/Landing'
 import SignUp from './pages/SignUp'
 import Login from './pages/Login'
-
+import  { Toaster } from 'react-hot-toast'
+import SellerHomePage from './pages/seller pages/SellerHomePage'
+import SellerSignUp from './pages/seller pages/SellerSignUp'
+import SellerLogin from './pages/seller pages/SellerLogin'
+import AdminHome from './pages/admin pages/AdminHome'
+import AdminLogin from './components/admin components/AdminLogin'
+import useAppContext from './context/AppContext'
 
 const App = () => {
-  return (
+  const { isAdmin } = useAppContext()
+  return  (
     <div>
       <Navbar />
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='/home' element={<HomePage />} />
-        <Route path='/signup' element={<SignUp/>} />
+        <Route path='/signup' element={ <SignUp /> } />
         <Route path='/login' element={<Login />} />
+        <Route path='/seller' element={ <SellerHomePage /> } />
+        <Route path='/seller/signup'  element={ <SellerSignUp />} />
+        <Route path='/seller/login' element={ <SellerLogin /> } />
+        <Route path='/admin' element={ isAdmin ? <AdminHome /> : <AdminLogin /> }/>
+
+        //temporary route
+        <Route path='/admin/login' element={<AdminLogin />  } />
       </Routes>
       <ThemeSwitch/>
+      <Toaster
+             position="top-right"
+             reverseOrder={false}
+      />
 
     </div>
   )
