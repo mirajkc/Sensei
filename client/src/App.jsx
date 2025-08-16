@@ -15,7 +15,7 @@ import AdminLogin from './components/admin components/AdminLogin'
 import useAppContext from './context/AppContext'
 
 const App = () => {
-  const { isAdmin } = useAppContext()
+  const { isAdmin,sellerLoggedIn } = useAppContext()
   return  (
     <div>
       <Navbar />
@@ -24,13 +24,10 @@ const App = () => {
         <Route path='/home' element={<HomePage />} />
         <Route path='/signup' element={ <SignUp /> } />
         <Route path='/login' element={<Login />} />
-        <Route path='/seller' element={ <SellerHomePage /> } />
+        <Route path='/seller' element={   sellerLoggedIn ?   <SellerHomePage /> : <SellerLogin /> } />
         <Route path='/seller/signup'  element={ <SellerSignUp />} />
         <Route path='/seller/login' element={ <SellerLogin /> } />
         <Route path='/admin' element={ isAdmin ? <AdminHome /> : <AdminLogin /> }/>
-
-        //temporary route
-        <Route path='/admin/login' element={<AdminLogin />  } />
       </Routes>
       <ThemeSwitch/>
       <Toaster

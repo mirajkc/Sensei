@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronDown, User, BookOpen, Settings, LogOut, Menu, X, Home } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import useAppContext from '../../context/AppContext'
 import toast from 'react-hot-toast'
 import nav_logo from '../../assets/navbar_logo.png'
+import {motion} from 'framer-motion'
 
 const SellerNavbar = () => {
   const { theme, sellerLoggedIn } = useAppContext()
@@ -23,7 +24,7 @@ const SellerNavbar = () => {
   }
 
   return (
-    <nav
+    <motion.nav
       className={`sticky top-0 z-50 border-b shadow-sm transition-colors duration-200 ${
         theme === 'dark'
           ? 'bg-gray-800 text-gray-200 border-gray-700'
@@ -59,114 +60,8 @@ const SellerNavbar = () => {
               className={`${linkBase} ${linkHover} flex items-center space-x-2`}
               onClick={() => navigate('/seller')}
             >
-              <Home className="w-4 h-4" />
-              <span>Home</span>
-            </button>
-          </div>
-
-          {/* Auth section */}
-          <div className="flex items-center space-x-4">
-            {sellerLoggedIn ? (
-              <div className="relative">
-                <button
-                  onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className={`flex items-center space-x-2 p-2 rounded-full transition-colors duration-200 ${
-                    theme === 'dark'
-                      ? 'hover:bg-gray-700'
-                      : 'hover:bg-gray-100'
-                  }`}
-                >
-                  <User className="w-5 h-5" />
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-
-                {isProfileOpen && (
-                  <div
-                    className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg z-50 ${
-                      theme === 'dark'
-                        ? 'bg-gray-800 border border-gray-700'
-                        : 'bg-white border border-gray-200'
-                    }`}
-                  >
-                    <div className="py-1">
-                      <button
-                        onClick={() => {
-                          navigate('/seller/profile')
-                          setIsProfileOpen(false)
-                        }}
-                        className={`flex items-center space-x-2 px-4 py-2 text-sm w-full text-left ${linkHover}`}
-                      >
-                        <User className="w-4 h-4" />
-                        <span>Seller Profile</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          navigate('/seller/courses')
-                          setIsProfileOpen(false)
-                        }}
-                        className={`flex items-center space-x-2 px-4 py-2 text-sm w-full text-left ${linkHover}`}
-                      >
-                        <BookOpen className="w-4 h-4" />
-                        <span>My Courses</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          navigate('/seller/settings')
-                          setIsProfileOpen(false)
-                        }}
-                        className={`flex items-center space-x-2 px-4 py-2 text-sm w-full text-left ${linkHover}`}
-                      >
-                        <Settings className="w-4 h-4" />
-                        <span>Settings</span>
-                      </button>
-                      <hr
-                        className={`my-1 ${
-                          theme === 'dark'
-                            ? 'border-gray-700'
-                            : 'border-gray-200'
-                        }`}
-                      />
-                      <button
-                        onClick={() => {
-                          handleLogout()
-                          setIsProfileOpen(false)
-                        }}
-                        className={`flex items-center space-x-2 px-4 py-2 text-sm w-full text-left ${linkHover} text-red-600`}
-                      >
-                        <LogOut className="w-4 h-4" />
-                        <span>Sign Out</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={() => navigate('/seller/login')}
-                  className={`${linkBase} ${linkHover}`}
-                >
-                  Log In
-                </button>
-                <button
-                  onClick={() => navigate('/seller/signup')}
-                  className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
-                >
-                  Sign Up
-                </button>
-              </div>
-            )}
-
-            {/* Mobile toggle */}
-            <button
-              className="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
             </button>
           </div>
         </div>
@@ -195,7 +90,7 @@ const SellerNavbar = () => {
                   setIsMobileMenuOpen(false)
                 }}
               >
-                <Home className="w-4 h-4" />
+                <LogOut className="w-4 h-4" />
                 <span>Home</span>
               </button>
 
@@ -225,7 +120,7 @@ const SellerNavbar = () => {
           </div>
         )}
       </div>
-    </nav>
+    </motion.nav>
   )
 }
 

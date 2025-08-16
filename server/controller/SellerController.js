@@ -66,7 +66,7 @@ export const sellerSignUp = async (req, res) => {
 
     res.cookie("sellerToken", sellerToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -119,7 +119,7 @@ export const sellerLogin = async (req, res) => {
 
     res.cookie("sellerToken", sellerToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });

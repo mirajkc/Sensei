@@ -64,7 +64,7 @@ export const GoogleSignIn = async (req, res) => {
     // Send cookie
     res.cookie('userToken', userToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -152,7 +152,7 @@ export const defaultServerSignUP = async (req, res) => {
     // Send cookie
     res.cookie('userToken', userToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -227,7 +227,7 @@ export const loginWithGoogle = async (req, res) => {
 
     res.cookie("userToken", userToken, {
       httpOnly: true,
-       secure: false,
+       secure: true,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -291,7 +291,7 @@ export const defaultServerLogin = async (req, res) => {
     const userToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
     res.cookie( "userToken" , userToken , {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     })
