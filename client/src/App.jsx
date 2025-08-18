@@ -13,6 +13,7 @@ import SellerLogin from './pages/seller pages/SellerLogin'
 import AdminHome from './pages/admin pages/AdminHome'
 import AdminLogin from './components/admin components/AdminLogin'
 import useAppContext from './context/AppContext'
+import AddNewCourse from './pages/seller pages/AddNewCourse'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -24,10 +25,15 @@ const App = () => {
         <Route path='/home' element={<HomePage />} />
         <Route path='/signup' element={ <SignUp /> } />
         <Route path='/login' element={<Login />} />
+        <Route path='/admin' element={ isAdmin ? <AdminHome /> : <AdminLogin /> }/>
+
+        //* all seller routes 
         <Route path='/seller' element={   sellerLoggedIn ?   <SellerHomePage /> : <SellerLogin /> } />
         <Route path='/seller/signup'  element={ <SellerSignUp />} />
         <Route path='/seller/login' element={ <SellerLogin /> } />
-        <Route path='/admin' element={ isAdmin ? <AdminHome /> : <AdminLogin /> }/>
+        <Route path='/seller/addcourse' element={ <AddNewCourse /> } />
+        
+
       </Routes>
       <ThemeSwitch/>
       <Toaster

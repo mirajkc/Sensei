@@ -26,7 +26,7 @@ export const sellerSignUp = async (req, res) => {
     if (seller) {
       return res.status(200).json({
         success: false,
-        message: "User already exists, please log in instead"
+        message: "Seller already exists, please log in instead"
       });
     }
 

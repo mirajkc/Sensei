@@ -1,9 +1,4 @@
-import React from "react";
-import SellerNavbar from "../../components/seller components/SellerNavbar";
-import SellerSidebar from "../../components/seller components/SellerSidebar";
-
-const SellerHomePage = () => {
-   const code = `import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 //* Lesson sub-schema
 const lessonSchema = new mongoose.Schema({ 
@@ -37,8 +32,11 @@ const courseSchema = new mongoose.Schema({
   lessons: [lessonSchema],
   price: { type: Number, required: true },
   discountedPrice : {type : Number , required : true},
+
+  //* Auto-calculated fields
   totalHours: { type: Number, default: 0 },
   totalNumberOfLessons: { type: Number, default: 0 },
+
   seller: { type: mongoose.Schema.Types.ObjectId, ref: "Seller", required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
@@ -56,22 +54,4 @@ courseSchema.pre("save", function(next) {
 });
 
 const Course = mongoose.models.Course || mongoose.model("Course", courseSchema);
-export default Course;`;
-
-  return (
-    <div className="flex flex-col h-screen">
-      <SellerNavbar />
-      <div className="flex flex-1">
-        <SellerSidebar />
-        <div className="flex-1 p-6 bg-gray-100 overflow-y-auto">
-          <h2 className="text-2xl font-semibold">Seller Dashboard</h2>
-          <pre>
-      <code>{code}</code>
-    </pre>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default SellerHomePage;
+export default Course;
