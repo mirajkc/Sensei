@@ -5,21 +5,21 @@ import { Home, GraduationCap, UsersRound, BookPlus, Menu, X, Settings } from "lu
 
 const categories = [
   { name: "Dashboard", icon: <Home size={20} />, route: "/seller" },
-  { name: "Courses", icon: <GraduationCap size={20} />, route: "/course" },
+  { name: "Courses", icon: <GraduationCap size={20} />, route: "/seller/allcourse" },
   { name: "Enrolled Students", icon: <UsersRound size={20} />, route: "/students" },
   { name: "Add New Course", icon: <BookPlus size={20} />, route: "/seller/addcourse" },
   { name: "Settings", icon: <Settings size={20} />, route: "/settings" },
 ];
 
-const SellerSidebar = () => {
+const SellerSidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(true);
   const { theme } = useAppContext();
 
   return (
     <div
-      className={`  h-screen flex flex-col shadow-lg transition-all duration-300
+      className={`
+        h-full flex flex-col shadow-lg transition-all duration-300
         ${theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"}
       `}
       style={{ width: isOpen ? "250px" : "70px" }}
@@ -37,14 +37,14 @@ const SellerSidebar = () => {
       </div>
 
       {/* Menu Items */}
-      <nav className="flex-1 mt-4">
+      <nav className="flex-1 mt-4 overflow-y-auto">
         {categories.map((item, i) => {
           const isActive = location.pathname === item.route;
           return (
             <div
               key={i}
               onClick={() => navigate(item.route)}
-              className={`flex items-center gap-3 px-4 py-2 cursor-pointer rounded-md transition-colors
+              className={`flex items-center gap-3 px-4 py-2 cursor-pointer rounded-md transition-colors mx-2
                 ${
                   isActive
                     ? theme === "dark"

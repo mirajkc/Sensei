@@ -39,7 +39,7 @@ const courseSchema = new mongoose.Schema({
 
   seller: { type: mongoose.Schema.Types.ObjectId, ref: "Seller", required: true },
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  updatedAt: { type: Date, default: Date.now } 
 });
 
 //* Middleware to auto-calculate fields
@@ -49,9 +49,10 @@ courseSchema.pre("save", function(next) {
   this.updatedAt = new Date();
   this.lessons.forEach((lesson, index) => {
     lesson.lessonNumber = index + 1; 
-  });
+  }); //* automatically add the lesson number
   next();
 });
 
 const Course = mongoose.models.Course || mongoose.model("Course", courseSchema);
 export default Course;
+ 
