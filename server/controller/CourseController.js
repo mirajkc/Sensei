@@ -299,7 +299,7 @@ export const deleteCourseById = async (req, res) => {
 export const addNewLesson = async (req, res) => {
   try {
     //* get the seller id from middleware
-    const { sellerId } = req.seller;
+    const  sellerId  = req.seller._id;
     if (!sellerId) {
       return res.status(200).json({
         success: false,
@@ -408,3 +408,168 @@ export const getAllLessonByCourseIdForSeller = async (req, res) => {
     });
   }
 };
+
+
+//* controller to get all lesson data by lessonId 
+//* Controller to get all lesson data by lessonId 
+export const getLessonDetailById = async (req, res) => {
+  try {
+    const { courseId, lessonId } = req.params
+
+    if (!courseId || !lessonId) {
+      return res.status(400).json({
+        success: false,
+        message: "Error !! courseId or lessonId is missing"
+      })
+    }
+
+    //* Find the course first
+    const course = await Course.findById(courseId)
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found"
+      })
+    }
+
+    //* Find the lesson inside the course.lessons array
+    const lesson = course.lessons.id(lessonId) 
+    if (!lesson) {
+      return res.status(404).json({
+        success: false,
+        message: "Lesson not found, please provide valid lessonId"
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      lesson
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Server error !! ${error.message}`
+    })
+  }
+}
+
+
+//* controller to edit the lesson  by course id and lesson id 
+export const editLessonById = async (req, res) => {
+  try {
+    const sellerId = req.seller?._id;
+    if (!sellerId) {
+      return res.status(401).json({
+        success: false,
+        message: "Seller not authenticated. Please refresh or re-login.",
+      });
+    }
+
+    const { courseId, lessonId } = req.params;
+    if (!courseId || !lessonId) {
+      return res.status(400).json({
+        success: false,
+        message: "Course ID and Lesson ID are required.",
+      });
+    }
+
+    //* Check if the seller owns the course
+    const course = await Course.findOne({ _id: courseId, seller: sellerId });
+    if (!course) {
+      return res.status(403).json({
+        success: false,
+        message: "Only the owner can edit lessons.",
+      });
+    }
+
+    //* Find the lesson inside the course
+    const lesson = course.lessons.id(lessonId);
+    if (!lesson) {
+      return res.status(404).json({
+        success: false,
+        message: "Lesson not found.",
+      });
+    }
+
+    //* Destructure request body
+    const { title, description, whatYouWillLearn, lessonDuration, textGuide, videoGuide } = req.body;
+
+    //* Update only provided fields
+    if (title) lesson.title = title;
+    if (description) lesson.description = description;
+    if (whatYouWillLearn) lesson.whatYouWillLearn = whatYouWillLearn;
+    if (lessonDuration) lesson.lessonDuration = lessonDuration;
+    if (textGuide) lesson.textGuide = textGuide;
+    if (videoGuide) lesson.videoGuide = videoGuide;
+
+    await course.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Lesson successfully updated.",
+      lesson,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Server error: ${error.message}`,
+    });
+  }
+};
+
+//* contoller to delete the lesson by Id 
+export const deleteLessonById = async (req, res) => {
+  try {
+    //* Authenticate the seller
+    const sellerId = req.seller._id
+    if (!sellerId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unable to authenticate seller. Please reload the page or relogin."
+      })
+    }
+
+    const { courseId, lessonId } = req.params
+    if (!courseId || !lessonId) {
+      return res.status(400).json({
+        success: false,
+        message: "Unable to get lesson and course details."
+      })
+    }
+
+    //* Check if course exists
+    const course = await Course.findById(courseId)
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found or it has been deleted."
+      })
+    }
+
+    //* Check if lesson exists
+    const lesson = course.lessons.id(lessonId)
+    if (!lesson) {
+      return res.status(404).json({
+        success: false,
+        message: "Lesson not found or it has been deleted."
+      })
+    }
+
+    //* Delete the lesson
+    lesson.remove()
+    await course.save()
+
+    return res.status(200).json({
+      success: true,
+      message: "Lesson deleted successfully."
+    })
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: `Server error: ${error.message}`
+    })
+  }
+}
