@@ -61,11 +61,10 @@ const SellerSetting = () => {
       setLocation(seller.location || "");
       setContactNumber(seller.contactNumber || "");
       setWebsite(seller.socialLinks?.website || "");
-setLinkedin(seller.socialLinks?.linkedin || "");
-setGithub(seller.socialLinks?.github || "");
-setTwitter(seller.socialLinks?.twitter || "");
-setYoutube(seller.socialLinks?.youtube || "");
-
+      setLinkedin(seller.socialLinks?.linkedin || "");
+      setGithub(seller.socialLinks?.github || "");
+      setTwitter(seller.socialLinks?.twitter || "");
+      setYoutube(seller.socialLinks?.youtube || "");
     } catch (error) {
       toast.error(error.message);
     } finally {
