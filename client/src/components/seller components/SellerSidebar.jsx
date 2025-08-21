@@ -8,7 +8,7 @@ const categories = [
   { name: "Courses", icon: <GraduationCap size={20} />, route: "/seller/allcourse" },
   { name: "Enrolled Students", icon: <UsersRound size={20} />, route: "/students" },
   { name: "Add New Course", icon: <BookPlus size={20} />, route: "/seller/addcourse" },
-  { name: "Settings", icon: <Settings size={20} />, route: "/settings" },
+  { name: "Settings", icon: <Settings size={20} />, route: "/seller/settings" },
 ];
 
 const SellerSidebar = ({ isOpen, setIsOpen }) => {

@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { sellerLogin, sellerSignUp } from '../controller/SellerController.js';
+import { getSellerDetailsBySellerId, sellerLogin, sellerSignUp, updateSellerDetails } from '../controller/SellerController.js';
 import verifySeller from '../middleware/SellerMiddleware.js';
 
 const sellerRouter = express.Router();
@@ -16,4 +16,8 @@ sellerRouter.get('/authseller', verifySeller, (req, res) => {
     seller: req.seller 
   });
 });
+
+sellerRouter.get('/getsellerbyid' , verifySeller , getSellerDetailsBySellerId )
+sellerRouter.post('/updateseller' , verifySeller , upload.single('image') ,  updateSellerDetails )
+
 export default sellerRouter;

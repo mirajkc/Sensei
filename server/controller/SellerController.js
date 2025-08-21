@@ -3,6 +3,7 @@ import Seller from "../models/SellerModel.js";
 import cloudinary from 'cloudinary';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { log } from "console";
 
 export const sellerSignUp = async (req, res) => {
   try {
@@ -136,3 +137,154 @@ export const sellerLogin = async (req, res) => {
     });
   }
 }
+
+// * Get seller details by seller ID (middleware ensures req.seller exists)
+export const getSellerDetailsBySellerId = async (req, res) => {
+  try {
+    const sellerId = req.seller?._id;
+
+    if (!sellerId) {
+      return res.status(200).json({
+        success: false,
+        message: "Unable to retrieve seller data. Please reload or relogin.",
+      });
+    }
+
+    // * Check if the seller exists in the database
+    const seller = await Seller.findById(sellerId)
+    if (!seller) {
+      return res.status(200).json({
+        success: false,
+        message: "Seller profile not found. Please create your seller account first.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      seller,
+    });
+  } catch (error) {
+    console.error("Error fetching seller details:", error);
+    return res.status(200).json({
+      success: false,
+      message: "Server error. Please try again later.",
+      error: error.message,
+    });
+  }
+};
+
+
+//* update the seller details 
+export const updateSellerDetails = async (req, res) => {
+  try {
+    const sellerId = req.seller?._id;
+
+    if (!sellerId) {
+      return res.status(200).json({
+        success: false,
+        message: "Unable to retrieve seller data. Please reload or relogin.",
+      });
+    }
+
+    // * Find seller in DB
+    const seller = await Seller.findById(sellerId);
+    if (!seller) {
+      return res.status(200).json({
+        success: false,
+        message: "Seller profile not found. Please create your seller account first.",
+      });
+    }
+
+    //* get data from client
+    const {
+      name,
+      oldPassword,
+      newPassword1,
+      newPassword2,
+      bio,
+      specialization,
+      qualification,
+      experience,
+      location,
+      contactNumber,
+      website,
+      linkedin,
+      github,
+      twitter,
+      youtube,
+    } = req.body;
+
+    if (name?.length === 0) {
+      return res.status(200).json({
+        success: false,
+        message: "Name cannot be empty.",
+      });
+    }
+
+    let imageUrl = seller.image;
+
+    //* Handle image upload if new image provided
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "Sensei_all_images",
+        use_filename: true,
+        unique_filename: false,
+      });
+      fs.unlinkSync(req.file.path);
+      imageUrl = result.secure_url;
+    }
+
+    //* Handle password change
+    if (newPassword1 && newPassword1.length > 0) {
+      const isMatch = await bcrypt.compare(oldPassword, seller.password);
+      if (!isMatch) {
+        return res.status(200).json({
+          success: false,
+          message: "Incorrect old password.",
+        });
+      }
+
+      if (newPassword1 !== newPassword2) {
+        return res.status(200).json({
+          success: false,
+          message: "New passwords do not match.",
+        });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword1, 10);
+      seller.password = hashedPassword;
+    }
+
+    //* Update other fields
+    seller.name = name || seller.name;
+    seller.image = imageUrl;
+    seller.bio = bio || seller.bio;
+    seller.specialization = specialization || seller.specialization;
+    seller.qualification = qualification || seller.qualification;
+    seller.experience = experience || seller.experience;
+    seller.location = location || seller.location;
+    seller.contactNumber = contactNumber || seller.contactNumber;
+
+    seller.socialLinks = {
+      website: website || seller.socialLinks.website,
+      linkedin: linkedin || seller.socialLinks.linkedin,
+      github: github || seller.socialLinks.github,
+      twitter: twitter || seller.socialLinks.twitter,
+      youtube: youtube || seller.socialLinks.youtube,
+    };
+
+    await seller.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Information updated successfully",
+    });
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      success: false,
+      message: `Server error: ${error.message}`,
+    });
+  }
+};
