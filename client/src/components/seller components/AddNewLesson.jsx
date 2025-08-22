@@ -177,7 +177,7 @@ const AddNewLesson = ({ courseId }) => {
                       <td className={tdClass}>{lesson.lessonNumber}</td>
                       <td className={tdClass}>{lesson.title}</td>
                       <td className={tdClass}>
-                        {lesson.lessonDuration ? `${lesson.lessonDuration} min` : 'Not specified'}
+                        {lesson.lessonDuration ? `${lesson.lessonDuration} hr` : 'Not specified'}
                       </td>
                       <td className={tdClass}>
                         <div className="flex gap-2">

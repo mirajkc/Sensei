@@ -46,3 +46,35 @@ export const adminLogin = async (req, res) => {
     });
   }
 };
+
+export const adminLogout = async (req, res) => {
+  try {
+    const email = req.admin?.email;
+
+    if (!email) {
+      return res.status(200).json({
+        success: false,
+        message: "Admin not authenticated. Please relogin or reload the page.",
+      });
+    }
+
+    res.clearCookie("adminToken", {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Successfully logged out",
+    });
+
+  } catch (error) {
+    console.error("Logout Error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: `Server error: ${error.message}`,
+    });
+  }
+};
+

@@ -212,7 +212,7 @@ const EditLesson = () => {
 
             <div>
               <label className={labelClass}>
-                Lesson Duration (minutes) <span className="text-red-500">*</span>
+                Lesson Duration (hours) <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"

@@ -1,5 +1,5 @@
 import express from 'express'
-import { adminLogin } from '../controller/AdminController.js'
+import { adminLogin, adminLogout } from '../controller/AdminController.js'
 import verifyAdmin from '../middleware/AdminMiddleware.js'
 
 const adminRouter = express.Router()
@@ -14,5 +14,7 @@ adminRouter.get('/verifyadmin' , verifyAdmin , (req,res)=>{
     admin  : req.admin
   });
 } )
+
+adminRouter.get('/logoutseller' , verifyAdmin , adminLogout )
 
 export default  adminRouter

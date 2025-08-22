@@ -21,6 +21,7 @@ import SellerSetting from './pages/seller pages/SellerSetting'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
+  
   return  (
     <div>
       <Navbar />
@@ -29,6 +30,8 @@ const App = () => {
         <Route path='/home' element={<HomePage />} />
         <Route path='/signup' element={ <SignUp /> } />
         <Route path='/login' element={<Login />} />
+
+        //* all admin routes 
         <Route path='/admin' element={ isAdmin ? <AdminHome /> : <AdminLogin /> }/>
 
         //* all seller routes 

@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LogOut, Menu, X } from 'lucide-react'
+import { LogOut, Menu, X , Home} from 'lucide-react'
 import useAppContext from '../../context/AppContext'
 import toast from 'react-hot-toast'
 import nav_logo from '../../assets/navbar_logo.png'
 import { motion } from 'framer-motion'
+import axios from 'axios'
 
 const SellerNavbar = () => {
   const { theme, sellerLoggedIn } = useAppContext()
@@ -16,9 +17,18 @@ const SellerNavbar = () => {
   const linkHover =
     theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
 
-  const handleLogout = () => {
-    toast.success('Logged out successfully')
-    navigate('/seller/login')
+  const handleLogout = async() => {
+    try {
+      const {data} = await axios.get('/api/seller/sellerlogout')
+      if(!data.success){
+        return toast.error(data.message)
+      }
+
+      toast.success(data.message)
+      window.location.pathname = ('/home')
+    } catch (error) {
+      
+    }
   }
 
   const toggleMobileMenu = () => {
@@ -33,7 +43,7 @@ const SellerNavbar = () => {
           : 'bg-white text-slate-800 border-gray-200'
       }`}
     >
-      <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="max-w-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div
@@ -57,6 +67,15 @@ const SellerNavbar = () => {
           </div>
 
           {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-4">
+            <button
+              className={`${linkBase} ${linkHover} flex items-center space-x-2`}
+              onClick={()=>navigate('/home')}
+            >
+              <Home className="w-4 h-4" />
+              <span>Home</span>
+            </button>
+          </div>
           <div className="hidden md:flex items-center space-x-4">
             <button
               className={`${linkBase} ${linkHover} flex items-center space-x-2`}

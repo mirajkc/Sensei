@@ -288,3 +288,35 @@ export const updateSellerDetails = async (req, res) => {
     });
   }
 };
+
+//* logout the seller 
+export const sellerLogout = async (req, res) => {
+  try {
+    const sellerId = req.seller?._id;
+    if (!sellerId) {
+      return res.status(200).json({
+        success: false,
+        message: "Seller not authenticated. Please relogin or reload the page."
+      });
+    }
+
+    //* Clear cookie with same options used while setting
+    res.clearCookie("sellerToken", {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Successfully logged out"
+    });
+
+  } catch (error) {
+    console.error("Logout error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: `Server error: ${error.message}`
+    });
+  }
+};

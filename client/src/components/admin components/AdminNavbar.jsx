@@ -1,14 +1,28 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronDown, User, BookOpen, Settings, LogOut, Menu, X, Home } from 'lucide-react'
+import { ChevronDown, User, BookOpen, Settings, LogOut, Menu, X, Home, ReceiptTurkishLira } from 'lucide-react'
 import useAppContext from '../../context/AppContext'
 import toast from 'react-hot-toast'
 import nav_logo from '../../assets/navbar_logo.png'
+import axios from 'axios'
 
 const AdminNavbar = () => {
-  const { theme, sellerLoggedIn } = useAppContext()
+  const { theme, isAdmin } = useAppContext()
   const navigate = useNavigate()
 
+
+  const logoutAdmin = async() => {
+    try {
+      const {data} = await axios.get('/api/admin/logoutseller')
+      if(!data.success){
+        return toast.error(data.message)
+      }
+      toast.success(data.message)
+      window.location.pathname = ('/home')
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
 
   const linkBase =
     'px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200'
@@ -54,6 +68,13 @@ const AdminNavbar = () => {
             >
               <Home className="w-4 h-4" />
               <span>Home</span>
+            </button>
+            <button
+              className={`${linkBase} ${linkHover} flex items-center space-x-2`}
+              onClick={logoutAdmin}
+            >
+              <LogOut className="w-4 h-4" />
+              <span>LogOut</span>
             </button>
           </div>
         </div>

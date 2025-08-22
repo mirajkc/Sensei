@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { Search, ChevronDown, User, BookOpen, Settings, LogOut, Menu, X } from 'lucide-react'
 import nav_logo from '../assets/navbar_logo.png'
 import useAppContext from '../context/AppContext'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 
 
 const Navbar = () => {
@@ -15,6 +17,22 @@ const Navbar = () => {
   if (['/login', '/signup'].includes(location.pathname)) return null;
   if (location.pathname.startsWith('/seller')) return null;
   if(location.pathname.startsWith('/admin')) return null
+
+  const logoutUser = async () => {
+    try {
+      const {data} = await axios.get('/api/user/logoutuser')
+      if(!data){
+        return toast.error(data.message)
+      }
+
+      toast.success(data.message)
+      window.location.pathname = ('/home')
+      
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
 
   const linkBase =
     'px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200'
@@ -143,8 +161,8 @@ const Navbar = () => {
                         }`}
                       />
                       <a
-                        href="#"
-                        className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover} text-red-600`}
+                        onClick={logoutUser}
+                        className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover} text-red-600 cursor-pointer `}
                       >
                         <LogOut className="w-4 h-4" />
                         <span>Sign Out</span>

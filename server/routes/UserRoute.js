@@ -1,5 +1,5 @@
 import express from 'express'
-import {  defaultServerLogin, defaultServerSignUP, GoogleSignIn, loginWithGoogle } from '../controller/UserController.js'
+import {  defaultServerLogin, defaultServerSignUP, GoogleSignIn, loginWithGoogle, userLogOut } from '../controller/UserController.js'
 import multer from 'multer'
 import verifyUser from '../middleware/UserMiddleware.js'
 
@@ -14,6 +14,7 @@ userRouter.post('/signingoogle', GoogleSignIn)
 userRouter.post('/signindefault', upload.single('image'), defaultServerSignUP)
 userRouter.post('/logingoogle' , loginWithGoogle )
 userRouter.post('/logindefault' , defaultServerLogin )
+userRouter.get('/logoutuser' , verifyUser , userLogOut )
 
 userRouter.get( '/verifyUser' , verifyUser , (req,res)=>{
   res.status(200).json({

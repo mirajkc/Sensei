@@ -77,14 +77,15 @@ export const AppContextContainer = ({ children }) => {
       if(!data.success){
         console.log(data.message);
         setIsAdmin(false)
+      }else{
+        setIsAdmin(true)
       }
-      setIsAdmin(true)
       setAdminData(data.admin)
     } catch (error) {
        console.log(error.message);
     }
   }
-
+  
   useEffect(() => {
     authenticateUser();
     authenticateSeller();

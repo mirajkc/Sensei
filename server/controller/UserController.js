@@ -311,3 +311,43 @@ export const defaultServerLogin = async (req, res) => {
   }
 };
 
+//* logout the user 
+export const userLogOut = async (req, res) => {
+  try {
+    const userId = req.user?._id;
+
+    if (!userId) {
+      return res.status(200).json({
+        success: false,
+        message: "User not authenticated, please relogin or reload the page",
+      });
+    }
+
+    //* check if the user exists in the database 
+    const user = await User.findById(userId);
+    if (!user) {  
+      return res.status(200).json({
+        success: false,
+        message: "User not found, please login first",
+      });
+    }
+
+    //* if user exists in the database 
+    res.clearCookie("userToken", {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Successfully logged out",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      success: false,
+      message: `Server error: ${error.message}`,
+    });
+  }
+};
