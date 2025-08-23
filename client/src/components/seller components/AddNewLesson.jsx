@@ -254,29 +254,31 @@ const AddNewLesson = ({ courseId }) => {
             <label className={labelClass}>
               What You Will Learn <span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
+            <textarea
               value={whatYouWillLearn}
               onChange={(e) => setWhatYouWillLearn(e.target.value)}
-              placeholder="e.g., You will learn about C++ loops and variables"
-              className={inputClass}
+              placeholder="Provide detailed text instructions for this lesson..."
+              className={textareaClass}
               required
             />
           </div>
 
           <div>
             <label className={labelClass}>
-              Lesson Duration (minutes) <span className="text-red-500">*</span>
+              Lesson Duration (Enter in minutes !! please note that your input will automatically converted into hour) <span className="text-red-500">*</span>
             </label>
-            <input
-              type="number"
-              value={lessonDuration}
-              onChange={(e) => setLessonDuration(e.target.value)}
-              placeholder="e.g., 30"
-              min="1"
-              className={inputClass}
-              required
-            />
+                            <input
+  type="text"
+  value={lessonDuration}  
+  onChange={(e) => {
+    const minutes = Number(e.target.value)
+    const hours = (minutes / 60).toFixed(2) 
+    setLessonDuration(Number(hours))
+  }}
+  placeholder="e.g., 7 (minutes)"
+  min="0"
+  className={inputClass}
+/>
           </div>
 
           <div>

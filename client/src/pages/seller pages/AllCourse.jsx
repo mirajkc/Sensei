@@ -309,18 +309,24 @@ const SellerCoursesTable = () => {
                   </div>
                   
                   <div className={`${cardClass} p-4`}>
-                    <div className="flex items-center">
-                      <div className="p-2 bg-green-100 rounded-lg">
-                        <DollarSign className="w-6 h-6 text-green-600" />
-                      </div>
-                      <div className="ml-3">
-                        <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-                        <p className="text-2xl font-bold text-green-600">
-                          {formatPrice(courses.reduce((sum, course) => sum + course.price, 0))}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+  <div className="flex items-center">
+    <div className="p-2 bg-green-100 rounded-lg">
+      <DollarSign className="w-6 h-6 text-green-600" />
+    </div>
+    <div className="ml-3">
+      <p className="text-sm font-medium text-gray-500">Total Revenue</p>
+      <p className="text-2xl font-bold text-green-600">
+        {formatPrice(courses.reduce((sum, course) => {
+          // Use discounted price if it exists and is less than original price
+          const effectivePrice = course.discountedPrice && course.discountedPrice < course.price 
+            ? course.discountedPrice 
+            : course.price;
+          return sum + effectivePrice;
+        }, 0))}
+      </p>
+    </div>
+  </div>
+</div>
                   
                   <div className={`${cardClass} p-4`}>
                     <div className="flex items-center">
@@ -415,16 +421,24 @@ const SellerCoursesTable = () => {
                                   {course.category}
                                 </span>
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium">
-                                  {formatPrice(course.price)}
-                                </div>
-                                {course.discountedPrice && course.discountedPrice < course.price && (
-                                  <div className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'} line-through`}>
-                                    {formatPrice(course.discountedPrice)}
-                                  </div>
-                                )}
-                              </td>
+                                 <td className="px-6 py-4 whitespace-nowrap">
+  {course.discountedPrice && course.discountedPrice < course.price ? (
+    // Show discounted price scenario
+    <>
+      <div className="text-sm font-medium text-green-600">
+        {formatPrice(course.discountedPrice)}
+      </div>
+      <div className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'} line-through`}>
+        {formatPrice(course.price)}
+      </div>
+    </>
+  ) : (
+    // Show regular price
+    <div className="text-sm font-medium">
+      {formatPrice(course.price)}
+    </div>
+  )}
+</td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm">
                                 {course.totalNumberOfLessons} lessons
                               </td>

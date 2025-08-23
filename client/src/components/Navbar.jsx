@@ -5,6 +5,7 @@ import nav_logo from '../assets/navbar_logo.png'
 import useAppContext from '../context/AppContext'
 import toast from 'react-hot-toast'
 import axios from 'axios'
+import {motion} from 'framer-motion'
 
 
 const Navbar = () => {
@@ -41,7 +42,11 @@ const Navbar = () => {
     theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
 
   return (
-    <nav
+    <div className={`${ theme === "dark" ? 'bg-gray-800' : 'bg-white' }`}  >
+          <motion.nav
+       initial={{ y: -100 }}
+       animate={{ y: 0 }}
+       transition={{ duration: 0.8 }}
       className={`sticky top-0 z-50 border-b shadow-sm transition-colors duration-200 ${
         theme === 'dark'
           ? 'bg-gray-800 text-gray-200 border-gray-700'
@@ -307,7 +312,8 @@ const Navbar = () => {
           </div>
         )}
       </div>
-    </nav>
+    </motion.nav>
+    </div>
   )
 }
 

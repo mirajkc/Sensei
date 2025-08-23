@@ -14,19 +14,33 @@ const Landing = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { duration: 0.6, staggerChildren: 0.2 }
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.2
+      }
     }
   }
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6 }
+    }
   }
 
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.8 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
-    hover: { scale: 1.05, transition: { duration: 0.2 } }
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.5 }
+    },
+    hover: {
+      scale: 1.05,
+      transition: { duration: 0.2 }
+    }
   }
 
   const features = [
@@ -146,12 +160,12 @@ const Landing = () => {
         className="pt-24 pb-16"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div variants={itemVariants} className="space-y-8">
-              <div className="space-y-4">
+          <div className="grid xl:grid-cols-2 gap-12 xl:gap-16 items-center">
+            <motion.div variants={itemVariants} className="space-y-6 xl:space-y-8">
+              <div className="space-y-4 xl:space-y-6">
                 <motion.h1 
                   variants={itemVariants}
-                  className="text-4xl md:text-6xl font-bold leading-tight"
+                  className="text-4xl md:text-5xl xl:text-7xl font-bold leading-tight"
                 >
                   Start Learning{' '}
                   <motion.span 
@@ -170,7 +184,7 @@ const Landing = () => {
                 </motion.h1>
                 <motion.p 
                   variants={itemVariants}
-                  className={`text-xl leading-relaxed ${
+                  className={`text-lg xl:text-xl leading-relaxed ${
                     theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
                   }`}
                 >
@@ -181,66 +195,66 @@ const Landing = () => {
               
               <motion.div 
                 variants={itemVariants}
-                className="flex flex-col sm:flex-row gap-4"
+                className="flex flex-col sm:flex-row gap-4 xl:gap-6"
               >
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+                  className="bg-blue-600 text-white px-8 xl:px-10 py-4 xl:py-5 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2 text-lg xl:text-xl font-semibold"
                 >
                   <span>Get Started</span>
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-5 h-5 xl:w-6 xl:h-6" />
                 </motion.button>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`px-8 py-4 rounded-lg border-2 transition-colors flex items-center justify-center space-x-2 ${
+                  className={`px-8 xl:px-10 py-4 xl:py-5 rounded-lg border-2 transition-colors flex items-center justify-center space-x-2 text-lg xl:text-xl font-medium ${
                     theme === 'dark' 
                       ? 'border-gray-600 hover:border-white hover:bg-gray-800' 
                       : 'border-gray-300 hover:border-gray-900 hover:bg-gray-50'
                   }`}
                 >
-                  <Play className="w-5 h-5" />
+                  <Play className="w-5 h-5 xl:w-6 xl:h-6" />
                   <span>Watch Demo</span>
                 </motion.button>
               </motion.div>
 
               <motion.div 
                 variants={itemVariants}
-                className="grid grid-cols-3 gap-8 pt-8 border-t border-gray-200 dark:border-gray-700"
+                className="grid grid-cols-3 gap-6 xl:gap-8 pt-6 xl:pt-8 border-t border-gray-200 dark:border-gray-700"
               >
                 <motion.div whileHover={{ scale: 1.05 }} className="text-center">
                   <motion.div 
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 1, duration: 0.5 }}
-                    className="text-3xl font-bold text-blue-600"
+                    className="text-2xl xl:text-4xl font-bold text-blue-600"
                   >
                     50K+
                   </motion.div>
-                  <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Students</div>
+                  <div className={`text-xs xl:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Students</div>
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.05 }} className="text-center">
                   <motion.div 
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 1.2, duration: 0.5 }}
-                    className="text-3xl font-bold text-blue-600"
+                    className="text-2xl xl:text-4xl font-bold text-blue-600"
                   >
                     200+
                   </motion.div>
-                  <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Courses</div>
+                  <div className={`text-xs xl:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Courses</div>
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.05 }} className="text-center">
                   <motion.div 
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 1.4, duration: 0.5 }}
-                    className="text-3xl font-bold text-blue-600"
+                    className="text-2xl xl:text-4xl font-bold text-blue-600"
                   >
                     4.9
                   </motion.div>
-                  <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Rating</div>
+                  <div className={`text-xs xl:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Rating</div>
                 </motion.div>
               </motion.div>
             </motion.div>
@@ -265,23 +279,23 @@ const Landing = () => {
               />
               <motion.div 
                 whileHover={{ scale: 1.05 }}
-                className={`relative rounded-3xl p-8 backdrop-blur-sm ${
+                className={`relative rounded-3xl p-6 xl:p-10 backdrop-blur-sm ${
                   theme === 'dark' ? 'bg-gray-800/80 border border-gray-700' : 'bg-white/80 border border-gray-200'
                 }`}
               >
-                <div className="space-y-6">
+                <div className="space-y-4 xl:space-y-6">
                   <motion.div 
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.5, duration: 0.6 }}
-                    className="flex items-center space-x-4"
+                    className="flex items-center space-x-3 xl:space-x-4"
                   >
-                    <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
-                      <GraduationCap className="w-6 h-6 text-white" />
+                    <div className="w-10 h-10 xl:w-14 xl:h-14 bg-blue-600 rounded-full flex items-center justify-center">
+                      <GraduationCap className="w-5 h-5 xl:w-8 xl:h-8 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold">Complete Your Education</h3>
-                      <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                      <h3 className="font-semibold text-base xl:text-lg">Complete Your Education</h3>
+                      <p className={`text-xs xl:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                         Join thousands of successful graduates
                       </p>
                     </div>
@@ -291,7 +305,7 @@ const Landing = () => {
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="space-y-3"
+                    className="space-y-2 xl:space-y-3"
                   >
                     {[
                       'Expert-led curriculum',
@@ -301,10 +315,10 @@ const Landing = () => {
                       <motion.div
                         key={index}
                         variants={itemVariants}
-                        className="flex items-center space-x-2"
+                        className="flex items-center space-x-2 xl:space-x-3"
                       >
-                        <CheckCircle className="w-5 h-5 text-green-500" />
-                        <span className="text-sm">{text}</span>
+                        <CheckCircle className="w-4 h-4 xl:w-5 xl:h-5 text-green-500" />
+                        <span className="text-xs xl:text-sm">{text}</span>
                       </motion.div>
                     ))}
                   </motion.div>

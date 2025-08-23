@@ -19,6 +19,7 @@ import AllCourse from './pages/seller pages/AllCourse'
 import EditLesson from './pages/seller pages/EditLesson'
 import SellerSetting from './pages/seller pages/SellerSetting'
 import UserProfile from './pages/UserProfile'
+import Footer from './components/Footer'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -50,11 +51,13 @@ const App = () => {
         
 
       </Routes>
+      <Footer />
       <ThemeSwitch/>
       <Toaster
              position="top-right"
              reverseOrder={false}
       />
+      
 
     </div>
   )
