@@ -18,6 +18,7 @@ import EditCourse from './pages/seller pages/EditCourse'
 import AllCourse from './pages/seller pages/AllCourse'
 import EditLesson from './pages/seller pages/EditLesson'
 import SellerSetting from './pages/seller pages/SellerSetting'
+import UserProfile from './pages/UserProfile'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -43,6 +44,9 @@ const App = () => {
         <Route path='/seller/allcourse' element={<AllCourse />} />
         <Route path='/seller/editcourse/:courseId/editlesson/:lessonId' element={<EditLesson />} />
         <Route path='/seller/settings' element={<SellerSetting />} />
+
+        //* all user routes
+        <Route path='/userprofile' element={<UserProfile />} />
         
 
       </Routes>

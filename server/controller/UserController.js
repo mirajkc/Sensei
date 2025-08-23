@@ -351,3 +351,147 @@ export const userLogOut = async (req, res) => {
     });
   }
 };
+
+//* get the student details by student Id 
+export const getStudentDetails = async(req,res) => {
+  try {
+
+    const studentId = req.user?._id
+    if(!studentId) {
+      return res.status(200).json({
+        success : false,
+        message : "User not authenticated please relogin or reload the page"
+      })
+    }
+
+    //* check if the user exists in the databse 
+    const student = await User.findById(studentId)
+    if(!student){
+      return res.status(200).json({
+        success : false,
+        message : "User not found"
+      })
+    }
+
+    //* if user is found 
+    res.status(200).json({
+      success : true,
+      message : "Successfully fetched student data",
+      student
+    })
+  } catch (error) {
+    console.log(error.message);
+    
+    return res.status(500).json({
+        success : false,
+        message : `Server error ${error.message}`
+      })
+  }
+}
+
+//* update the student data 
+export const updateStudentDetails = async (req, res) => {
+  try {
+    const studentId = req.user?._id;
+    if (!studentId) {
+      return res.status(200).json({
+        success: false,
+        message: "User not authenticated, please relogin or reload the page"
+      });
+    }
+
+    const student = await User.findById(studentId);
+    if (!student) {
+      return res.status(200).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    const {
+      name,
+      oldPassword,
+      newPassword1,
+      newPassword2,
+      phoneno,
+      address,
+      bio,
+      link,
+      linkedin,
+      github,
+      twitter,
+      facebook,
+      specialization,
+      achievements,
+      grade
+    } = req.body;
+
+    if (!name) {
+      return res.status(200).json({
+        success: false,
+        message: "Name cannot be empty"
+      });
+    }
+
+    //* Handle profile image update
+    let imageUrl = student.picture; 
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "Sensei_all_images",
+        use_filename: true,
+        unique_filename: false,
+      });
+      fs.unlinkSync(req.file.path);
+      imageUrl = result.secure_url;
+    }
+
+    //* Handle password change
+    if (oldPassword && oldPassword.length > 0) {
+      const match = await bcrypt.compare(oldPassword, student.password);
+      if (!match) {
+        return res.status(200).json({
+          success: false,
+          message: "Incorrect old password"
+        });
+      }
+      if (newPassword1 !== newPassword2) {
+        return res.status(200).json({
+          success: false,
+          message: "New passwords do not match"
+        });
+      }
+      const salt = await bcrypt.genSalt(10);
+      student.password = await bcrypt.hash(newPassword1, salt);
+    }
+
+    //* Update other student details
+    student.name = name;
+    student.phoneno = phoneno || student.phoneno;
+    student.address = address || student.address;
+    student.bio = bio || student.bio;
+    student.link = link || student.link;
+    student.picture = imageUrl;
+    student.linkedin = linkedin || student.linkedin;
+    student.github = github || student.github;
+    student.twitter = twitter || student.twitter;
+    student.facebook = facebook || student.facebook;
+    student.specialization = specialization || student.specialization;
+    student.achievements = achievements || student.achievements;
+    student.grade = grade || student.grade;
+
+    await student.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Student details updated successfully",
+    });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: `Server error: ${error.message}`
+    });
+  }
+};
+
+

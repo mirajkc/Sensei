@@ -132,6 +132,16 @@ const SellerNavbar = () => {
               <button
                 className={`${linkBase} ${linkHover} flex items-center space-x-2 w-full text-left`}
                 onClick={() => {
+                  navigate('/home')
+                  setIsMobileMenuOpen(false)
+                }}
+              >
+                <Home assName="w-4 h-4" />
+                <span>Home</span>
+              </button>
+              <button
+                className={`${linkBase} ${linkHover} flex items-center space-x-2 w-full text-left`}
+                onClick={() => {
                   handleLogout()
                   setIsMobileMenuOpen(false)
                 }}

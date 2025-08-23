@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { Search, ChevronDown, User, BookOpen, Settings, LogOut, Menu, X } from 'lucide-react'
+import { useNavigate, useLocation , Link} from 'react-router-dom'
+import { Search, ChevronDown, User, BookOpen, Settings, LogOut, Menu, X , BookmarkPlus, MessageCircleQuestionMark} from 'lucide-react'
 import nav_logo from '../assets/navbar_logo.png'
 import useAppContext from '../context/AppContext'
 import toast from 'react-hot-toast'
@@ -17,6 +17,7 @@ const Navbar = () => {
   if (['/login', '/signup'].includes(location.pathname)) return null;
   if (location.pathname.startsWith('/seller')) return null;
   if(location.pathname.startsWith('/admin')) return null
+  if(location.pathname == '/') return null;
 
   const logoutUser = async () => {
     try {
@@ -89,6 +90,18 @@ const Navbar = () => {
             </button>
             <button
               className={`${linkBase} ${linkHover}`}
+              onClick={() => navigate('/community')}
+            >
+              Discover Courses
+            </button>
+            <button
+              className={`${linkBase} ${linkHover}`}
+              onClick={() => navigate('/community')}
+            >
+              Carrers & Roadmaps
+            </button>
+            <button
+              className={`${linkBase} ${linkHover}`}
               onClick={() => navigate('/admin')}
             >
               Admin 
@@ -133,7 +146,7 @@ const Navbar = () => {
                   >
                     <div className="py-1">
                       <a
-                        href="#"
+                        href="userprofile"
                         className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover}`}
                       >
                         <User className="w-4 h-4" />
@@ -145,6 +158,20 @@ const Navbar = () => {
                       >
                         <BookOpen className="w-4 h-4" />
                         <span>My Courses</span>
+                      </a>
+                      <a
+                        href="#"
+                        className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover}`}
+                      >
+                        <BookmarkPlus className="w-4 h-4" />
+                        <span>Wishlist</span>
+                      </a>
+                      <a
+                        href="#"
+                        className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover}`}
+                      >
+                        <MessageCircleQuestionMark className="w-4 h-4" />
+                        <span>Support</span>
                       </a>
                       <a
                         href="#"
