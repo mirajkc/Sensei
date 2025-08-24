@@ -12,22 +12,14 @@ const Footer = () => {
   if (location.pathname.startsWith('/seller')) return null;
   if(location.pathname.startsWith('/admin')) return null
 
-  const footerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
-    }
-  }
+
 
   return (
     <div className={`${ theme === "dark" ? 'bg-gray-800' : 'bg-white' }`} >
           <motion.footer
-      variants={footerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
+      initial={{opacity : 0 , y:100}}
+      whileInView={{opacity : 1 , y : 0}}
+      transition={ {duration : 0.8}}
       className={`w-full py-6 ${
         theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
       } flex flex-col items-center justify-center`}

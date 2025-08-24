@@ -26,7 +26,16 @@ const courseSchema = new mongoose.Schema({
       "Others"
     ]
   },
-  thumbnail: { type: String, required: true },
+  skillLevel: { 
+  type: String, 
+  required: true, 
+  enum: ["Beginner", "Intermediate", "Advanced"] 
+},
+language: { 
+  type: String, 
+  required: true 
+},
+  thumbnail: { type: String, required: true }, 
   trailer: { type: String, required: true },
   description: { type: String, required: true },
   lessons: [lessonSchema],

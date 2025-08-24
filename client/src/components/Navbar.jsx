@@ -95,7 +95,7 @@ const Navbar = () => {
             </button>
             <button
               className={`${linkBase} ${linkHover}`}
-              onClick={() => navigate('/community')}
+              onClick={() => navigate('/discovercourses')}
             >
               Discover Courses
             </button>

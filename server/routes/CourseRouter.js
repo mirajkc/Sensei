@@ -1,7 +1,7 @@
 import express from 'express'
 import multer from 'multer'
 import verifySeller from '../middleware/SellerMiddleware.js'
-import { addCourse, addNewLesson, deleteCourseById, deleteLessonById, editLessonById, getAllCourseForOneSeller, getAllLessonByCourseIdForSeller, getCourseById, getLessonDetailById, updateCourse } from '../controller/CourseController.js'
+import { addCourse, addNewLesson, deleteCourseById, deleteLessonById, editLessonById, getAllCourseForOneSeller, getAllCourseForUI, getAllLessonByCourseIdForSeller, getCourseById, getLessonDetailById, updateCourse } from '../controller/CourseController.js'
 
 
 
@@ -19,6 +19,7 @@ courseRouter.get('/getalllesson/manage/:courseId', verifySeller , getAllLessonBy
 courseRouter.get('/getcourse/:courseId/getlesson/:lessonId', getLessonDetailById)
 courseRouter.post('/editcourse/:courseId/editlesson/:lessonId' , verifySeller , editLessonById )
 courseRouter.delete('/deletelesson/:courseId/:lessonId' , verifySeller , deleteLessonById )
+courseRouter.get('/getAllCourseForUI' , getAllCourseForUI  )
 
 
 export default courseRouter

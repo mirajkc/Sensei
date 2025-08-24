@@ -20,6 +20,7 @@ import EditLesson from './pages/seller pages/EditLesson'
 import SellerSetting from './pages/seller pages/SellerSetting'
 import UserProfile from './pages/UserProfile'
 import Footer from './components/Footer'
+import DiscoverCourses from './pages/DiscoverCourses'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -48,6 +49,11 @@ const App = () => {
 
         //* all user routes
         <Route path='/userprofile' element={<UserProfile />} />
+
+
+
+        //* general dashboard routes
+        <Route path='/discovercourses' element = {<DiscoverCourses />} />
         
 
       </Routes>

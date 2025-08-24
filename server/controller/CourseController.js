@@ -2,13 +2,14 @@ import Course from "../models/CourseModel.js"
 import fs from 'fs'
 import cloudinary from 'cloudinary'
 import Seller from "../models/SellerModel.js";
+import { error } from "console";
 
 export const addCourse = async (req, res) => {
   try {
-    const { title, category, trailer, description, price, discountedPrice } = req.body;
+    const { title, category, trailer, description, price, discountedPrice,skillLevel,language } = req.body;
 
     //* check if seller has included all fields
-    if (!title || !category || !trailer || !description || !price || !discountedPrice) {
+    if (!title || !category || !trailer || !description || !price || !discountedPrice ||!language ||!skillLevel) {
       return res.status(200).json({
         success: false,
         message: "All fields are required"
@@ -51,7 +52,9 @@ export const addCourse = async (req, res) => {
       price,
       discountedPrice,
       seller,
-      thumbnail: imageUrl
+      thumbnail: imageUrl,
+      language,
+      skillLevel
     });
 
     res.status(200).json({
@@ -125,12 +128,12 @@ export const getCourseById = async (req, res) => {
 //* update the course 
 export const updateCourse = async (req, res) => {
   try {
-    const { title, category, trailer, description, price, discountedPrice } = req.body;
+    const { title, category, trailer, description, price, discountedPrice, language , skillLevel } = req.body;
     const { courseId } = req.params;
     const sellerId = req.seller._id;
 
     //* Validate required fields
-    if (!title || !category || !trailer || !description || !price || !discountedPrice) {
+    if (!title || !category || !trailer || !description || !price || !discountedPrice ||! language || !skillLevel) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -192,6 +195,8 @@ export const updateCourse = async (req, res) => {
         price,
         discountedPrice,
         thumbnail: imageUrl,
+        language,
+        skillLevel
       },
       { new: true }
     );
@@ -210,7 +215,7 @@ export const updateCourse = async (req, res) => {
   }
 };
 
-//* Get all courses of a particular seller
+//* Get all courses of a particular seller have used seller authentication
 export const getAllCourseForOneSeller = async (req, res) => {
   try {
     const sellerId = req.seller._id;
@@ -295,7 +300,7 @@ export const deleteCourseById = async (req, res) => {
 };
 
 
-//* controller to add the lesson 
+//* add the lesson for a particular course
 export const addNewLesson = async (req, res) => {
   try {
     //* get the seller id from middleware
@@ -570,6 +575,30 @@ export const deleteLessonById = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: `Server error: ${error.message}`
+    })
+  }
+}
+
+//* get all the courses of all seller to show in the main UI 
+export const getAllCourseForUI = async(req,res) => {
+  try {
+      const courses = await Course.find().populate('seller')
+  if(!courses){
+    return res.status(200).json({
+      success : false,
+      message : `Database error ${error.message}`
+    })
+  }
+  res.status(200).json({
+    success : true,
+    courses
+  })
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(200).json({
+      success : false,
+      message : `Server Error ${error.message}`
     })
   }
 }

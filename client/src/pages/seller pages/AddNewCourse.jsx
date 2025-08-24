@@ -26,6 +26,8 @@ const AddNewCourse = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [discountedPrice, setDiscountedPrice] = useState("");
+  const [language , setLanguage] = useState("");
+  const [skillLevel , setSkillLevel] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -39,6 +41,10 @@ const AddNewCourse = () => {
     "Front End Development",
     "Back End Development",
     "Others"
+  ];
+
+  const skillLevels = [
+    "Beginner", "Intermediate", "Advanced"
   ];
 
   // Check if device is mobile
@@ -106,6 +112,15 @@ const AddNewCourse = () => {
       return;
     }
 
+    if(!language){
+      toast.error("At least on language is required")
+    }
+
+    if(!skillLevel){
+      toast.error("At least one skill level is required")
+    }
+
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("category", category);
@@ -114,6 +129,8 @@ const AddNewCourse = () => {
     formData.append("price", price);
     formData.append("discountedPrice", discountedPrice);
     formData.append("image", thumbnail);
+    formData.append("skillLevel" , skillLevel)
+    formData.append("language" , language)
 
     setLoading(true);
 
@@ -137,6 +154,8 @@ const AddNewCourse = () => {
         setDiscountedPrice("");
         setThumbnail(null);
         setThumbnailPreview(null);
+        setSkillLevel("")
+        setLanguage("")
 
         // Navigate to edit course page
         navigate(`/seller/editcourse/${data.courseId}`);
@@ -287,6 +306,25 @@ const AddNewCourse = () => {
                         </select>
                       </div>
                     </div>
+                    <div>
+                      <label className={labelClass}>
+                        Skill levels *
+                      </label>
+                      <div className="relative">
+                        <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <select
+                          value={skillLevel}
+                          onChange={(e) => setSkillLevel(e.target.value)}
+                          className={`${inputClass} pl-10`}
+                          required
+                        >
+                          <option value="">-- Select SkillLevel --</option>
+                          {skillLevels.map(cat => (
+                            <option key={cat} value={cat}>{cat}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
 
                     {/* Price */}
                     <div>
@@ -325,8 +363,25 @@ const AddNewCourse = () => {
                           step="0.01"
                         />
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">Optional: Leave empty if no discount</p>
                     </div>
+
+
+                     <div>
+                      <label className={labelClass}>
+                        Plese enter languages used
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={language}
+                          onChange={(e) => setLanguage(e.target.value)}
+                          className={`${inputClass} pl-10`}
+                          placeholder="eg : html , css , js (Note comma is required after each laguage)"
+                          min="0"
+                          step="0.01"
+                        />
+                      </div>
+                      </div>
 
                     {/* Description */}
                     <div className="lg:col-span-2">
