@@ -136,7 +136,7 @@ const SellerNavbar = () => {
                   setIsMobileMenuOpen(false)
                 }}
               >
-                <Home assName="w-4 h-4" />
+                <Home className="w-4 h-4" />
                 <span>Home</span>
               </button>
               <button

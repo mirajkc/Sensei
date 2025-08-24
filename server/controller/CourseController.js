@@ -563,8 +563,10 @@ export const deleteLessonById = async (req, res) => {
     }
 
     //* Delete the lesson
-    lesson.remove()
+    await lesson.deleteOne();
+    
     await course.save()
+   
 
     return res.status(200).json({
       success: true,

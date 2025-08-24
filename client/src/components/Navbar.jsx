@@ -107,12 +107,6 @@ const Navbar = () => {
             </button>
             <button
               className={`${linkBase} ${linkHover}`}
-              onClick={() => navigate('/admin')}
-            >
-              Admin 
-            </button>
-            <button
-              className={`${linkBase} ${linkHover}`}
               onClick={() => navigate('/seller')}
             >
               Teach on Sensei

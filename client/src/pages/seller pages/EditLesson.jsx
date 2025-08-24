@@ -41,7 +41,7 @@ const EditLesson = () => {
       setTitle(data.lesson.title || '')
       setDescription(data.lesson.description || '')
       setWhatYouWillLearn(data.lesson.whatYouWillLearn || '')
-      setLessonDuration(data.lesson.lessonDuration || '')
+      setLessonDuration(data.lesson.lessonDuration ? Math.round(data.lesson.lessonDuration * 60) : '')
       setTextGuide(data.lesson.textGuide || '')
       setVideoGuide(data.lesson.videoGuide || '')
     } catch (error) {
@@ -59,7 +59,7 @@ const EditLesson = () => {
         title,
         description,
         whatYouWillLearn,
-        lessonDuration,
+        lessonDuration: Number(lessonDuration) / 60,
         textGuide,
         videoGuide
       })
@@ -208,24 +208,25 @@ const EditLesson = () => {
               required
             />
             </div>
-
             <div>
-              <label className={labelClass}>
-                Lesson Duration (Enter in minutes !! please note that your input will automatically converted into hour) <span className="text-red-500">*</span>
-              </label>
-                <input
-  type="text"
-  value={lessonDuration}  
-  onChange={(e) => {
-    const minutes = Number(e.target.value)
-    const hours = (minutes / 60).toFixed(2) 
-    setLessonDuration(Number(hours))
-  }}
-  placeholder="e.g., 7 (minutes)"
-  min="0"
-  className={inputClass}
-/>
-            </div>
+  <label className={labelClass}>
+    Lesson Duration (in minutes) <span className="text-red-500">*</span>
+  </label>
+  <input
+    type="number"
+    value={lessonDuration}
+    onChange={(e) => setLessonDuration(e.target.value)}
+    placeholder="e.g., 90 (minutes)"
+    min="1"
+    className={inputClass}
+    required
+  />
+  {lessonDuration && (
+    <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+      Duration: {Math.floor(lessonDuration / 60)}h {lessonDuration % 60}m ({(lessonDuration / 60).toFixed(2)} hours)
+    </p>
+  )}
+</div> 
 
             <div>
               <label className={labelClass}>

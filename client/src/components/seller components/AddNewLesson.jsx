@@ -52,7 +52,7 @@ const AddNewLesson = ({ courseId }) => {
       const { data } = await axios.post(`/api/course/addnewlesson/${courseId}`, { 
         title, 
         description, 
-        lessonDuration: Number(lessonDuration), 
+        lessonDuration: Number(lessonDuration) / 60,
         whatYouWillLearn, 
         videoGuide, 
         textGuide 
@@ -72,6 +72,7 @@ const AddNewLesson = ({ courseId }) => {
 
   const handleDeleteLesson = async (lessonId) => {
     if (!window.confirm('Are you sure you want to delete this lesson?')) return
+   
     
     try {
       setLoading(true)
@@ -193,6 +194,7 @@ const AddNewLesson = ({ courseId }) => {
                           </button>
                           <button
                             onClick={() => handleDeleteLesson(lesson._id)}
+                            
                             className={`px-3 py-1 text-sm rounded ${
                               theme === 'dark'
                                 ? 'bg-red-600 hover:bg-red-700 text-white'
@@ -262,25 +264,26 @@ const AddNewLesson = ({ courseId }) => {
               required
             />
           </div>
-
           <div>
             <label className={labelClass}>
-              Lesson Duration (Enter in minutes !! please note that your input will automatically converted into hour) <span className="text-red-500">*</span>
+              Lesson Duration (in minutes) <span className="text-red-500">*</span>
             </label>
-                            <input
-  type="text"
-  value={lessonDuration}  
-  onChange={(e) => {
-    const minutes = Number(e.target.value)
-    const hours = (minutes / 60).toFixed(2) 
-    setLessonDuration(Number(hours))
-  }}
-  placeholder="e.g., 7 (minutes)"
-  min="0"
-  className={inputClass}
-/>
+            <input type="number"
+            value={lessonDuration}
+            onChange={(e) => setLessonDuration(e.target.value)}
+            placeholder="e.g., 90 (minutes)"
+            min="1"
+            className={inputClass}
+            required
+            />
+            {
+              lessonDuration && (
+                <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}> 
+                   Duration: {Math.floor(lessonDuration / 60)}h {lessonDuration % 60}m ({(lessonDuration / 60).toFixed(2)} hours)
+                </p>
+              )
+            }
           </div>
-
           <div>
             <label className={labelClass}>
               Text Guide <span className="text-red-500">*</span>
