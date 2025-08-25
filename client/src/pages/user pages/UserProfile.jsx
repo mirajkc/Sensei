@@ -1,5 +1,5 @@
 import React from 'react'
-import useAppContext from '../context/AppContext.jsx'
+import useAppContext from '../../context/AppContext.jsx'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
@@ -310,7 +310,7 @@ const handleSubmit = async (e) => {
                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   Bio
                 </label>
-                <textarea
+                <textarea 
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
                   rows={4}

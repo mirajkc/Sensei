@@ -1,29 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import useAppContext from "../context/AppContext.jsx";
+import useAppContext from "../../context/AppContext.jsx";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { 
   Search, Filter, Clock, BookOpen, Star, Heart, Eye,
   User, ChevronDown, X, SlidersHorizontal, MessageCircle,
-  Code, Palette, Database, Monitor, Globe, Award
+  Code, Palette, Database, Monitor, Globe, Award, Trash2
 } from "lucide-react";
 
-
-const DiscoverCourses = () => {
-  const { theme , loggedIn } = useAppContext();
-  const [courses, setCourses] = useState([]);
+const Wishlist = () => {
+  const { theme, loggedIn } = useAppContext();
+  const [wishlists, setWishLists] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchLetter, setSearchLetter] = useState(""); 
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedLevel, setSelectedLevel] = useState("All");
-  const [priceOrder, setPriceOrder] = useState(""); 
-  const [hoursOrder, setHoursOrder] = useState(""); 
+  const [searchInput, setSearchInput] = useState("");
+  const [sortedPrice, setSortedPrice] = useState("");
+  const [sortedHour, setSortedHours] = useState("");
+  const [sortedLevel, setSortedLevel] = useState("All");
+  const [sortedCategory, setSortedCategory] = useState("All");
   const [showFilters, setShowFilters] = useState(false);
-  const [wishlist, setWishList] = useState(new Set())
-  const navigate = useNavigate()
-
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -56,81 +51,73 @@ const DiscoverCourses = () => {
       y: -8,
       scale: 1.02,
       transition: { duration: 0.3, ease: "easeOut" }
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.95,
+      transition: { duration: 0.3 }
     }
   };
 
-  //* Apply filters/sorting on courses
-  const sortedData = courses
-    .filter((course) =>
-      course.title.toLowerCase().includes(searchLetter.toLowerCase())
-    )
-    .filter((course) =>
-      selectedLevel === "All" ? true : course.skillLevel === selectedLevel
-    )
-    .filter((course) =>
-      selectedCategory === "All" ? true : course.category === selectedCategory
-    )
-    .sort((a, b) => {
-      if (priceOrder === "asc") return a.discountedPrice - b.discountedPrice;
-      if (priceOrder === "desc") return b.discountedPrice - a.discountedPrice;
-      return 0;
-    })
-    .sort((a, b) => {
-      if (hoursOrder === "asc") return a.totalHours - b.totalHours;
-      if (hoursOrder === "desc") return b.totalHours - a.totalHours;
-      return 0;
-    });
-
-
-   const toggleWishlist = async (courseId) => {
-    if(loggedIn === false){
-      return toast.error("You have to log in to add course in your wishlists")
+  // Get the wishlist by userId
+  const getWishList = async() => {
+    try {
+      setLoading(true);
+      const {data} = await axios.get('/api/wishlist/getallwishList');
+      if(!data.success){
+        return toast.error(data.message);
+      }
+      setWishLists(data.wishlists);
+    } catch (error) {
+      return toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
     }
-  if (wishlist.has(courseId)) {
-    // *Remove from wishlist
+  };
+
+  // Remove from wishlist
+  const removeFromWishlist = async (courseId) => {
     try {
       const { data } = await axios.delete(`/api/wishlist/removewishlist/${courseId}`);
       if (data.success) {
-        const updatedWishlist = new Set(wishlist);
-        updatedWishlist.delete(courseId);
-        setWishList(updatedWishlist);
+        // Remove the course from the local state
+        setWishLists(prevWishlists => 
+          prevWishlists.filter(course => course._id !== courseId)
+        );
         toast.success(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
-  } else {
-    //* Add to wishlist
-    try {
-      const { data } = await axios.post(`/api/wishlist/addwishlist/${courseId}`);
-      if (data.success) {
-        const updatedWishlist = new Set(wishlist);
-        updatedWishlist.add(courseId);
-        setWishList(updatedWishlist);
-        toast.success(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  }
-};
+  };
 
-  //* get wishlist on mount
-const getAllWishlist = async() => {
-  try {
-    const {data} = await axios.get(`/api/wishlist/getallwishList`)
-    if(data.success){ 
-      const wishlistSet = new Set(data.wishlists.map(course => course._id))
-      setWishList(wishlistSet)
-    } else {
-      console.log(data.message)
-    }
-  } catch (error) {
-    toast.error(error.response?.data?.message || error.message) 
-  }
-}
+  useEffect(() => { 
+    getWishList();
+  }, []);
 
-  //* Get skill level color
+  // Sort the data with fixed hour sorting logic
+  const sortedWishlists = wishlists
+    .filter(course =>
+      searchInput === "" ? true : course.title.toLowerCase().includes(searchInput.toLowerCase())
+    )
+    .filter(course =>
+      sortedLevel === "All" ? true : course.skillLevel.toLowerCase() === sortedLevel.toLowerCase()
+    )
+    .filter(course =>
+      sortedCategory === "All" ? true : course.category.toLowerCase() === sortedCategory.toLowerCase()
+    )
+    .sort((a,b) => {
+      if(sortedPrice === "ascending") return a.discountedPrice - b.discountedPrice;
+      if(sortedPrice === "descending") return b.discountedPrice - a.discountedPrice;
+      return 0;
+    })
+    .sort((a,b) => {
+      if(sortedHour === "ascending") return a.totalHours - b.totalHours;
+      if(sortedHour === "descending") return b.totalHours - a.totalHours;
+      return 0;
+    });
+
+  // Get skill level color
   const getSkillLevelColor = (level) => {
     switch (level) {
       case 'Beginner':
@@ -144,7 +131,7 @@ const getAllWishlist = async() => {
     }
   };
 
-  //* Get category icon
+  // Get category icon
   const getCategoryIcon = (category) => {
     switch (category) {
       case 'Web Development':
@@ -162,34 +149,13 @@ const getAllWishlist = async() => {
     }
   };
 
-  //* Fetch courses from API
-  const getAllCourse = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get("/api/course/getAllCourseForUI");
-      if (!data.success) {
-        return toast.error(data.message);
-      }
-      setCourses(data.courses);
-    } catch (error) {
-      toast.error("Failed to load courses");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const clearFilters = () => {
-    setSearchLetter("");
-    setSelectedCategory("All");
-    setSelectedLevel("All");
-    setPriceOrder("");
-    setHoursOrder("");
+    setSearchInput("");
+    setSortedCategory("All");
+    setSortedLevel("All");
+    setSortedPrice("");
+    setSortedHours("");
   };
-
-  useEffect(() => {
-    getAllCourse();
-    getAllWishlist()
-  }, []);
 
   const categories = [
     "All",
@@ -203,26 +169,7 @@ const getAllWishlist = async() => {
 
   const levels = ["All", "Beginner", "Intermediate", "Advanced"];
 
-  if (loading) {
-    return (
-      <div className={`min-h-screen flex items-center justify-center ${
-        theme === "dark" ? "bg-gray-900" : "bg-gray-50"
-      }`}>
-        <motion.div
-          animate={{ 
-            rotate: 360
-          }}
-          transition={{ 
-            duration: 1,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full"
-        />
-      </div>
-    );
-  }
-    const renderStars = (rating) => {
+  const renderStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
@@ -249,6 +196,26 @@ const getAllWishlist = async() => {
     return stars;
   };
 
+  if (loading) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center ${
+        theme === "dark" ? "bg-gray-900" : "bg-gray-50"
+      }`}>
+        <motion.div
+          animate={{ 
+            rotate: 360
+          }}
+          transition={{ 
+            duration: 1,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={`min-h-screen ${
       theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
@@ -272,13 +239,16 @@ const getAllWishlist = async() => {
             className="space-y-6"
           >
             <motion.div variants={itemVariants} className="text-center">
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">
-                Discover Amazing Courses
-              </h1>
+              <div className="flex items-center justify-center space-x-3 mb-2">
+                <Heart className="w-8 h-8 text-red-500 fill-current" />
+                <h1 className="text-3xl md:text-4xl font-bold">
+                  My Wishlist
+                </h1>
+              </div>
               <p className={`text-lg ${
                 theme === "dark" ? "text-gray-300" : "text-gray-600"
               }`}>
-                Find the perfect course to advance your skills and career
+                Your saved courses collection - {wishlists.length} course{wishlists.length !== 1 ? 's' : ''} total
               </p>
             </motion.div>
             
@@ -287,9 +257,9 @@ const getAllWishlist = async() => {
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search courses, skills, or topics..."
-                value={searchLetter}
-                onChange={(e) => setSearchLetter(e.target.value)}
+                placeholder="Search your wishlist..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
                 className={`w-full pl-12 pr-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
                   theme === "dark" 
                     ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
@@ -318,7 +288,7 @@ const getAllWishlist = async() => {
               <span className={`text-sm px-2 py-1 rounded-full ${
                 theme === "dark" ? "bg-blue-900/30 text-blue-300" : "bg-blue-100 text-blue-600"
               }`}>
-                {sortedData.length} courses
+                {sortedWishlists.length} courses
               </span>
             </div>
             <div className="flex items-center space-x-3">
@@ -362,8 +332,8 @@ const getAllWishlist = async() => {
                   <label className="block text-sm font-medium mb-2">Category</label>
                   <div className="relative">
                     <select
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      value={sortedCategory}
+                      onChange={(e) => setSortedCategory(e.target.value)}
                       className={`w-full p-3 rounded-lg border appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
                         theme === "dark" 
                           ? "bg-gray-700 border-gray-600 text-white" 
@@ -382,8 +352,8 @@ const getAllWishlist = async() => {
                   <label className="block text-sm font-medium mb-2">Level</label>
                   <div className="relative">
                     <select
-                      value={selectedLevel}
-                      onChange={(e) => setSelectedLevel(e.target.value)}
+                      value={sortedLevel}
+                      onChange={(e) => setSortedLevel(e.target.value)}
                       className={`w-full p-3 rounded-lg border appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
                         theme === "dark" 
                           ? "bg-gray-700 border-gray-600 text-white" 
@@ -402,8 +372,8 @@ const getAllWishlist = async() => {
                   <label className="block text-sm font-medium mb-2">Price</label>
                   <div className="relative">
                     <select
-                      value={priceOrder}
-                      onChange={(e) => setPriceOrder(e.target.value)}
+                      value={sortedPrice}
+                      onChange={(e) => setSortedPrice(e.target.value)}
                       className={`w-full p-3 rounded-lg border appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
                         theme === "dark" 
                           ? "bg-gray-700 border-gray-600 text-white" 
@@ -411,8 +381,8 @@ const getAllWishlist = async() => {
                       }`}
                     >
                       <option value="">Sort by Price</option>
-                      <option value="asc">Low to High</option>
-                      <option value="desc">High to Low</option>
+                      <option value="ascending">Low to High</option>
+                      <option value="descending">High to Low</option>
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 pointer-events-none" />
                   </div>
@@ -422,8 +392,8 @@ const getAllWishlist = async() => {
                   <label className="block text-sm font-medium mb-2">Duration</label>
                   <div className="relative">
                     <select
-                      value={hoursOrder}
-                      onChange={(e) => setHoursOrder(e.target.value)}
+                      value={sortedHour}
+                      onChange={(e) => setSortedHours(e.target.value)}
                       className={`w-full p-3 rounded-lg border appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
                         theme === "dark" 
                           ? "bg-gray-700 border-gray-600 text-white" 
@@ -431,8 +401,8 @@ const getAllWishlist = async() => {
                       }`}
                     >
                       <option value="">Sort by Duration</option>
-                      <option value="asc">Short to Long</option>
-                      <option value="desc">Long to Short</option>
+                      <option value="ascending">Short to Long</option>
+                      <option value="descending">Long to Short</option>
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 pointer-events-none" />
                   </div>
@@ -444,16 +414,21 @@ const getAllWishlist = async() => {
 
         {/* Course Cards */}
         <AnimatePresence>
-          {sortedData.length === 0 ? (
+          {sortedWishlists.length === 0 ? (
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="text-center py-20"
             >
-              <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">No courses found</h3>
+              <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-2">
+                {wishlists.length === 0 ? "Your wishlist is empty" : "No courses found"}
+              </h3>
               <p className={`${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>
-                Try adjusting your search or filters
+                {wishlists.length === 0 
+                  ? "Start adding courses to your wishlist to see them here" 
+                  : "Try adjusting your search or filters"
+                }
               </p>
             </motion.div>
           ) : (
@@ -463,11 +438,12 @@ const getAllWishlist = async() => {
               animate="visible"
               className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
             >
-              {sortedData.map((course, index) => (
+              {sortedWishlists.map((course, index) => (
                 <motion.div
                   key={course._id}
                   variants={cardVariants}
                   whileHover="hover"
+                  exit="exit"
                   layout
                   className={`rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border ${
                     theme === "dark" 
@@ -510,6 +486,7 @@ const getAllWishlist = async() => {
                         {course.category}
                       </span>
                     </div>
+
                     {/* Stats Row */}
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center space-x-4">
@@ -565,17 +542,16 @@ const getAllWishlist = async() => {
                     <div className="flex items-center justify-between pt-2">
                       <div className="flex items-center space-x-2">
                         <div className="flex items-center space-x-1">
-                          {renderStars(4.5)}
+                          {renderStars(course.rating || 4.5)}
                           <span className={theme === "dark" ? "text-gray-300" : "text-gray-600"}>
-                          (4.5)
-                        </span>
+                            ({course.rating || 4.5})
+                          </span>
                         </div>
-                        <span className="font-semibold text-sm">{course.rating}</span>
                       </div>
                       <div className="flex items-center space-x-1 text-sm">
                         <MessageCircle className="w-4 h-4 text-gray-400" />
                         <span className={theme === "dark" ? "text-gray-300" : "text-gray-600"}>
-                          12
+                          {course.comments || 12}
                         </span>
                       </div>
                     </div>
@@ -585,25 +561,20 @@ const getAllWishlist = async() => {
                       <motion.button 
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={()=>navigate(`/coursedetail/${course._id}`)}
                         className="flex-1 bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition-colors font-semibold flex items-center justify-center space-x-2"
                       >
                         <Eye className="w-4 h-4" />
                         <span>View Course</span>
                       </motion.button>
                       <motion.button 
-  onClick={() => toggleWishlist(course._id)}
-  className={`p-3 rounded-xl border-2 transition-all ${
-    wishlist.has(course._id)
-      ? "bg-red-50 border-red-200 text-red-600 hover:bg-red-100"
-      : theme === "dark"
-      ? "border-gray-600 text-gray-400 hover:border-red-400 hover:text-red-400"
-      : "border-gray-200 text-gray-600 hover:border-red-300 hover:text-red-500"
-  }`}
->
-  <Heart className={`w-5 h-5 ${wishlist.has(course._id) ? "fill-current" : ""}`} />
-</motion.button>
-
+                        onClick={() => removeFromWishlist(course._id)}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="p-3 rounded-xl border-2 bg-red-50 border-red-200 text-red-600 hover:bg-red-100 hover:border-red-300 transition-all"
+                        title="Remove from wishlist"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </motion.button>
                     </div>
                   </div>
                 </motion.div>
@@ -616,4 +587,4 @@ const getAllWishlist = async() => {
   );
 };
 
-export default DiscoverCourses;
+export default Wishlist;

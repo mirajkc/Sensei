@@ -153,8 +153,7 @@ export const getAllWishList = async (req, res) => {
       });
     }
 
-    const wishlists = await Course.find({ _id: { $in: wishlist } });
-
+    const wishlists = await Course.find({ _id: { $in: wishlist } }).populate('seller');
     res.status(200).json({
       success: true,
       wishlists

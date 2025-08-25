@@ -159,7 +159,7 @@ const Navbar = () => {
                         <span>My Courses</span>
                       </a>
                       <a
-                        href="#"
+                        href="/wishlists"
                         className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover}`}
                       >
                         <BookmarkPlus className="w-4 h-4" />
@@ -171,13 +171,6 @@ const Navbar = () => {
                       >
                         <MessageCircleQuestionMark className="w-4 h-4" />
                         <span>Support</span>
-                      </a>
-                      <a
-                        href="#"
-                        className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover}`}
-                      >
-                        <Settings className="w-4 h-4" />
-                        <span>Settings</span>
                       </a>
                       <hr
                         className={`my-1 ${

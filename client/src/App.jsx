@@ -18,9 +18,11 @@ import EditCourse from './pages/seller pages/EditCourse'
 import AllCourse from './pages/seller pages/AllCourse'
 import EditLesson from './pages/seller pages/EditLesson'
 import SellerSetting from './pages/seller pages/SellerSetting'
-import UserProfile from './pages/UserProfile'
 import Footer from './components/Footer'
 import DiscoverCourses from './pages/DiscoverCourses'
+import UserProfile from './pages/user pages/UserProfile'
+import WishList from './pages/user pages/wishlist'
+import CourseDetailsPage from './pages/CourseDetailsPage'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -49,11 +51,13 @@ const App = () => {
 
         //* all user routes
         <Route path='/userprofile' element={<UserProfile />} />
+        <Route path='/wishlists' element={<WishList />} />
 
 
 
         //* general dashboard routes
         <Route path='/discovercourses' element = {<DiscoverCourses />} />
+        <Route path='/coursedetail/:courseId' element={<CourseDetailsPage />} />
         
 
       </Routes>
