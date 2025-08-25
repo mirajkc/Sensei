@@ -9,8 +9,9 @@ import {
   Code, Palette, Database, Monitor, Globe, Award
 } from "lucide-react";
 
+
 const DiscoverCourses = () => {
-  const { theme } = useAppContext();
+  const { theme , loggedIn } = useAppContext();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchLetter, setSearchLetter] = useState(""); 
@@ -19,7 +20,8 @@ const DiscoverCourses = () => {
   const [priceOrder, setPriceOrder] = useState(""); 
   const [hoursOrder, setHoursOrder] = useState(""); 
   const [showFilters, setShowFilters] = useState(false);
-  const [wishlist, setWishlist] = useState(new Set());
+  const [wishlist, setWishList] = useState(new Set())
+
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -77,16 +79,54 @@ const DiscoverCourses = () => {
       return 0;
     });
 
-  //* Toggle wishlist
-  const toggleWishlist = (courseId) => {
-    const newWishlist = new Set(wishlist);
-    if (newWishlist.has(courseId)) {
-      newWishlist.delete(courseId);
-    } else {
-      newWishlist.add(courseId);
+
+   const toggleWishlist = async (courseId) => {
+    if(loggedIn === false){
+      return toast.error("You have to log in to add course in your wishlists")
     }
-    setWishlist(newWishlist);
-  };
+  if (wishlist.has(courseId)) {
+    // *Remove from wishlist
+    try {
+      const { data } = await axios.delete(`/api/wishlist/removewishlist/${courseId}`);
+      if (data.success) {
+        const updatedWishlist = new Set(wishlist);
+        updatedWishlist.delete(courseId);
+        setWishList(updatedWishlist);
+        toast.success(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  } else {
+    //* Add to wishlist
+    try {
+      const { data } = await axios.post(`/api/wishlist/addwishlist/${courseId}`);
+      if (data.success) {
+        const updatedWishlist = new Set(wishlist);
+        updatedWishlist.add(courseId);
+        setWishList(updatedWishlist);
+        toast.success(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+};
+
+  //* get wishlist on mount
+const getAllWishlist = async() => {
+  try {
+    const {data} = await axios.get(`/api/wishlist/getallwishList`)
+    if(data.success){ 
+      const wishlistSet = new Set(data.wishlists.map(course => course._id))
+      setWishList(wishlistSet)
+    } else {
+      console.log(data.message)
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.message || error.message) 
+  }
+}
 
   //* Get skill level color
   const getSkillLevelColor = (level) => {
@@ -146,6 +186,7 @@ const DiscoverCourses = () => {
 
   useEffect(() => {
     getAllCourse();
+    getAllWishlist()
   }, []);
 
   const categories = [
@@ -548,21 +589,18 @@ const DiscoverCourses = () => {
                         <span>View Course</span>
                       </motion.button>
                       <motion.button 
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => toggleWishlist(course._id)}
-                        className={`p-3 rounded-xl border-2 transition-all ${
-                          wishlist.has(course._id)
-                            ? "bg-red-50 border-red-200 text-red-600 hover:bg-red-100"
-                            : theme === "dark"
-                            ? "border-gray-600 text-gray-400 hover:border-red-400 hover:text-red-400"
-                            : "border-gray-200 text-gray-600 hover:border-red-300 hover:text-red-500"
-                        }`}
-                      >
-                        <Heart 
-                          className={`w-5 h-5 ${wishlist.has(course._id) ? 'fill-current' : ''}`} 
-                        />
-                      </motion.button>
+  onClick={() => toggleWishlist(course._id)}
+  className={`p-3 rounded-xl border-2 transition-all ${
+    wishlist.has(course._id)
+      ? "bg-red-50 border-red-200 text-red-600 hover:bg-red-100"
+      : theme === "dark"
+      ? "border-gray-600 text-gray-400 hover:border-red-400 hover:text-red-400"
+      : "border-gray-200 text-gray-600 hover:border-red-300 hover:text-red-500"
+  }`}
+>
+  <Heart className={`w-5 h-5 ${wishlist.has(course._id) ? "fill-current" : ""}`} />
+</motion.button>
+
                     </div>
                   </div>
                 </motion.div>

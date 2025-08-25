@@ -8,6 +8,7 @@ import connectCloudinary from './configs/cloudinaryconnect.js'
 import sellerRouter from './routes/SellerRoute.js'
 import adminRouter from './routes/AdminRoute.js'
 import courseRouter from './routes/CourseRouter.js'
+import wishlistRouter from './routes/WishListRoute.js'
 
 const app = express()
 const PORT = process.env.PORT_NUMBER || 5000
@@ -40,6 +41,7 @@ app.use('/api/user', userRouter)
 app.use( '/api/seller' , sellerRouter )
 app.use('/api/admin' , adminRouter)
 app.use('/api/course', courseRouter)
+app.use('/api/wishlist' , wishlistRouter)
 
 app.get('/', (req, res) => {
   res.send("Server is working fine")
