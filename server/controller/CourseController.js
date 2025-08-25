@@ -6,10 +6,10 @@ import { error } from "console";
 
 export const addCourse = async (req, res) => {
   try {
-    const { title, category, trailer, description, price, discountedPrice,skillLevel,language } = req.body;
+    const { title, category, trailer, description, price, discountedPrice,skillLevel,language,whatYouWillLearn } = req.body;
 
     //* check if seller has included all fields
-    if (!title || !category || !trailer || !description || !price || !discountedPrice ||!language ||!skillLevel) {
+    if (!title || !category || !trailer || !description || !price || !discountedPrice ||!language ||!skillLevel ||!whatYouWillLearn) {
       return res.status(200).json({
         success: false,
         message: "All fields are required"
@@ -54,7 +54,8 @@ export const addCourse = async (req, res) => {
       seller,
       thumbnail: imageUrl,
       language,
-      skillLevel
+      skillLevel,
+      whatYouWillLearn
     });
 
     res.status(200).json({
@@ -128,12 +129,12 @@ export const getCourseById = async (req, res) => {
 //* update the course 
 export const updateCourse = async (req, res) => {
   try {
-    const { title, category, trailer, description, price, discountedPrice, language , skillLevel } = req.body;
+    const { title, category, trailer, description, price, discountedPrice, language , skillLevel , whatYouWillLearn } = req.body;
     const { courseId } = req.params;
     const sellerId = req.seller._id;
 
     //* Validate required fields
-    if (!title || !category || !trailer || !description || !price || !discountedPrice ||! language || !skillLevel) {
+    if (!title || !category || !trailer || !description || !price || !discountedPrice ||! language || !skillLevel ||!whatYouWillLearn) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -173,7 +174,7 @@ export const updateCourse = async (req, res) => {
     }
 
     //* Upload new thumbnail if provided
-    let imageUrl = course.thumbnail; // keep old one if no new upload
+    let imageUrl = course.thumbnail; 
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "Sensei_all_images",
@@ -196,7 +197,8 @@ export const updateCourse = async (req, res) => {
         discountedPrice,
         thumbnail: imageUrl,
         language,
-        skillLevel
+        skillLevel,
+        whatYouWillLearn
       },
       { new: true }
     );

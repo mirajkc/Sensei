@@ -29,6 +29,7 @@ const EditCourse = () => {
   const [updatedAt, setUpdatedAt] = useState("");
   const [language, setLanguage] = useState("");
   const [skillLevel, setSkillLevel] = useState("");
+  const [whatYouWillLearn , setWhatYouWillLearn] = useState("")
 
   const categories = [
     "Web Development",
@@ -63,6 +64,7 @@ const EditCourse = () => {
         setUpdatedAt(course.updatedAt || "");
         setLanguage(course.language || "");
         setSkillLevel(course.skillLevel || "");
+        setWhatYouWillLearn(course.whatYouWillLearn || "")
       }
     } catch (error) {
       toast.error("Server error: " + error.message);
@@ -94,6 +96,7 @@ const EditCourse = () => {
     if (!price || price <= 0) return toast.error("Valid price is required");
     if (!language) return toast.error("At least one language is required");
     if (!skillLevel) return toast.error("At least one skill level is required");
+    if (!whatYouWillLearn) return toast.error("Please enter what people will learn from this course");
 
     try {
       setUpdateLoading(true);
@@ -108,6 +111,7 @@ const EditCourse = () => {
       formData.append("lessons", JSON.stringify(lessons));
       formData.append("skillLevel", skillLevel);
       formData.append("language", language);
+      formData.append("whatYouWillLearn" , whatYouWillLearn)
 
       if (thumbnailFile) formData.append("thumbnail", thumbnailFile);
 
@@ -328,6 +332,17 @@ const EditCourse = () => {
                         placeholder="eg: HTML, CSS, JS (Note comma is required after each language)"
                       />
                     </div>
+                  </div>
+
+                  <div className="mt-6">
+                    <label className="block text-sm font-medium mb-2">What you will learn *</label>
+                    <textarea
+                      value={whatYouWillLearn}
+                      onChange={(e) => setWhatYouWillLearn(e.target.value)}
+                      className={`${inputClass} h-32 resize-vertical`}
+                      placeholder="Please enter what the viewer will be able to learn from this course"
+                      required
+                    />
                   </div>
 
                   {/* Description */}

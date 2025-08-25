@@ -24,6 +24,7 @@ const AddNewCourse = () => {
   const [category, setCategory] = useState("");
   const [trailer, setTrailer] = useState(""); 
   const [description, setDescription] = useState("");
+  const [whatYouWillLearn , setWhatYouWillLearn] = useState("")
   const [price, setPrice] = useState("");
   const [discountedPrice, setDiscountedPrice] = useState("");
   const [language , setLanguage] = useState("");
@@ -119,6 +120,9 @@ const AddNewCourse = () => {
     if(!skillLevel){
       toast.error("At least one skill level is required")
     }
+    if(!whatYouWillLearn){
+      toast.error("Please enter what students will learn from this course")
+    }
 
 
     const formData = new FormData();
@@ -131,6 +135,7 @@ const AddNewCourse = () => {
     formData.append("image", thumbnail);
     formData.append("skillLevel" , skillLevel)
     formData.append("language" , language)
+    formData.append("whatYouWillLearn" , whatYouWillLearn)
 
     setLoading(true);
 
@@ -156,6 +161,8 @@ const AddNewCourse = () => {
         setThumbnailPreview(null);
         setSkillLevel("")
         setLanguage("")
+        setWhatYouWillLearn("")
+        
 
         // Navigate to edit course page
         navigate(`/seller/editcourse/${data.courseId}`);
@@ -382,6 +389,21 @@ const AddNewCourse = () => {
                         />
                       </div>
                       </div>
+                      <div className="lg:col-span-2">
+                      <label className={labelClass}>
+                        What you will learn *
+                      </label>
+                      <textarea
+                        value={whatYouWillLearn}
+                        onChange={(e) => setWhatYouWillLearn(e.target.value)}
+                        className={`${inputClass} h-32 resize-vertical`}
+                        placeholder="Describe what students will learn in this course..."
+                        required
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        {description.length}/500 characters
+                      </p>
+                    </div>
 
                     {/* Description */}
                     <div className="lg:col-span-2">
@@ -392,7 +414,7 @@ const AddNewCourse = () => {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         className={`${inputClass} h-32 resize-vertical`}
-                        placeholder="Describe what students will learn in this course..."
+                        placeholder="Description of the course..."
                         required
                       />
                       <p className="text-xs text-gray-500 mt-1">
