@@ -585,7 +585,7 @@ const getAllWishlist = async() => {
                       <motion.button 
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={()=>navigate(`/coursedetail/${course._id}`)}
+                        onClick={()=>{navigate(`/coursedetail/${course._id}`) ; scrollTo(0,0) }}
                         className="flex-1 bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition-colors font-semibold flex items-center justify-center space-x-2"
                       >
                         <Eye className="w-4 h-4" />

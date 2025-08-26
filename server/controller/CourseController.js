@@ -72,7 +72,7 @@ export const addCourse = async (req, res) => {
   }
 };
 
-//* get all the course data by courseId 
+//* get all the course data by courseId  for the seller 
 export const getCourseById = async (req, res) => {
   try {
     const sellerId = req.seller._id
@@ -604,5 +604,37 @@ export const getAllCourseForUI = async(req,res) => {
       success : false,
       message : `Server Error ${error.message}`
     })
+  }
+}
+
+//* api call to get all the details of a single course by course Id 
+export const getSingleCourseforUI = async(req , res ) => {
+  try {
+    const {courseId} = req.params
+    if(!courseId){
+      return res.status(200).json({
+        success : false,
+        message : "Error !!! could not retrieve the course data make sure course Id is valid"
+      })
+    }
+
+    const course = await Course.findById(courseId).populate('seller')
+    if(!course){
+      return res.status(200).json({
+        success : false,
+        message : "Error !!! could not found"
+      })
+    }
+
+    res.status(200).json({
+      success : true,
+      course
+    })
+
+  } catch (error) {
+    res.status(500).json({
+        success : false,
+        message : `Server error ${error.message}`
+      })
   }
 }
