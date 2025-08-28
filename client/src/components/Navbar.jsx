@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation , Link} from 'react-router-dom'
-import { Search, ChevronDown, User, BookOpen, LogOut, Menu, X , BookmarkPlus, MessageCircleQuestionMark} from 'lucide-react'
+import { Search, ChevronDown, User, BookOpen, LogOut, Menu, X , BookmarkPlus, MessageCircleQuestionMark, ShoppingCart} from 'lucide-react'
 import nav_logo from '../assets/navbar_logo.png'
 import useAppContext from '../context/AppContext'
 import toast from 'react-hot-toast'
@@ -8,11 +8,14 @@ import axios from 'axios'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const Navbar = () => {
-  const { theme, loggedIn, userDetails } = useAppContext()
+  const { theme, loggedIn, userDetails  ,  cartItemsDetails} = useAppContext()
   const navigate = useNavigate()
   const location = useLocation()
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  
+  // Mock cart items count - replace with your actual cart state
+  const cartItemsCount = cartItemsDetails.totalCartItems
   
   if (['/login', '/signup'].includes(location.pathname)) return null;
   if (location.pathname.startsWith('/seller')) return null;
@@ -224,6 +227,40 @@ const Navbar = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4, duration: 0.5 }}
             >
+              {/* Shopping Cart - Always visible */}
+              <motion.button
+                variants={buttonVariants}
+                initial="initial"
+                whileHover="hover"
+                whileTap="tap"
+                onClick={() => navigate('/cart')}
+                className={`relative p-2 rounded-full transition-colors duration-200 ${
+                  theme === 'dark'
+                    ? 'hover:bg-gray-700 text-gray-200'
+                    : 'hover:bg-gray-100 text-gray-800'
+                }`}
+              >
+                <ShoppingCart className="w-6 h-6" />
+                
+                {/* Cart Badge */}
+                {cartItemsCount > 0 && (
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    whileHover={{ scale: 1.2 }}
+                    className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium"
+                  >
+                    {cartItemsCount > 99 ? '99+' : cartItemsCount}
+                  </motion.span>
+                )}
+                
+                {/* Hover glow effect */}
+                <motion.div
+                  className="absolute inset-0 bg-blue-500 opacity-0 rounded-full blur-md"
+                  whileHover={{ opacity: 0.2 }}
+                  transition={{ duration: 0.2 }}
+                />
+              </motion.button>
               {loggedIn ? (
                 <div className="relative">
                   <motion.button
@@ -337,7 +374,7 @@ const Navbar = () => {
                 initial="initial"
                 whileHover="hover"
                 whileTap="tap"
-                className="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="lg:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 <AnimatePresence mode="wait">
@@ -369,7 +406,7 @@ const Navbar = () => {
 
           {/* Search (mobile) */}
           <motion.div 
-            className="md:hidden pb-4"
+            className="lg:hidden pb-4"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.4 }}
@@ -399,7 +436,7 @@ const Navbar = () => {
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
-                className={`md:hidden border-t overflow-hidden ${
+                className={`lg:hidden border-t overflow-hidden ${
                   theme === 'dark' ? 'border-gray-700' : 'border-gray-200'
                 }`}
               >
