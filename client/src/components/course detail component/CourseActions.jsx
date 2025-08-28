@@ -10,17 +10,16 @@ import {
 import toast from 'react-hot-toast'
 import useAppContext from '../../context/AppContext.jsx'
 import {useNavigate} from 'react-router-dom'
+import axios from 'axios'
 
 const CourseActions = ({ course, theme }) => {
-  const { cartItemsDetails ,addCartItem ,removeCartItem , getCartDetails , loading , buyNow} = useAppContext()
-  const [isWishlisted, setIsWishlisted] = useState(false)  
+  const { cartItemsDetails ,addCartItem ,removeCartItem , getCartDetails , loading , buyNow , loggedIn} = useAppContext()
+  const [wishList , setWishlist] = useState([])
   const courseID = course._id.toString()
   const cartItems = cartItemsDetails.cartItems || []; 
   const isInCart = cartItems.some(item => item._id === courseID);
   const navigate = useNavigate()
 
-
- 
   const formatPrice = (price, discountedPrice) => {
     if (discountedPrice && discountedPrice < price) {
       return {
@@ -38,7 +37,7 @@ const CourseActions = ({ course, theme }) => {
 
   const priceInfo = formatPrice(course?.price, course?.discountedPrice)
 
-    const getYouTubeEmbedUrl = (url) => {
+  const getYouTubeEmbedUrl = (url) => {
     try {
       const parsedUrl = new URL(url);
 
@@ -54,18 +53,93 @@ const CourseActions = ({ course, theme }) => {
   };
 
   const addToCart = async() => {
+    if(!loggedIn)
+    {
+      navigate('/login')
+      scrollTo(0,0)
+    }
     addCartItem(course._id)
     getCartDetails()
   }
+  
   const removeFromCart = async() => {
+     if(!loggedIn)
+    {
+      navigate('/login')
+      scrollTo(0,0)
+    }
     removeCartItem(course._id)
     getCartDetails()
   }
+  
   const buyProducts = async () => {
-    navigate('/cart')
+    if(!loggedIn)
+    {
+      navigate('/login')
+      scrollTo(0,0)
+    }else{
+     navigate('/cart')
     buyNow(course._id)
+    }
   }
 
+  const addWishList = async() => {
+    try { if(!loggedIn)
+    {
+      navigate('/login')
+      scrollTo(0,0)
+    }
+      const {data} = await axios.post(`/api/wishlist/addwishlist/${course._id}`)
+      if(!data.success){
+        return toast.error(data.message)
+      }else{
+        toast.success(data.message)
+        getWishListData()
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+  const removeWishList = async() => {
+    try {
+      const {data} = await axios.delete(`/api/wishlist/removewishlist/${course._id}`)
+      if(!data.success){
+        return toast.error(data.message)
+      }else{
+        toast.success(data.message)
+        getWishListData()
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+  const getWishListData = async () => {
+    try {
+      const { data } = await axios.get('/api/wishlist/getallwishList')
+      if (!data.success) {
+        console.log(data.message);
+        return;
+      }
+      setWishlist(data.wishlists || []); 
+    } catch (error) {
+      console.log(error.message);
+      setWishlist([]);
+    }
+  }
+
+  const isInWishList = Array.isArray(wishList) && wishList.some(item => item._id.toLowerCase() === course._id.toLowerCase())
+  console.log(isInWishList);
+  
+  useEffect(() => {
+    const fetchWishListData = async () => {
+      await getWishListData();
+    };
+    
+    fetchWishListData();
+  }, []);
+  
   return (
     <motion.div
       className="w-full max-w-sm mx-auto"
@@ -83,9 +157,14 @@ const CourseActions = ({ course, theme }) => {
           {/* Video Preview */}
           <div className="relative aspect-video bg-gradient-to-br from-blue-500 to-purple-600">
             {
-              getYouTubeEmbedUrl (course.trailer) && 
+              getYouTubeEmbedUrl(course.trailer) && 
             
-            <iframe src={getYouTubeEmbedUrl(course.trailer)} frameborder="0" className='w-full h-full'
+            <iframe 
+              src={getYouTubeEmbedUrl(course.trailer)} 
+              frameBorder="0" 
+              className='w-full h-full'
+              title="Course Preview"
+              allowFullScreen
             ></iframe>
 
             }
@@ -126,16 +205,15 @@ const CourseActions = ({ course, theme }) => {
 
             {/* Call to Action Text */}
             <p className={`text-center mb-6 font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-  Message from {course.seller.name}:
-  <span className="block mt-2 italic font-serif text-lg">
-    "Hello everyone! I hope you're doing well.  
-    This course is designed for {course.skillLevel} learners.  
-    In just {course.totalHours} hours and {course.totalNumberOfLessons} lessons,  
-    you'll gain all the skills you need to succeed.  
-    Join now and start learning!"
-  </span>
-             </p>
-
+              Message from {course.seller.name}:
+              <span className="block mt-2 italic font-serif text-lg">
+                "Hello everyone! I hope you're doing well.  
+                This course is designed for {course.skillLevel} learners.  
+                In just {course.totalHours} hours and {course.totalNumberOfLessons} lessons,  
+                you'll gain all the skills you need to succeed.  
+                Join now and start learning!"
+              </span>
+            </p>
 
             {/* Action Buttons */}
             <div className="space-y-3">
@@ -183,21 +261,22 @@ const CourseActions = ({ course, theme }) => {
               }
 
               <div className="flex gap-2">
-                <motion.button
-                  onClick={() => setIsWishlisted(!isWishlisted)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 transition-all duration-300 ${
-                    isWishlisted
-                      ? 'border-red-500 text-red-500 bg-red-50 dark:bg-red-900/20'
-                      : theme === 'dark'
-                      ? 'border-gray-600 text-gray-400 hover:border-red-500 hover:text-red-400'
-                      : 'border-gray-300 text-gray-600 hover:border-red-500 hover:text-red-500'
-                  }`}
-                >
-                  <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
-                  <span className="text-sm font-medium">
-                    {isWishlisted ? 'Saved' : 'Save'}
+                {/* Wishlist Toggle Button */}
+             <motion.button
+                onClick={isInWishList ? removeWishList : addWishList}
+                className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 transition-all duration-300 ${
+                 isInWishList
+                ? 'border-red-500 text-red-500 bg-red-50 dark:bg-red-900/20'
+               : theme === 'dark'
+                ? 'border-gray-600 text-gray-400 hover:border-red-500 hover:text-red-400'
+               : 'border-gray-300 text-gray-600 hover:border-red-500 hover:text-red-500'
+                    }`}
+                 >
+                    <Heart className={`w-5 h-5 ${isInWishList ? 'fill-current' : ''}`} />
+                 <span className="text-sm font-medium">
+                  {isInWishList ? 'Saved' : 'Save'}
                   </span>
-                </motion.button>
+               </motion.button>
 
                 <motion.button
                   className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 transition-all duration-300 ${

@@ -59,7 +59,7 @@ const Wishlist = () => {
     }
   };
 
-  // Get the wishlist by userId
+  //* Get the wishlist by userId
   const getWishList = async() => {
     try {
       setLoading(true);
@@ -75,7 +75,7 @@ const Wishlist = () => {
     }
   };
 
-  // Remove from wishlist
+  //* Remove from wishlist
   const removeFromWishlist = async (courseId) => {
     try {
       const { data } = await axios.delete(`/api/wishlist/removewishlist/${courseId}`);
