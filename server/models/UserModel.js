@@ -15,7 +15,11 @@ const userSchema = new mongoose.Schema({
   enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
   completedCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
   progress: { type: Map, of: Number, default: {} },
+  
+
+  //* cart and wishlist 
   wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
+  cart : [{type : mongoose.Schema.Types.ObjectId , ref : "Course" }],
 
   //* Payments
   payments: [{ 

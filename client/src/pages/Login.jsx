@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast'
 import { FcGoogle } from "react-icons/fc"
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import {motion} from 'framer-motion'
 
 const Login = () => {
   const { theme } = useAppContext()
@@ -60,9 +61,13 @@ const googleLogin = useGoogleLogin({
   }
 
   return (
-    <div
+    <motion.div
+       initial={{opacity : 0 ,  y : 100}}
+       animate ={ {opacity : 1 , y : 0}}
+       transition={{duration : 0.8}}
       className={`min-h-screen flex items-center justify-center px-4 
       ${theme === 'dark' ? 'bg-gray-900 text-gray-200' : 'bg-white text-slate-800'}`}
+      
     >
       <div
         className={`w-full max-w-md flex flex-col gap-6 rounded-lg p-6 shadow-2xl border 
@@ -138,7 +143,7 @@ const googleLogin = useGoogleLogin({
           Login with Google
         </button>
       </div>
-    </div>
+    </motion.div>
   ) 
 }
 

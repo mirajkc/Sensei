@@ -84,7 +84,8 @@ const DiscoverCourses = () => {
 
    const toggleWishlist = async (courseId) => {
     if(loggedIn === false){
-      return toast.error("You have to log in to add course in your wishlists")
+      scrollTo(0,0)
+      navigate('/login')
     }
   if (wishlist.has(courseId)) {
     // *Remove from wishlist

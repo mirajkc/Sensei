@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Play, 
@@ -8,10 +8,19 @@ import {
   User, 
 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import useAppContext from '../../context/AppContext.jsx'
+import {useNavigate} from 'react-router-dom'
 
 const CourseActions = ({ course, theme }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false)
+  const { cartItemsDetails ,addCartItem ,removeCartItem , getCartDetails , loading , buyNow} = useAppContext()
+  const [isWishlisted, setIsWishlisted] = useState(false)  
+  const courseID = course._id.toString()
+  const cartItems = cartItemsDetails.cartItems || []; 
+  const isInCart = cartItems.some(item => item._id === courseID);
+  const navigate = useNavigate()
 
+
+ 
   const formatPrice = (price, discountedPrice) => {
     if (discountedPrice && discountedPrice < price) {
       return {
@@ -43,6 +52,19 @@ const CourseActions = ({ course, theme }) => {
       return null;
     }
   };
+
+  const addToCart = async() => {
+    addCartItem(course._id)
+    getCartDetails()
+  }
+  const removeFromCart = async() => {
+    removeCartItem(course._id)
+    getCartDetails()
+  }
+  const buyProducts = async () => {
+    navigate('/cart')
+    buyNow(course._id)
+  }
 
   return (
     <motion.div
@@ -117,23 +139,48 @@ const CourseActions = ({ course, theme }) => {
 
             {/* Action Buttons */}
             <div className="space-y-3">
+              
               <motion.button
+                 onClick={buyProducts}
                 className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <Zap className="w-5 h-5" />
                 Buy Now
               </motion.button>
 
-              <motion.button
+              {
+                isInCart ? (
+                  
+                    <motion.button
+                    disabled = {loading}
+                onClick={removeFromCart}
+                className={`w-full flex items-center justify-center gap-2 font-semibold py-3 px-6 rounded-lg border-2 transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'border-red-500 text-red-400 hover:bg-red-500/10'
+                    : 'border-red-500 text-red-600 hover:bg-red-50'
+                }`
+              }
+              >
+                <ShoppingCart className="w-5 h-5" />
+                Remove from Cart
+                    </motion.button>
+                ) : (
+                  
+                <motion.button
+                disabled = {loading}
+                onClick={addToCart}
                 className={`w-full flex items-center justify-center gap-2 font-semibold py-3 px-6 rounded-lg border-2 transition-all duration-300 ${
                   theme === 'dark'
                     ? 'border-blue-500 text-blue-400 hover:bg-blue-500/10'
                     : 'border-blue-500 text-blue-600 hover:bg-blue-50'
-                }`}
+                }`
+              }
               >
                 <ShoppingCart className="w-5 h-5" />
                 Add to Cart
-              </motion.button>
+                </motion.button>     
+                )
+              }
 
               <div className="flex gap-2">
                 <motion.button

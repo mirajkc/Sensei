@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {motion} from 'framer-motion'
 
 const SignUp = () => {
   const { theme } = useAppContext();
@@ -126,7 +127,10 @@ const SignUp = () => {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{opacity : 0 , y : 100}}
+      animate = {{ opacity : 1 , y : 0 }}
+      transition={{duration : 0.8}}
       className={`min-h-screen flex items-center justify-center px-4 py-8
       ${theme === 'dark' ? 'bg-gray-900 text-gray-200' : 'bg-white text-slate-800'}`}
     >
@@ -288,7 +292,7 @@ const SignUp = () => {
           {loading ? 'Please wait…' : 'Sign up with Google'}
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
