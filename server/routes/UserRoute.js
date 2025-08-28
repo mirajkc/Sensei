@@ -24,7 +24,8 @@ userRouter.get( '/verifyUser' , verifyUser , (req,res)=>{
     user : {
       id : req.user._id,
       name : req.user.name,
-      email : req.user.email
+      email : req.user.email,
+      picture : req.user.picture
     }
   })
 })

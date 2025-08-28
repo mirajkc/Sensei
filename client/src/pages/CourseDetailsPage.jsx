@@ -260,9 +260,13 @@ const CourseDetailsPage = () => {
         </div>
 
         {/* Right Column - Actions & Sidebar */}
-        <div className="lg:w-3/10 h-max sticky top-0 flex flex-col p-6 space-y-6">
+        <motion.div 
+        initial = {{opacity : 0 , x : 100}}
+        animate ={{opacity : 1 , x : 0}}
+        transition={{duration : 0.6}}
+        className="lg:w-3/10 h-max sticky top-0 flex flex-col p-6 space-y-6">
           <CourseActions course={course} theme={theme} />
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   )
