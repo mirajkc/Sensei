@@ -164,7 +164,6 @@ const CourseActions = ({ course, theme }) => {
               frameBorder="0" 
               className='w-full h-full'
               title="Course Preview"
-              allowFullScreen
             ></iframe>
 
             }
@@ -175,7 +174,7 @@ const CourseActions = ({ course, theme }) => {
             </div >
             <div
               onClick={()=>toast.error("Fullscreen is disabled in preview")}
-             className='absolute bottom-3 right-4 p-4 cursor-not-allowed' >
+             className='absolute bottom-0.5 right-4 p-8 cursor-not-allowed' >
               
             </div>
           </div>

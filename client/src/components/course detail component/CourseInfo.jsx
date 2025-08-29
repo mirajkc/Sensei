@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Star, Users, MessageCircle, Calendar, Globe, Award } from 'lucide-react'
 
 const CourseInfo = ({ course, theme }) => {
+  const [seemore , setSeeMore] = useState(500)
   const containerVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -40,6 +41,11 @@ const CourseInfo = ({ course, theme }) => {
   }
 
   const priceInfo = formatPrice(course?.price, course?.discountedPrice)
+  const handleSlider = () => {
+    setSeeMore(seemore + 500)
+  }
+
+
 
   return (
     <motion.div
@@ -65,7 +71,24 @@ const CourseInfo = ({ course, theme }) => {
           theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
         }`}
       >
-        {course?.description}
+        {course?.description.length > 500 ? (
+         <>
+          {course.description.slice(0, seemore)}
+          {
+            seemore < course.description.length && (
+              <span
+              className="text-blue-500 cursor-pointer ml-1"
+              onClick={handleSlider}
+              >
+                ...see more
+              </span>
+            )
+          }
+          </>
+        ) : (
+        course.description
+       )}
+      
       </motion.p>
 
       {/* Course Stats */}
@@ -170,7 +193,7 @@ const CourseInfo = ({ course, theme }) => {
             <p className={`text-xs ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              Created
+              Course Created At
             </p>
             <p className={`text-sm font-medium ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
@@ -190,7 +213,7 @@ const CourseInfo = ({ course, theme }) => {
             <p className={`text-xs ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              Updated
+              Course Updated At
             </p>
             <p className={`text-sm font-medium ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
@@ -210,7 +233,7 @@ const CourseInfo = ({ course, theme }) => {
             <p className={`text-xs ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              Language
+              Languages Used
             </p>
             <p className={`text-sm font-medium ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
@@ -230,7 +253,7 @@ const CourseInfo = ({ course, theme }) => {
             <p className={`text-xs ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              Level
+              Course Difficulty
             </p>
             <p className={`text-sm font-medium ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'

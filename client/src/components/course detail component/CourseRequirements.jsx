@@ -24,53 +24,6 @@ const CourseRequirements = ({ course, theme }) => {
     }
   }
 
-  // Default requirements for MongoDB course (you can modify this based on course type)
-  const requirements = [
-    {
-      icon: Monitor,
-      title: 'Computer Requirements',
-      items: [
-        'Windows, macOS, or Linux operating system',
-        'At least 4GB RAM (8GB recommended)',
-        'Minimum 2GB free disk space',
-        'Modern web browser (Chrome, Firefox, Safari, or Edge)'
-      ],
-      type: 'required'
-    },
-    {
-      icon: Code,
-      title: 'Software Requirements',
-      items: [
-        'MongoDB Community Edition (free)',
-        'MongoDB Compass (GUI tool - optional but recommended)',
-        'Text editor or IDE (VS Code, Sublime Text, etc.)',
-        'Node.js (if following along with backend examples)'
-      ],
-      type: 'required'
-    },
-    {
-      icon: Database,
-      title: 'Prior Knowledge',
-      items: [
-        'Basic understanding of databases (helpful but not required)',
-        'Familiarity with command line interface (basic level)',
-        'No prior MongoDB experience needed - we start from scratch',
-        'Enthusiasm to learn database management!'
-      ],
-      type: 'recommended'
-    },
-    {
-      icon: Wifi,
-      title: 'Internet & Tools',
-      items: [
-        'Stable internet connection for video streaming',
-        'MongoDB Atlas account (free cloud database - optional)',
-        'GitHub account for accessing course resources',
-        'Note-taking application or physical notebook'
-      ],
-      type: 'recommended'
-    }
-  ]
 
   const getRequirementColor = (type) => {
     if (type === 'required') {
@@ -87,11 +40,40 @@ const CourseRequirements = ({ course, theme }) => {
     }
   }
 
+  //* req based on category
+const courseCategory = course?.category;
+
+const categoryRequirements = {
+  "Web Development": "Basic understanding of HTML, CSS, and JavaScript is recommended.",
+  "Digital Marketing": "Familiarity with social media platforms and marketing concepts is helpful.",
+  "Data Science": "Some experience with Python or statistics will be beneficial.",
+  "Front End Development": "Knowledge of HTML, CSS, and a JavaScript framework like React is recommended.",
+  "Back End Development": "Understanding of server-side programming and databases is recommended.",
+  "Others": "No specific requirements. Just a willingness to learn!"
+};
+
+//* Dynamic requirement variable
+const requirementText = categoryRequirements[courseCategory] || "No specific requirements.";
+
+const courseLevel = course?.skillLevel;
+
+const levelRequirements = {
+  "Beginner": "No prior experience is needed. This course is perfect for newcomers.",
+  "Intermediate": "Basic understanding of the subject is recommended before starting this course.",
+  "Advanced": "Strong knowledge and experience in the subject is required to follow this course effectively."
+};
+
+//* Dynamic requirement based on level
+const levelRequirementText = levelRequirements[courseLevel] || "No specific requirements.";
+
+
+  
+
   return (
     <motion.div
       variants={containerVariants}
       initial="hidden"
-      animate="visible"
+      whileInView="visible"
       className={`w-full p-6 rounded-xl border transition-all duration-300 ${
         theme === 'dark'
           ? 'bg-gray-800 border-gray-700 shadow-lg shadow-gray-900/20'
@@ -121,57 +103,35 @@ const CourseRequirements = ({ course, theme }) => {
       >
         Here's what you'll need to get the most out of this course:
       </motion.p>
-
-      <div className="grid gap-6 md:grid-cols-2">
-        {requirements.map((requirement, index) => {
-          const colors = getRequirementColor(requirement.type)
-          const RequirementIcon = requirement.icon
-
-          return (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              className={`p-5 rounded-lg border ${colors.bg} ${colors.border}`}
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <RequirementIcon className={`w-6 h-6 ${colors.icon}`} />
-                <div>
-                  <h3 className={`font-semibold ${
-                    theme === 'dark' ? 'text-white' : 'text-gray-900'
-                  }`}>
-                    {requirement.title}
-                  </h3>
-                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                    requirement.type === 'required'
-                      ? theme === 'dark'
-                        ? 'bg-red-800/50 text-red-300'
-                        : 'bg-red-100 text-red-700'
-                      : theme === 'dark'
-                      ? 'bg-blue-800/50 text-blue-300'
-                      : 'bg-blue-100 text-blue-700'
-                  }`}>
-                    {requirement.type === 'required' ? 'Required' : 'Recommended'}
-                  </span>
-                </div>
-              </div>
-
-              <ul className="space-y-2">
-                {requirement.items.map((item, itemIndex) => (
-                  <li key={itemIndex} className="flex items-start gap-2">
-                    <CheckCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
-                      theme === 'dark' ? 'text-green-400' : 'text-green-500'
-                    }`} />
-                    <span className={`text-sm leading-relaxed ${
-                      theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
-                      {item}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          )
-        })}
+            <div className="space-y-2 mb-6">
+        <div className={`p-3 rounded-lg transition-colors duration-200 ${
+          theme === 'dark' 
+            ? 'bg-gray-700/50 text-gray-200 hover:bg-gray-600 hover:text-white' 
+            : 'bg-gray-50 text-gray-800 hover:bg-gray-200 hover:text-gray-900'
+        }`}>
+          <p className="text-sm">✓ {requirementText}</p>
+        </div>
+        <div className={`p-3 rounded-lg transition-colors duration-200 ${
+          theme === 'dark' 
+            ? 'bg-gray-700/50 text-gray-200 hover:bg-gray-600 hover:text-white' 
+            : 'bg-gray-50 text-gray-800 hover:bg-gray-200 hover:text-gray-900'
+        }`}>
+          <p className="text-sm">✓ {levelRequirementText}</p>
+        </div>
+        <div className={`p-3 rounded-lg transition-colors duration-200 ${
+          theme === 'dark' 
+            ? 'bg-gray-700/50 text-gray-200 hover:bg-gray-600 hover:text-white' 
+            : 'bg-gray-50 text-gray-800 hover:bg-gray-200 hover:text-gray-900'
+        }`}>
+          <p className="text-sm">✓ Have a computer with stable internet connection</p>
+        </div>
+        <div className={`p-3 rounded-lg transition-colors duration-200 ${
+          theme === 'dark' 
+            ? 'bg-gray-700/50 text-gray-200 hover:bg-gray-600 hover:text-white' 
+            : 'bg-gray-50 text-gray-800 hover:bg-gray-200 hover:text-gray-900'
+        }`}>
+          <p className="text-sm">✓ Prepare to build real projects!</p>
+        </div>
       </div>
 
       {/* Help section */}

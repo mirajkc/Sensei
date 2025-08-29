@@ -397,7 +397,7 @@ const AddNewCourse = () => {
                         value={whatYouWillLearn}
                         onChange={(e) => setWhatYouWillLearn(e.target.value)}
                         className={`${inputClass} h-32 resize-vertical`}
-                        placeholder="Describe what students will learn in this course..."
+                        placeholder="Important !!! please writte in bullet points with no special numbering such as (1. , - , i ) at front of a point"
                         required
                       />
                       <p className="text-xs text-gray-500 mt-1">

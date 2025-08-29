@@ -23,6 +23,7 @@ import DiscoverCourses from './pages/DiscoverCourses'
 import UserProfile from './pages/user pages/UserProfile'
 import WishList from './pages/user pages/wishlist'
 import CourseDetailsPage from './pages/CourseDetailsPage'
+import Cart from './pages/user pages/Cart'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -52,6 +53,7 @@ const App = () => {
         //* all user routes
         <Route path='/userprofile' element={<UserProfile />} />
         <Route path='/wishlists' element={<WishList />} />
+        <Route path='/cart' element={<Cart />} />
 
 
 

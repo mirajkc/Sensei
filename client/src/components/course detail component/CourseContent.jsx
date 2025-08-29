@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, ChevronRight, PlayCircle, Clock, FileText, Video } from 'lucide-react'
 
 const CourseContent = ({ course, theme }) => {
-  const [expandedLessons, setExpandedLessons] = useState(new Set())
+  const [expandedLessons, setExpandedLessons] = useState(new Set([course?.lessons[0]?._id]))
 
   const toggleLesson = (lessonId) => {
     const newExpanded = new Set(expandedLessons)
@@ -53,7 +53,7 @@ const CourseContent = ({ course, theme }) => {
     <motion.div
       variants={containerVariants}
       initial="hidden"
-      animate="visible"
+      whileInView="visible"
       className={`w-full p-6 rounded-xl border transition-all duration-300 ${
         theme === 'dark'
           ? 'bg-gray-800 border-gray-700 shadow-lg shadow-gray-900/20'
@@ -64,7 +64,7 @@ const CourseContent = ({ course, theme }) => {
         <h2 className={`text-2xl font-bold ${
           theme === 'dark' ? 'text-white' : 'text-gray-900'
         }`}>
-          Course Content
+          Course Content 
         </h2>
         <div className={`px-4 py-2 rounded-lg ${
           theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-100'
@@ -108,7 +108,7 @@ const CourseContent = ({ course, theme }) => {
 
       {/* Lessons list */}
       <div className="space-y-3">
-        {lessons.map((lesson, index) => (
+        {lessons.map((lesson) => (
           <motion.div
             key={lesson._id}
             variants={itemVariants}
@@ -160,30 +160,6 @@ const CourseContent = ({ course, theme }) => {
                       {formatDuration(lesson.lessonDuration)}
                     </span>
                   </div>
-                  {lesson.videoGuide && (
-                    <div className="flex items-center gap-1">
-                      <Video className={`w-4 h-4 ${
-                        theme === 'dark' ? 'text-green-400' : 'text-green-500'
-                      }`} />
-                      <span className={`text-sm ${
-                        theme === 'dark' ? 'text-green-400' : 'text-green-500'
-                      }`}>
-                        Video
-                      </span>
-                    </div>
-                  )}
-                  {lesson.textGuide && (
-                    <div className="flex items-center gap-1">
-                      <FileText className={`w-4 h-4 ${
-                        theme === 'dark' ? 'text-purple-400' : 'text-purple-500'
-                      }`} />
-                      <span className={`text-sm ${
-                        theme === 'dark' ? 'text-purple-400' : 'text-purple-500'
-                      }`}>
-                        Text Guide
-                      </span>
-                    </div>
-                  )}
                 </div>
               </div>
             </motion.div>
@@ -231,34 +207,6 @@ const CourseContent = ({ course, theme }) => {
                       </div>
                     )}
 
-                    {/* Resources */}
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {lesson.videoGuide && (
-                        <a
-                          href={lesson.videoGuide}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium transition-colors duration-200 ${
-                            theme === 'dark'
-                              ? 'bg-red-900/30 text-red-400 hover:bg-red-900/50'
-                              : 'bg-red-100 text-red-600 hover:bg-red-200'
-                          }`}
-                        >
-                          <Video className="w-4 h-4" />
-                          Watch Video
-                        </a>
-                      )}
-                      {lesson.textGuide && (
-                        <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
-                          theme === 'dark'
-                            ? 'bg-purple-900/30 text-purple-400'
-                            : 'bg-purple-100 text-purple-600'
-                        }`}>
-                          <FileText className="w-4 h-4" />
-                          Text Guide Available
-                        </span>
-                      )}
-                    </div>
                   </div>
                 </motion.div>
               )}
@@ -283,7 +231,7 @@ const CourseContent = ({ course, theme }) => {
               ? 'bg-yellow-900/30 text-yellow-400'
               : 'bg-yellow-100 text-yellow-700'
           }`}>
-            🏆 Certificate Available
+             Certificate Available
           </div>
         </div>
       </motion.div>

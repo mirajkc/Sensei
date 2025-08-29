@@ -16,6 +16,8 @@ const CourseDetailsPage = () => {
   const { theme } = useAppContext()
   const [loading, setLoading] = useState(false)
   const [course, setCourse] = useState(null)
+  const [slicer , setSlicer] = useState(500)
+  const [whatYouWillLearnSlicer , setWShatYouWillLearnSlicer ] = useState(500)
 
   const navigate = useNavigate()
   const params = useParams()
@@ -99,7 +101,13 @@ const CourseDetailsPage = () => {
       </div>
     )
   }
+  const handleSlicer = () => {
+    setSlicer(slicer + 500)
+  }
 
+  const handleWhatYouWillLearnSlicer = () => {
+    setSlicer(whatYouWillLearnSlicer + 500)
+  }
   return (
     <motion.div
       variants={pageVariants}
@@ -174,7 +182,7 @@ const CourseDetailsPage = () => {
         {/* Full Description Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className={`w-full p-6 rounded-xl border transition-all duration-300 ${
             theme === 'dark'
@@ -185,7 +193,7 @@ const CourseDetailsPage = () => {
           <h2 className={`text-2xl font-bold mb-6 ${
             theme === 'dark' ? 'text-white' : 'text-gray-900'
           }`}>
-            About This Course
+            Course Description
           </h2>
           <div className={`prose max-w-none ${
             theme === 'dark' ? 'prose-invert' : ''
@@ -193,7 +201,17 @@ const CourseDetailsPage = () => {
             <p className={`text-lg leading-relaxed ${
               theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
             }`}>
-              {course.description}
+               {course.description.length <= 500
+              ? course.description
+              : course.description.slice(0, slicer)}
+              {
+                slicer < course.description.length ? (
+                  <button
+                   onClick={handleSlicer}  >Show More</button>
+                ) : (
+                  <button onClick={()=>setSlicer(500)} > Show Less</button>
+                )
+              }
             </p>
             {course.whatYouWillLearn && (
               <div className="mt-6">
@@ -205,7 +223,18 @@ const CourseDetailsPage = () => {
                 <div className={`whitespace-pre-wrap ${
                   theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                 }`}>
-                  {course.whatYouWillLearn}
+                  
+                  {course.whatYouWillLearn.length <= 500
+              ? course.whatYouWillLearn
+              : course.whatYouWillLearn.slice(0, slicer)}
+              {
+                slicer < course.description.length ? (
+                  <button
+                   onClick={handleWhatYouWillLearnSlicer}  >Show More</button>
+                ) : (
+                  <button onClick={()=>setWShatYouWillLearnSlicer(500)} > Show Less</button>
+                )
+              }
                 </div>
               </div>
             )}
@@ -215,7 +244,7 @@ const CourseDetailsPage = () => {
         {/* Comments Section Placeholder */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className={`w-full p-6 rounded-xl border transition-all duration-300 ${
             theme === 'dark'
@@ -238,7 +267,7 @@ const CourseDetailsPage = () => {
         {/* Related Courses Placeholder */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className={`w-full p-6 rounded-xl border transition-all duration-300 ${
             theme === 'dark'

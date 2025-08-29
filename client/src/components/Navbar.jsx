@@ -250,7 +250,7 @@ const Navbar = () => {
                     whileHover={{ scale: 1.2 }}
                     className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium"
                   >
-                    {cartItemsCount > 99 ? '99+' : cartItemsCount}
+                    {cartItemsCount > 9 ? '9+' : cartItemsCount}
                   </motion.span>
                 )}
                 
@@ -306,7 +306,8 @@ const Navbar = () => {
                           {[
                             { icon: User, label: 'Profile', href: 'userprofile' },
                             { icon: BookOpen, label: 'My Courses', href: '#' },
-                            { icon: BookmarkPlus, label: 'Wishlist', href: '/wishlists' },
+                            { icon: ShoppingCart, label: 'My Cart', href: 'cart' },
+                            { icon: BookmarkPlus, label: 'My Wishlist', href: '/wishlists' },
                             { icon: MessageCircleQuestionMark, label: 'Support', href: '#' }
                           ].map((item, index) => (
                             <motion.a

@@ -34,13 +34,13 @@ const CourseIncludes = ({ course, theme }) => {
     {
       icon: PlayCircle,
       label: 'Video Lessons',
-      value: `${course?.totalNumberOfLessons || 0} lessons`,
+      value: `${course?.totalNumberOfLessons || 0} hours on-demand video`,
       color: 'green'
     },
     {
       icon: FileText,
-      label: 'Video Guides',
-      value: `${course?.totalNumberOfLessons || 0} guides`,
+      label: 'Articles',
+      value: `${course?.totalNumberOfLessons || 0} Articles`,
       color: 'purple'
     },
     {
@@ -52,7 +52,7 @@ const CourseIncludes = ({ course, theme }) => {
     {
       icon: Globe,
       label: 'Language',
-      value: course?.language || 'English',
+      value: 'English',
       color: 'indigo'
     },
     {
@@ -79,7 +79,7 @@ const CourseIncludes = ({ course, theme }) => {
     <motion.div
       variants={containerVariants}
       initial="hidden"
-      animate="visible"
+      whileInView="visible"
       className={`w-full p-6 rounded-xl border transition-all duration-300 ${
         theme === 'dark'
           ? 'bg-gray-800 border-gray-700 shadow-lg shadow-gray-900/20'
