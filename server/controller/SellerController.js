@@ -4,6 +4,8 @@ import cloudinary from 'cloudinary';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { log } from "console";
+import User from "../models/UserModel.js";
+import Course from "../models/CourseModel.js";
 
 export const sellerSignUp = async (req, res) => {
   try {
@@ -317,6 +319,149 @@ export const sellerLogout = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: `Server error: ${error.message}`
+    });
+  }
+};
+
+//* like the seller profile
+export const likeSellerById = async (req, res) => {
+  try {
+    const { sellerId } = req.params;
+    const userId = req.user?._id;
+
+    if (!sellerId) {
+      return res.status(200).json({ success: false, message: "Unable to retrieve the seller data" });
+    }
+
+    if (!userId) {
+      return res.status(200).json({ success: false, message: "You must be logged in to like" });
+    }
+
+    const seller = await Seller.findById(sellerId);
+    if (!seller) {
+      return res.status(200).json({ success: false, message: "Seller not found" });
+    }
+
+    //* Check if user already liked
+    const alreadyLiked = seller.like.some(id => id.toString() === userId.toString());
+    if (alreadyLiked) {
+      return res.status(200).json({ success: false, message: "You have already liked the seller" });
+    }
+
+    //* Remove from dislikes if user had disliked before
+    seller.dislike = seller.dislike.filter(id => id.toString() !== userId.toString());
+
+    //* Add to likes
+    seller.like.push(userId);
+
+    await seller.save();
+
+    return res.status(200).json({ success: true, message: "Like added for seller" });
+
+  } catch (error) {
+    return res.status(500).json({ success: false, message: `Server error: ${error.message}` });
+  }
+};
+
+//* dislike the seller
+export const dislikeSellerById = async (req, res) => {
+  try {
+    const { sellerId } = req.params;
+    const userId = req.user?._id;
+
+    if (!sellerId) {
+      return res.status(200).json({ success: false, message: "Unable to retrieve the seller data" });
+    }
+
+    if (!userId) {
+      return res.status(200).json({ success: false, message: "You must be logged in to dislike" });
+    }
+
+    const seller = await Seller.findById(sellerId);
+    if (!seller) {
+      return res.status(200).json({ success: false, message: "Seller not found" });
+    }
+
+    // *Check if user already disliked
+    const alreadyDisliked = seller.dislike.some(id => id.toString() === userId.toString());
+    if (alreadyDisliked) {
+      return res.status(200).json({ success: false, message: "You have already disliked the seller" });
+    }
+
+    // *Remove from likes if user had liked before
+    seller.like = seller.like.filter(id => id.toString() !== userId.toString());
+
+    //* Add to dislikes
+    seller.dislike.push(userId);
+
+    await seller.save();
+
+    return res.status(200).json({ success: true, message: "Dislike added for seller" });
+
+  } catch (error) {
+    return res.status(500).json({ success: false, message: `Server error: ${error.message}` });
+  }
+};
+
+
+//* get the seller details for the UI
+
+export const getSellerDetailsForUI = async (req, res) => {
+  try {
+    const { sellerId } = req.params;
+    const userId = req.user?._id;
+
+    if (!sellerId) {
+      return res.status(200).json({
+        success: false,
+        message: "Unable to retrieve the seller data"
+      });
+    }
+
+    const seller = await Seller.findById(sellerId);
+    if (!seller) {
+      return res.status(200).json({
+        success: false,
+        message: "Seller not found"
+      });
+    }
+
+    //* Calculate total likes and dislikes
+    const totalLike = seller.like.length;
+    const totalDislike = seller.dislike.length;
+
+    //* Calculate rating (0-5 scale)
+    const totalVotes = totalLike + totalDislike;
+    const rating = totalVotes > 0 ? (totalLike / totalVotes) * 5 : 0;
+
+    //* Get total courses created by seller
+    const courses = await Course.find({ seller: sellerId });
+    const totalCourses = courses.length;
+
+    //* Determine like/dislike status for current user
+    let likeStatus = false;
+    let disLikeStatus = false;
+
+    if (userId) {
+      likeStatus = seller.like.some(id => id.toString() === userId.toString());
+      disLikeStatus = seller.dislike.some(id => id.toString() === userId.toString());
+    }
+
+    return res.status(200).json({
+      success: true,
+      seller,
+      likeStatus,
+      disLikeStatus,
+      rating,
+      totalCourses,
+      totalLike,
+      totalDislike
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: `Server Error: ${error.message}`
     });
   }
 };

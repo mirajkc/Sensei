@@ -1,7 +1,8 @@
 import express from 'express';
 import multer from 'multer';
-import { getSellerDetailsBySellerId, sellerLogin, sellerLogout, sellerSignUp, updateSellerDetails } from '../controller/SellerController.js';
+import { dislikeSellerById, getSellerDetailsBySellerId, getSellerDetailsForUI, likeSellerById, sellerLogin, sellerLogout, sellerSignUp, updateSellerDetails } from '../controller/SellerController.js';
 import verifySeller from '../middleware/SellerMiddleware.js';
+import verifyUser from '../middleware/UserMiddleware.js';
 
 const sellerRouter = express.Router();
 const upload = multer({ dest: 'uploads/' }); 
@@ -20,5 +21,10 @@ sellerRouter.get('/authseller', verifySeller, (req, res) => {
 sellerRouter.get('/getsellerbyid' , verifySeller , getSellerDetailsBySellerId )
 sellerRouter.post('/updateseller' , verifySeller , upload.single('image') ,  updateSellerDetails )
 sellerRouter.get('/sellerlogout' , verifySeller , sellerLogout )
+
+sellerRouter.post('/likeseller/:sellerId' ,verifyUser , likeSellerById )
+sellerRouter.post('/dislikeseller/sellerId' , verifyUser , dislikeSellerById)
+sellerRouter.get('/getSellerDetails/:sellerId', verifyUser , getSellerDetailsForUI)
+
 
 export default sellerRouter;

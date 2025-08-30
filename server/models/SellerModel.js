@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
+
 
 const sellerSchema = new mongoose.Schema({ 
 
@@ -30,6 +31,8 @@ const sellerSchema = new mongoose.Schema({
 
   //* peformnace
    rating: { type: Number, default: 0 },
+    like: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],   
+   dislike: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 
   createdAt: { type: Date, default: Date.now },
 

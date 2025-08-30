@@ -11,13 +11,15 @@ import CourseIncludes from '../components/course detail component/CourseIncludes
 import CourseContent from '../components/course detail component/CourseContent.jsx'
 import CourseActions from '../components/course detail component/CourseActions.jsx'
 import CourseRequirements from '../components/course detail component/CourseRequirements.jsx'
+import RelatedCourses from '../components/course detail component/RelatedCourses.jsx'
+import InstructorDetails from '../components/course detail component/InstructorDetails.jsx'
 
 const CourseDetailsPage = () => {
   const { theme } = useAppContext()
   const [loading, setLoading] = useState(false)
   const [course, setCourse] = useState(null)
-  const [slicer , setSlicer] = useState(500)
-  const [whatYouWillLearnSlicer , setWShatYouWillLearnSlicer ] = useState(500)
+  const [slicer, setSlicer] = useState(500)
+  const [whatYouWillLearnSlicer, setWhatYouWillLearnSlicer] = useState(500)
 
   const navigate = useNavigate()
   const params = useParams()
@@ -39,8 +41,12 @@ const CourseDetailsPage = () => {
     }
   }
 
+  // Fixed useEffect - no longer returns a Promise
   useEffect(() => {
-    getCourseData()
+    const fetchData = async () => {
+      await getCourseData()
+    }
+    fetchData()
   }, [courseId])
 
   const pageVariants = {
@@ -53,7 +59,6 @@ const CourseDetailsPage = () => {
       }
     }
   }
-
 
   if (loading) {
     return (
@@ -73,7 +78,6 @@ const CourseDetailsPage = () => {
       </div>
     )
   }
-
 
   if (!course) {
     return (
@@ -101,13 +105,16 @@ const CourseDetailsPage = () => {
       </div>
     )
   }
+
   const handleSlicer = () => {
     setSlicer(slicer + 500)
   }
 
+  // Fixed function name and logic
   const handleWhatYouWillLearnSlicer = () => {
-    setSlicer(whatYouWillLearnSlicer + 500)
+    setWhatYouWillLearnSlicer(whatYouWillLearnSlicer + 500)
   }
+
   return (
     <motion.div
       variants={pageVariants}
@@ -176,124 +183,148 @@ const CourseDetailsPage = () => {
 
           {/* Course Content */}
           <CourseContent course={course} theme={theme} />
-                  {/* Requirements */}
-        <CourseRequirements course={course} theme={theme} />
+          
+          {/* Requirements */}
+          <CourseRequirements course={course} theme={theme} />
 
-        {/* Full Description Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className={`w-full p-6 rounded-xl border transition-all duration-300 ${
-            theme === 'dark'
-              ? 'bg-gray-800 border-gray-700 shadow-lg shadow-gray-900/20'
-              : 'bg-white border-gray-200 shadow-lg shadow-gray-100/20'
-          }`}
-        >
-          <h2 className={`text-2xl font-bold mb-6 ${
-            theme === 'dark' ? 'text-white' : 'text-gray-900'
-          }`}>
-            Course Description
-          </h2>
-          <div className={`prose max-w-none ${
-            theme === 'dark' ? 'prose-invert' : ''
-          }`}>
-            <p className={`text-lg leading-relaxed ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+          {/* Full Description Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className={`w-full p-6 rounded-xl border transition-all duration-300 ${
+              theme === 'dark'
+                ? 'bg-gray-800 border-gray-700 shadow-lg shadow-gray-900/20'
+                : 'bg-white border-gray-200 shadow-lg shadow-gray-100/20'
+            }`}
+          >
+            <h2 className={`text-2xl font-bold mb-6 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
             }`}>
-               {course.description.length <= 500
-              ? course.description
-              : course.description.slice(0, slicer)}
-              {
-                slicer < course.description.length ? (
-                  <button
-                   onClick={handleSlicer}  >Show More</button>
-                ) : (
-                  <button onClick={()=>setSlicer(500)} > Show Less</button>
-                )
-              }
-            </p>
-            {course.whatYouWillLearn && (
-              <div className="mt-6">
-                <h3 className={`text-lg font-semibold mb-3 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                  Detailed Learning Outcomes
-                </h3>
-                <div className={`whitespace-pre-wrap ${
-                  theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-                }`}>
-                  
-                  {course.whatYouWillLearn.length <= 500
-              ? course.whatYouWillLearn
-              : course.whatYouWillLearn.slice(0, slicer)}
-              {
-                slicer < course.description.length ? (
-                  <button
-                   onClick={handleWhatYouWillLearnSlicer}  >Show More</button>
-                ) : (
-                  <button onClick={()=>setWShatYouWillLearnSlicer(500)} > Show Less</button>
-                )
-              }
+              Course Description
+            </h2>
+            <div className={`prose max-w-none ${
+              theme === 'dark' ? 'prose-invert' : ''
+            }`}>
+              <p className={`text-lg leading-relaxed ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                {course.description.length <= 500
+                  ? course.description
+                  : course.description.slice(0, slicer)}
+                {
+                  slicer < course.description.length ? (
+                    <button
+                      onClick={handleSlicer}
+                      className='mt-2 ml-1 text-sm font-medium transition-colors duration-200 text-blue-500'
+                    >...Show More</button>
+                  ) : null
+                }
+              </p>
+              {course.whatYouWillLearn && (
+                <div className="mt-6">
+                  <h3 className={`text-lg font-semibold mb-3 ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>
+                    Detailed Learning Outcomes
+                  </h3>
+                  <div className={`whitespace-pre-wrap ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
+                    {course.whatYouWillLearn.length <= 500
+                      ? course.whatYouWillLearn
+                      : course.whatYouWillLearn.slice(0, whatYouWillLearnSlicer)}
+                    {
+                      whatYouWillLearnSlicer < course.whatYouWillLearn.length ? (
+                        <button
+                          onClick={handleWhatYouWillLearnSlicer}
+                          className='mt-2 ml-1 text-sm font-medium transition-colors duration-200 text-blue-500'
+                        >...Show More</button>
+                      ) : null
+                    }
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </motion.div>
+              )}
+            </div>
+          </motion.div>
 
-        {/* Comments Section Placeholder */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className={`w-full p-6 rounded-xl border transition-all duration-300 ${
-            theme === 'dark'
-              ? 'bg-gray-800 border-gray-700 shadow-lg shadow-gray-900/20'
-              : 'bg-white border-gray-200 shadow-lg shadow-gray-100/20'
-          }`}
-        >
-          <h2 className={`text-2xl font-bold mb-6 ${
-            theme === 'dark' ? 'text-white' : 'text-gray-900'
-          }`}>
-            Student Reviews
-          </h2>
-          <div className={`text-center py-12 ${
-            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-          }`}>
-            <p>Reviews and comments component coming soon...</p>
-          </div>
-        </motion.div>
+          {/* Related Courses */}
+          <motion.div
+            initial={{ opacity: 0, x : -30 }}
+            whileInView={{ opacity: 1, x : 0 }}
+            transition={{ duration: 0.8 }}
+            className={`w-full p-6 rounded-xl border transition-all duration-300 ${
+              theme === 'dark'
+                ? 'bg-gray-800 border-gray-700 shadow-lg shadow-gray-900/20'
+                : 'bg-white border-gray-200 shadow-lg shadow-gray-100/20'
+            }`}
+          >
+            <h2 className={`text-2xl font-bold mb-6 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}>
+              Students also bought
+            </h2>
+            <div className={`text-center py-12 ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>
+              <RelatedCourses />
+            </div>
+          </motion.div>
 
-        {/* Related Courses Placeholder */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className={`w-full p-6 rounded-xl border transition-all duration-300 ${
-            theme === 'dark'
-              ? 'bg-gray-800 border-gray-700 shadow-lg shadow-gray-900/20'
-              : 'bg-white border-gray-200 shadow-lg shadow-gray-100/20'
-          }`}
-        >
-          <h2 className={`text-2xl font-bold mb-6 ${
-            theme === 'dark' ? 'text-white' : 'text-gray-900'
-          }`}>
-            Related Courses
-          </h2>
-          <div className={`text-center py-12 ${
-            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-          }`}>
-            <p>Related courses component coming soon...</p>
-          </div>
-        </motion.div>
+          {/* Instructor Details */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className={`w-full p-6 rounded-xl border transition-all duration-300 ${
+              theme === 'dark'
+                ? 'bg-gray-800 border-gray-700 shadow-lg shadow-gray-900/20'
+                : 'bg-white border-gray-200 shadow-lg shadow-gray-100/20'
+            }`}
+          >
+            <h2 className={`text-2xl font-bold mb-6 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}>
+              Instructor
+            </h2>
+            <div className={`text-center py-12 ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>
+              <InstructorDetails course={course} theme={theme} />
+            </div>
+          </motion.div>
+
+          {/* Comments Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className={`w-full p-6 rounded-xl border transition-all duration-300 ${
+              theme === 'dark'
+                ? 'bg-gray-800 border-gray-700 shadow-lg shadow-gray-900/20'
+                : 'bg-white border-gray-200 shadow-lg shadow-gray-100/20'
+            }`}
+          >
+            <h2 className={`text-2xl font-bold mb-6 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}>
+              Student Reviews
+            </h2>
+            <div className={`text-center py-12 ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>
+              <p>Reviews and comments component coming soon...</p>
+            </div>
+          </motion.div>
         </div>
 
         {/* Right Column - Actions & Sidebar */}
         <motion.div 
-        initial = {{opacity : 0 , x : 100}}
-        animate ={{opacity : 1 , x : 0}}
-        transition={{duration : 0.6}}
-        className="lg:w-3/10 h-max sticky top-0 flex flex-col p-6 space-y-6">
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          className="lg:w-3/10 h-max sticky top-0 flex flex-col p-6 space-y-6"
+        >
           <CourseActions course={course} theme={theme} />
         </motion.div>
       </div>

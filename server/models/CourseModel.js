@@ -54,15 +54,17 @@ language: {
 
 //* Middleware to auto-calculate fields
 courseSchema.pre("save", function(next) {
-  this.totalHours = this.lessons.reduce((sum, lesson) => sum + lesson.lessonDuration, 0);
+
+  const total = this.lessons.reduce((sum, lesson) => sum + lesson.lessonDuration, 0);
+  this.totalHours = Math.round(total * 100) / 100;
   this.totalNumberOfLessons = this.lessons.length;
   this.updatedAt = new Date();
   this.lessons.forEach((lesson, index) => {
     lesson.lessonNumber = index + 1; 
-  }); //* automatically add the lesson number
+  });
+
   next();
 });
-
 const Course = mongoose.models.Course || mongoose.model("Course", courseSchema);
 export default Course;
  
