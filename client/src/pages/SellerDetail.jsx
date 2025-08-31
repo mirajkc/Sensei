@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import useAppContext from '../context/AppContext.jsx'
 import { useNavigate, useParams } from 'react-router-dom'
 import { 
+  TriangleAlert,
   ThumbsDown, 
   ThumbsUp, 
   Globe, 
@@ -379,7 +380,19 @@ const SellerDetail = () => {
                   </p>
                 </div>
               )}
-            </motion.div>
+             <div className='flex justify-center' >
+                     <button
+                           className="flex  items-center gap-2 px-4 py-2 
+                           text-red-600 dark:text-red-400 
+                           rounded-lg font-medium 
+                           hover:bg-red-50 dark:hover:bg-red-900/30 
+                           transition-colors"
+                                 >
+                           < TriangleAlert className="w-5 h-5" />
+                            Report Seller
+                              </button>
+              </div>
+             </motion.div>
           </div>
 
           {/* Right Section - Seller Profile */}
