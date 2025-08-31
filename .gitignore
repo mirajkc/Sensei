@@ -1,13 +1,18 @@
-# dependencies
+# Ignore dependencies
 node_modules/
-package-lock.json
+client/node_modules/
 
-# build
+# Ignore lock files
+package-lock.json
+*.lock
+
+# Ignore build files
 dist/
 build/
 .next/
 *.map
+*.chunk.js
 
-# misc
+# Misc
 .DS_Store
 .env
