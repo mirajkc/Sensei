@@ -24,6 +24,7 @@ import UserProfile from './pages/user pages/UserProfile'
 import WishList from './pages/user pages/wishlist'
 import CourseDetailsPage from './pages/CourseDetailsPage'
 import Cart from './pages/user pages/Cart'
+import SellerDetail from './pages/SellerDetail'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -60,6 +61,7 @@ const App = () => {
         //* general dashboard routes
         <Route path='/discovercourses' element = {<DiscoverCourses />} />
         <Route path='/coursedetail/:courseId' element={<CourseDetailsPage />} />
+        <Route path='/instructordetails/:sellerId' element={<SellerDetail />} />
         
 
       </Routes>

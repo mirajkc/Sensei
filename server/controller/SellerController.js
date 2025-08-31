@@ -409,7 +409,7 @@ export const dislikeSellerById = async (req, res) => {
 export const getSellerDetailsForUI = async (req, res) => {
   try {
     const { sellerId } = req.params;
-    const userId = req.user?._id;
+    
 
     if (!sellerId) {
       return res.status(200).json({
@@ -437,25 +437,14 @@ export const getSellerDetailsForUI = async (req, res) => {
     //* Get total courses created by seller
     const courses = await Course.find({ seller: sellerId });
     const totalCourses = courses.length;
-
-    //* Determine like/dislike status for current user
-    let likeStatus = false;
-    let disLikeStatus = false;
-
-    if (userId) {
-      likeStatus = seller.like.some(id => id.toString() === userId.toString());
-      disLikeStatus = seller.dislike.some(id => id.toString() === userId.toString());
-    }
-
     return res.status(200).json({
       success: true,
       seller,
-      likeStatus,
-      disLikeStatus,
       rating,
       totalCourses,
       totalLike,
-      totalDislike
+      totalDislike,
+      courses
     });
 
   } catch (error) {

@@ -8,7 +8,6 @@ const verifyUser = async (req, res, next) => {
     if (!token) {
       return res.status(200).json({ 
         success: false,
-        message: "Token not found. Please log in again."
       });
     }
 

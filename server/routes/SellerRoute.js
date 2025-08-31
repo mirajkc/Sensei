@@ -23,8 +23,8 @@ sellerRouter.post('/updateseller' , verifySeller , upload.single('image') ,  upd
 sellerRouter.get('/sellerlogout' , verifySeller , sellerLogout )
 
 sellerRouter.post('/likeseller/:sellerId' ,verifyUser , likeSellerById )
-sellerRouter.post('/dislikeseller/sellerId' , verifyUser , dislikeSellerById)
-sellerRouter.get('/getSellerDetails/:sellerId', verifyUser , getSellerDetailsForUI)
+sellerRouter.post('/dislikeseller/:sellerId' , verifyUser , dislikeSellerById)
+sellerRouter.get('/getSellerDetails/:sellerId', getSellerDetailsForUI)
 
 
 export default sellerRouter;

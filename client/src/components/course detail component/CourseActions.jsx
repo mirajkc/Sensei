@@ -283,6 +283,7 @@ const CourseActions = ({ course, theme }) => {
                       ? 'border-gray-600 text-gray-400 hover:border-blue-500 hover:text-blue-400'
                       : 'border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500'
                   }`}
+                  onClick={()=>{navigate(`/instructordetails/${course.seller._id}`) ; scrollTo(0,0)}}
                 >
                   <User className="w-5 h-5" />
                   <span className="text-sm font-medium">Visit Seller</span>

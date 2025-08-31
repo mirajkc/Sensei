@@ -1,11 +1,63 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MapPin, Calendar, Star, Users, ThumbsUp, BookOpen, Globe, Linkedin, Github, Twitter, Youtube } from 'lucide-react'
+import { useState } from 'react'
+import axios from 'axios'
+import {toast} from 'react-hot-toast'
+import { useEffect } from 'react'
 
 const InstructorDetails = ({ course, theme }) => {
-  const navigate = useNavigate()
+
+  const [sellerData, setSellerData] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate() 
+   
+  //* make the api call to get the seller details 
+
+  const getSellerDetails = async() => {
+    try {
+      setLoading(true) 
+      const {data} = await axios.get(`/api/seller/getSellerDetails/${course.seller._id}`)
+      if(!data.success){
+        return toast.error(data.message)
+      }else{
+        setSellerData(data) 
+      }
+    } catch (error) {
+      return toast.error(error.message)
+    }finally{
+      setLoading(false)
+    }
+  }
+
+  useEffect(()=>{ 
+    if(course?.seller?._id) {
+      getSellerDetails() 
+    }
+  }, [course?.seller?._id]) 
   
-  // Format date for "Instructor since"
+
+  if (loading || !sellerData) {
+    return (
+      <div className={`p-6 rounded-xl border transition-all duration-300 ${
+        theme === 'dark'
+          ? 'bg-gray-800 border-gray-700'
+          : 'bg-white border-gray-200'
+      }`}>
+        <div className="flex items-center justify-center py-8">
+          <div className={`text-center ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          }`}>
+            Loading instructor details...
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const { seller, rating, totalCourses, totalLike } = sellerData
+
+
   const formatJoinDate = (dateString) => {
     try {
       const date = new Date(dateString)
@@ -15,12 +67,11 @@ const InstructorDetails = ({ course, theme }) => {
     }
   }
 
-  // Hardcoded stats for now
+ 
   const instructorStats = {
-    students: 45687,
-    courses: 7,
-    likes: 2341,
-    reviews: 1254
+    students: 45687, 
+    courses: totalCourses || 0,
+    likes: totalLike || 0,
   }
 
   const renderSocialLink = (platform, url, IconComponent) => {
@@ -56,8 +107,8 @@ const InstructorDetails = ({ course, theme }) => {
         <div className="flex flex-col items-center lg:items-start lg:w-1/4">
           <div className="relative mb-4">
             <img 
-              src={course.seller.image || '/default-instructor.jpg'} 
-              alt={course.seller.name}
+              src={seller?.image || '/default-instructor.jpg'} 
+              alt={seller?.name || 'Instructor'}
               className="w-24 h-24 lg:w-32 lg:h-32 rounded-full object-cover border-4 border-blue-500"
             />
             <div className={`absolute -bottom-2 -right-2 px-2 py-1 rounded-full text-xs font-medium ${
@@ -72,13 +123,13 @@ const InstructorDetails = ({ course, theme }) => {
           <h3 className={`text-xl font-bold text-center lg:text-left mb-2 ${
             theme === 'dark' ? 'text-white' : 'text-gray-900'
           }`}>
-            {course.seller.name}
+            {seller?.name || 'Unknown Instructor'}
           </h3>
           
           <p className={`text-sm font-medium text-center lg:text-left mb-3 ${
             theme === 'dark' ? 'text-blue-400' : 'text-blue-600'
           }`}>
-            {course.seller.specialization || 'Full Stack Developer'}
+            {seller?.specialization || 'Full Stack Developer'}
           </p>
 
           {/* Rating */}
@@ -93,28 +144,23 @@ const InstructorDetails = ({ course, theme }) => {
               <span className={`font-semibold ${
                 theme === 'dark' ? 'text-white' : 'text-gray-900'
               }`}>
-                {course.seller.rating || 4.8}
+                {rating?.toFixed(1) || '0.0'} instructor rating
               </span>
             </div>
-            <span className={`text-sm ${
-              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            }`}>
-              ({instructorStats.reviews} reviews)
-            </span>
           </div>
 
           {/* Social Links */}
-          {(course.seller.socialLinks?.website || 
-            course.seller.socialLinks?.linkedin || 
-            course.seller.socialLinks?.github || 
-            course.seller.socialLinks?.twitter || 
-            course.seller.socialLinks?.youtube) && (
+          {(seller?.socialLinks?.website || 
+            seller?.socialLinks?.linkedin || 
+            seller?.socialLinks?.github || 
+            seller?.socialLinks?.twitter || 
+            seller?.socialLinks?.youtube) && (
             <div className="flex flex-wrap gap-2 mb-4">
-              {renderSocialLink('Website', course.seller.socialLinks?.website, Globe)}
-              {renderSocialLink('LinkedIn', course.seller.socialLinks?.linkedin, Linkedin)}
-              {renderSocialLink('GitHub', course.seller.socialLinks?.github, Github)}
-              {renderSocialLink('Twitter', course.seller.socialLinks?.twitter, Twitter)}
-              {renderSocialLink('YouTube', course.seller.socialLinks?.youtube, Youtube)}
+              {renderSocialLink('Website', seller?.socialLinks?.website, Globe)}
+              {renderSocialLink('LinkedIn', seller?.socialLinks?.linkedin, Linkedin)}
+              {renderSocialLink('GitHub', seller?.socialLinks?.github, Github)}
+              {renderSocialLink('Twitter', seller?.socialLinks?.twitter, Twitter)}
+              {renderSocialLink('YouTube', seller?.socialLinks?.youtube, Youtube)}
             </div>
           )}
         </div>
@@ -169,7 +215,7 @@ const InstructorDetails = ({ course, theme }) => {
               <div className={`text-lg font-bold ${
                 theme === 'dark' ? 'text-white' : 'text-gray-900'
               }`}>
-                {instructorStats.likes.toLocaleString()}
+                {instructorStats.likes}
               </div>
               <div className={`text-xs ${
                 theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
@@ -187,7 +233,7 @@ const InstructorDetails = ({ course, theme }) => {
               <div className={`text-lg font-bold ${
                 theme === 'dark' ? 'text-white' : 'text-gray-900'
               }`}>
-                {formatJoinDate(course.seller.createdAt)}
+                {formatJoinDate(seller?.createdAt)}
               </div>
               <div className={`text-xs ${
                 theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
@@ -207,19 +253,19 @@ const InstructorDetails = ({ course, theme }) => {
             <p className={`leading-relaxed mb-4 ${
               theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
             }`}>
-              {course.seller.bio 
-                ? `Hi, I am ${course.seller.name}. ${course.seller.bio}` 
-                : `Hi, I am ${course.seller.name}. I am a passionate educator specializing in ${course.seller.specialization || 'web development'}.`
+              {seller?.bio 
+                ? `Hi, I am ${seller.name}. ${seller.bio}` 
+                : `Hi, I am ${seller?.name || 'the instructor'}. I am a passionate educator specializing in ${seller?.specialization || 'web development'}.`
               }
-              {course.seller.specialization && ` I specialize in ${course.seller.specialization}.`}
-              {course.seller.qualification && ` I am qualified in ${course.seller.qualification}.`}
-              {course.seller.experience && ` I have ${course.seller.experience} of experience in the field.`}
+              {seller?.specialization && ` I specialize in ${seller.specialization}.`}
+              {seller?.qualification && ` I am qualified in ${seller.qualification}.`}
+              {seller?.experience && ` I have ${seller.experience} of experience in the field.`}
             </p>
 
             {/* Additional Details */}
-            {(course.seller.qualification || course.seller.experience || course.seller.location) && (
+            {(seller?.qualification || seller?.experience || seller?.location) && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                {course.seller.qualification && (
+                {seller?.qualification && (
                   <div className={`p-3 rounded-lg ${
                     theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'
                   }`}>
@@ -231,12 +277,12 @@ const InstructorDetails = ({ course, theme }) => {
                     <div className={`font-semibold ${
                       theme === 'dark' ? 'text-white' : 'text-gray-900'
                     }`}>
-                      {course.seller.qualification}
+                      {seller.qualification}
                     </div>
                   </div>
                 )}
                 
-                {course.seller.experience && (
+                {seller?.experience && (
                   <div className={`p-3 rounded-lg ${
                     theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'
                   }`}>
@@ -248,12 +294,12 @@ const InstructorDetails = ({ course, theme }) => {
                     <div className={`font-semibold ${
                       theme === 'dark' ? 'text-white' : 'text-gray-900'
                     }`}>
-                      {course.seller.experience}
+                      {seller.experience}
                     </div>
                   </div>
                 )}
                 
-                {course.seller.location && (
+                {seller?.location && (
                   <div className={`p-3 rounded-lg ${
                     theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'
                   }`}>
@@ -266,7 +312,7 @@ const InstructorDetails = ({ course, theme }) => {
                       theme === 'dark' ? 'text-white' : 'text-gray-900'
                     }`}>
                       <MapPin size={14} />
-                      {course.seller.location}
+                      {seller.location}
                     </div>
                   </div>
                 )}
@@ -276,7 +322,7 @@ const InstructorDetails = ({ course, theme }) => {
 
           {/* View More Button */}
           <button
-            onClick={() => navigate(`/sellerdetails/${course.seller._id}`)}
+            onClick={() => {navigate(`/instructordetails/${seller?._id}`) ; scrollTo(0,0)}}
             className={`w-full md:w-auto px-6 py-3 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 ${
               theme === 'dark'
                 ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-900/30'
