@@ -12,21 +12,19 @@ const userSchema = new mongoose.Schema({
   link: { type: String },   //* portfolio or website
 
   //* Learning-related
-  enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
-  completedCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
-  progress: { type: Map, of: Number, default: {} },
+  enrolledCourses: [{
+    course : {type : mongoose.Schema.Types.ObjectId , ref:"Course"},
+    createdAt:{type : Date , default : Date.now},
+    progress: { type: Number, default: 0 },
+    completed: { type: Boolean, default: false }
+  }],
   
 
   //* cart and wishlist 
   wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
   cart : [{type : mongoose.Schema.Types.ObjectId , ref : "Course" }],
 
-  //* Payments
-  payments: [{ 
-    course: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
-    isPaid: { type: Boolean, default: false },
-    createdAt: { type: Date, default: Date.now }  //* enrollment date
-  }],
+
 
   //* Social / profile links
   linkedin: { type: String, default: "" },

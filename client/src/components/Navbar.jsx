@@ -304,11 +304,11 @@ const Navbar = () => {
                       >
                         <div className="py-1">
                           {[
-                            { icon: User, label: 'Profile', href: 'userprofile' },
-                            { icon: BookOpen, label: 'My Courses', href: '#' },
-                            { icon: ShoppingCart, label: 'My Cart', href: 'cart' },
+                            { icon: User, label: 'Profile', href: '/userprofile' },
+                            { icon: BookOpen, label: 'My Courses', href: '/#' },
+                            { icon: ShoppingCart, label: 'My Cart', href: '/cart' },
                             { icon: BookmarkPlus, label: 'My Wishlist', href: '/wishlists' },
-                            { icon: MessageCircleQuestionMark, label: 'Support', href: '#' }
+                            { icon: MessageCircleQuestionMark, label: 'Support', href: '/#' }
                           ].map((item, index) => (
                             <motion.a
                               key={item.label}
