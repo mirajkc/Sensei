@@ -539,22 +539,22 @@ const Wishlist = () => {
                     </div>
 
                     {/* Rating & Comments */}
-                    <div className="flex items-center justify-between pt-2">
-                      <div className="flex items-center space-x-2">
-                        <div className="flex items-center space-x-1">
-                          {renderStars(course.rating || 4.5)}
-                          <span className={theme === "dark" ? "text-gray-300" : "text-gray-600"}>
-                            ({course.rating || 4.5})
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-1 text-sm">
-                        <MessageCircle className="w-4 h-4 text-gray-400" />
-                        <span className={theme === "dark" ? "text-gray-300" : "text-gray-600"}>
-                          {course.comments || 12}
-                        </span>
-                      </div>
-                    </div>
+<div className="flex items-center justify-between pt-2">
+  <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-1">
+      {renderStars(course.rating || 4.5)}
+      <span className={theme === "dark" ? "text-gray-300" : "text-gray-600"}>
+        ({course.rating || 4.5})
+      </span>
+    </div>
+  </div>
+  <div className="flex items-center space-x-1 text-sm">
+    <MessageCircle className="w-4 h-4 text-gray-400" />
+    <span className={theme === "dark" ? "text-gray-300" : "text-gray-600"}>
+      {Array.isArray(course.comments) ? course.comments.length : 0}
+    </span>
+  </div>
+</div>
 
                     {/* Action Buttons */}
                     <div className="flex items-center space-x-3 pt-4">

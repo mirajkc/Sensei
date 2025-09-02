@@ -569,3 +569,56 @@ export const getCourseEnrollmentCount = async (req, res) => {
     });
   }
 };
+
+//* get enrolled course details foe a single course
+export const getSingleEnrolledCourseDetails = async(req,res) => {
+  try {
+
+    // * verify if the user is enrolled or not
+    const userId = req.user?._id
+    if(!userId){
+      return res.status(200).json({
+        success : false,
+        message : "Unable to authenticate user please relogin or reload the page"
+      })
+    }
+
+    //* get the user details from the db
+    const user = await User.findById(userId).populate({
+      path : "enrolledCourses.course",
+      populate : {
+        path : "seller"
+      },
+    })
+
+    //* get the course Id from params 
+    const {courseId} = req.params
+    if(!courseId){
+      return res.status(200).json({
+        success : false,
+        message : "Error unable to get the course details"
+      })
+    }
+
+    //* get the enrollment details
+     const enrolledCourse= user.enrolledCourses.find(item => item.course._id.toString().toLowerCase()
+        === courseId.toLowerCase())
+     if(!enrolledCourse){
+      return res.status(200).json({
+      success : false,
+      message : "You are not elligible to enroll in this  course"
+    })
+     }
+
+    res.status(200).json({
+      success : true,
+      enrolledCourse
+    })
+     
+  } catch (error) {
+     return res.status(200).json({
+        success : false,
+        message : `Server error ${error.message}`
+      })
+  }
+}
