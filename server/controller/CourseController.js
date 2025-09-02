@@ -625,7 +625,6 @@ export const getSingleCourseforUI = async(req , res ) => {
         message : "Error !!! could not found"
       })
     }
-
     res.status(200).json({
       success : true,
       course

@@ -1,9 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Star, Users, MessageCircle, Calendar, Globe, Award } from 'lucide-react'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 const CourseInfo = ({ course, theme }) => {
   const [seemore , setSeeMore] = useState(500)
+  const [enrolledCourse , setEnrolledCourse] = useState(0)
+
+  const getCount = async() =>{
+    try {
+      const {data} = await axios.get(`/api/user/getenrollmentcount/${course._id}`)
+      if(!data.success){
+        return toast.error(data.message)
+      }else{
+        setEnrolledCourse(data.totalEnrollment)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+  useEffect(()=>{getCount()} , [])
   const containerVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -115,11 +133,6 @@ const CourseInfo = ({ course, theme }) => {
           }`}>
             4.5
           </span>
-          <span className={`text-sm ${
-            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-          }`}>
-            (1,234 ratings)
-          </span>
         </div>
 
         {/* Students */}
@@ -130,7 +143,7 @@ const CourseInfo = ({ course, theme }) => {
           <span className={`text-sm font-medium ${
             theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
           }`}>
-            5,678 students
+            {enrolledCourse} students
           </span>
         </div>
 
@@ -142,7 +155,7 @@ const CourseInfo = ({ course, theme }) => {
           <span className={`text-sm font-medium ${
             theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
           }`}>
-            892 comments
+            {course.comments.length} comments
           </span>
         </div>
       </motion.div>

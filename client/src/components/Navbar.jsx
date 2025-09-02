@@ -305,7 +305,7 @@ const Navbar = () => {
                         <div className="py-1">
                           {[
                             { icon: User, label: 'Profile', href: '/userprofile' },
-                            { icon: BookOpen, label: 'My Courses', href: '/#' },
+                            { icon: BookOpen, label: 'My Courses', href: '/enrolledcourses' },
                             { icon: ShoppingCart, label: 'My Cart', href: '/cart' },
                             { icon: BookmarkPlus, label: 'My Wishlist', href: '/wishlists' },
                             { icon: MessageCircleQuestionMark, label: 'Support', href: '/#' }

@@ -5,6 +5,8 @@ import 'dotenv/config';
 import bcrypt from 'bcrypt';
 import cloudinary from 'cloudinary';
 import fs from 'fs';
+import Course from '../models/CourseModel.js';
+import mongoose from 'mongoose';
 
 export const GoogleSignIn = async (req, res) => {
   try {
@@ -494,4 +496,76 @@ export const updateStudentDetails = async (req, res) => {
   }
 };
 
+//* get all enrolled courses for a particualr user
+export const getEnrolledCourses = async(req,res) => {
+  try {
+    const userId = req.user?._id
+    if(!userId){
+      return res.status(200).json({
+        success : false,
+        message : "Error couldnot authenticate user please relogin or reload tha page"
+      })
+    }
+    
+    //* get the user details from the database 
+    const user  = await User.findById(userId).populate({
+      path : "enrolledCourses.course",
+      populate:{
+        path : 'seller'
+      }
+    })
 
+    if(!user){
+      return res.status(200).json({
+        success : false,
+        message : "User not found make sure user has signup on the page"
+      })
+    }
+
+    //* if we sucesfully get the user its enroleed  course course details and seller details
+    res.status(200).json({
+      success : true,
+      enrolledCourses : user.enrolledCourses
+    })
+  } catch (error) {
+    res.status(500).json({
+      success : false,
+      message : `Server error ${error.message}`
+    })
+  }
+}
+
+//* get total enrolled students for a certain Course
+export const getCourseEnrollmentCount = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    if (!courseId) {
+      return res.status(200).json({
+        success: false,
+        message: "Unable to retrieve the course details, please provide a valid course ID",
+      });
+    }
+
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(200).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+
+    const totalEnrollment = await User.countDocuments({
+      "enrolledCourses.course": new mongoose.Types.ObjectId(courseId),
+    });
+
+    res.status(200).json({
+      success: true,
+      totalEnrollment,
+    });
+  } catch (error) {
+    res.status(200).json({
+      success: false,
+      message: `Server Error: ${error.message}`,
+    });
+  }
+};

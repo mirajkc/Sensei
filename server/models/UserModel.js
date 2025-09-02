@@ -6,14 +6,14 @@ const userSchema = new mongoose.Schema({
   picture: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String },
-  phoneno: { type: String },
+  phoneno: { type: String }, 
   address: { type: String },
   bio: { type: String },  
   link: { type: String },   //* portfolio or website
 
   //* Learning-related
   enrolledCourses: [{
-    course : {type : mongoose.Schema.Types.ObjectId , ref:"Course"},
+    course : {type : mongoose.Schema.Types.ObjectId , ref:"Course"}, //uid of a certain course
     createdAt:{type : Date , default : Date.now},
     progress: { type: Number, default: 0 },
     completed: { type: Boolean, default: false }

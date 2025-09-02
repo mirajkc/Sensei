@@ -13,6 +13,7 @@ import CourseActions from '../components/course detail component/CourseActions.j
 import CourseRequirements from '../components/course detail component/CourseRequirements.jsx'
 import RelatedCourses from '../components/course detail component/RelatedCourses.jsx'
 import InstructorDetails from '../components/course detail component/InstructorDetails.jsx'
+import Comment from '../components/course detail component/Comment.jsx'
 
 const CourseDetailsPage = () => {
   const { theme } = useAppContext()
@@ -41,7 +42,7 @@ const CourseDetailsPage = () => {
     }
   }
 
-  // Fixed useEffect - no longer returns a Promise
+  
   useEffect(() => {
     const fetchData = async () => {
       await getCourseData()
@@ -110,7 +111,6 @@ const CourseDetailsPage = () => {
     setSlicer(slicer + 500)
   }
 
-  // Fixed function name and logic
   const handleWhatYouWillLearnSlicer = () => {
     setWhatYouWillLearnSlicer(whatYouWillLearnSlicer + 500)
   }
@@ -313,7 +313,7 @@ const CourseDetailsPage = () => {
             <div className={`text-center py-12 ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              <p>Reviews and comments component coming soon...</p>
+             <Comment courseId={courseId} />
             </div>
           </motion.div>
         </div>

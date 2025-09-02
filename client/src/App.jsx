@@ -25,6 +25,7 @@ import WishList from './pages/user pages/wishlist'
 import CourseDetailsPage from './pages/CourseDetailsPage'
 import Cart from './pages/user pages/Cart'
 import SellerDetail from './pages/SellerDetail'
+import EnrolledCourses from './pages/user pages/EnrolledCourses'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -55,6 +56,7 @@ const App = () => {
         <Route path='/userprofile' element={<UserProfile />} />
         <Route path='/wishlists' element={<WishList />} />
         <Route path='/cart' element={<Cart />} />
+        <Route path='/enrolledcourses' element={<EnrolledCourses />} />
 
 
 

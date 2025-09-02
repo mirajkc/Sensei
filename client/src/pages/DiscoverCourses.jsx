@@ -576,7 +576,7 @@ const getAllWishlist = async() => {
                       <div className="flex items-center space-x-1 text-sm">
                         <MessageCircle className="w-4 h-4 text-gray-400" />
                         <span className={theme === "dark" ? "text-gray-300" : "text-gray-600"}>
-                          12
+                          {course.comments.length}
                         </span>
                       </div>
                     </div>

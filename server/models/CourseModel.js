@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 //* Lesson sub-schema
 const lessonSchema = new mongoose.Schema({ 
@@ -10,6 +10,15 @@ const lessonSchema = new mongoose.Schema({
   textGuide: { type: String, required: true },
   videoGuide: { type: String } //* optional
 });
+
+//* comment subSchema 
+const commentSchema = new mongoose.Schema({
+  user : {type : mongoose.Schema.Types.ObjectId , ref:"User"},
+  comment : {type : String , required : true},
+  createdAt : {type : Date , default : Date.now}
+})
+
+
 
 //* Course schema
 const courseSchema = new mongoose.Schema({
@@ -40,6 +49,7 @@ language: {
   description: { type: String, required: true },
   whatYouWillLearn :{type :String , required :true},
   lessons: [lessonSchema],
+  comments : [commentSchema],
   price: { type: Number, required: true },
   discountedPrice : {type : Number , required : true},
 
@@ -47,10 +57,12 @@ language: {
   totalHours: { type: Number, default: 0 },
   totalNumberOfLessons: { type: Number, default: 0 },
 
-  seller: { type: mongoose.Schema.Types.ObjectId, ref: "Seller", required: true },
+  seller: { type: mongoose.Schema.Types.ObjectId, ref: "Seller", required: true }, 
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now } 
 });
+
+
 
 //* Middleware to auto-calculate fields
 courseSchema.pre("save", function(next) {

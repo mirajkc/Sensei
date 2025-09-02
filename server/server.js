@@ -11,6 +11,7 @@ import courseRouter from './routes/CourseRouter.js'
 import wishlistRouter from './routes/WishListRoute.js'
 import cartRouter from './routes/cartRoute.js'
 import purchaseRouter from './routes/Purchase.js'
+import commentRouter from './routes/CommentRoute.js'
 
 const app = express()
 const PORT = process.env.PORT_NUMBER || 5000
@@ -46,6 +47,7 @@ app.use('/api/course', courseRouter)
 app.use('/api/wishlist' , wishlistRouter)
 app.use('/api/cart',cartRouter )
 app.use('/api/purchase', purchaseRouter)
+app.use('/api/comment', commentRouter)
 
 app.get('/', (req, res) => {
   res.send("Server is working fine")
