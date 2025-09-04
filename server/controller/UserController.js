@@ -622,3 +622,70 @@ export const getSingleEnrolledCourseDetails = async(req,res) => {
       })
   }
 }
+
+//* track the user progress when the user loads the poge 
+export const progressTracker = async (req, res) => {
+  try {
+    const userId = req.user?._id;
+    const { courseId, lessonId } = req.params;
+
+    if (!courseId || !lessonId) {
+      return res.status(200).json({
+        success: false,
+        message: "Error! Missing course or lesson details",
+      });
+    }
+
+    if (!userId) {
+      return res.status(200).json({
+        success: false,
+        message: "Error! Unable to retrieve user data",
+      });
+    }
+
+    //* Get user and populate courses
+    const user = await User.findById(userId).populate("enrolledCourses.course");
+    if (!user) {
+      return res.status(200).json({ success: false, message: "User not found" });
+    }
+
+    //* Find the enrolled course
+    const enrolledCourse = user.enrolledCourses.find(
+      (enrolled) => enrolled.course._id.toString() === courseId.toString()
+    );
+    if (!enrolledCourse) {
+      return res.status(200).json({ success: false, message: "Course not found" });
+    }
+
+    const totalLessons = enrolledCourse.course.lessons.length;
+    const currentLessonIndex = enrolledCourse.course.lessons.findIndex(
+      (lesson) => lesson._id.toString() === lessonId.toString()
+    );
+
+    if (currentLessonIndex === -1) {
+      return res.status(200).json({ success: false, message: "Lesson not found" });
+    }
+
+    //* Calculate progress (index +1 so first lesson counts)
+    const totalProgressMade = ((currentLessonIndex + 1) / totalLessons) * 100;
+
+    //* Update fields
+    enrolledCourse.progress = totalProgressMade;
+    enrolledCourse.currentlyIn = lessonId;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      progress: enrolledCourse.progress,
+      currentLesson: enrolledCourse.currentlyIn,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: `Server error: ${error.message}`,
+    });
+  }
+};
+
+

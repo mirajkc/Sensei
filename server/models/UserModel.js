@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { type } from 'os';
 
 const userSchema = new mongoose.Schema({
   //* Personal details
@@ -13,10 +14,11 @@ const userSchema = new mongoose.Schema({
 
   //* Learning-related
   enrolledCourses: [{
-    course : {type : mongoose.Schema.Types.ObjectId , ref:"Course"}, 
+    course : {type : mongoose.Schema.Types.ObjectId , ref:"Course"},  
     createdAt:{type : Date , default : Date.now},
     progress: { type: Number, default: 0 },
-    completed: { type: Boolean, default: false }
+    completed: { type: Boolean, default: false },
+    currentlyIn : {type : String }
   }],
   
 

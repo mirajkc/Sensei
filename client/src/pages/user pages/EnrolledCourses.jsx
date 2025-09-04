@@ -51,8 +51,6 @@ const EnrolledCourses = () => {
       setLoading(false);
     }
   };
-  console.log(courses);
-  
 
   useEffect(() => {
     getEnrolledCourseDetails();
@@ -483,7 +481,7 @@ const EnrolledCourses = () => {
                           animate={{ scale: 1 }}
                           className={`text-sm font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}
                         >
-                          {item.progress}%
+                          {Math.floor(item.progress)}%
                         </motion.span>
                       </div>
                       <div className={`w-full ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded-full h-3 overflow-hidden shadow-inner`}>
@@ -508,7 +506,7 @@ const EnrolledCourses = () => {
                     <motion.button 
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      onClick={()=>{navigate(`/learn/${item.course?._id}/${item.course?.lessons?.[0]?._id}`); scrollTo(0,0)}}
+                      onClick={()=>{navigate(`/learn/${item.course?._id}/${item?.currentlyIn ?? item.course?.lessons[0]?._id }`); scrollTo(0,0)}}
                       className={`w-full py-3 px-4 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-all duration-300 shadow-lg ${
                         item.progress === 0
                           ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white'
