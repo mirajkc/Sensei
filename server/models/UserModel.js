@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { type } from 'os';
 
 const userSchema = new mongoose.Schema({
   //* Personal details
@@ -18,7 +17,8 @@ const userSchema = new mongoose.Schema({
     createdAt:{type : Date , default : Date.now},
     progress: { type: Number, default: 0 },
     completed: { type: Boolean, default: false },
-    currentlyIn : {type : String }
+    currentlyIn : {type : String },
+    completedDate : {type : Date , default: Date.now}
   }],
   
 

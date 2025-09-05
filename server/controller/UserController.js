@@ -8,6 +8,7 @@ import fs from 'fs';
 import Course from '../models/CourseModel.js';
 import mongoose from 'mongoose';
 
+
 export const GoogleSignIn = async (req, res) => {
   try {
     const { code } = req.body;
@@ -669,8 +670,13 @@ export const progressTracker = async (req, res) => {
     //* Calculate progress (index +1 so first lesson counts)
     const totalProgressMade = ((currentLessonIndex + 1) / totalLessons) * 100;
 
+  
     //* Update fields
     enrolledCourse.progress = totalProgressMade;
+    if(enrolledCourse.progress === 100){
+      enrolledCourse.completed = true
+      enrolledCourse.completedDate = new Date() 
+    }
     enrolledCourse.currentlyIn = lessonId;
 
     await user.save();
@@ -688,4 +694,72 @@ export const progressTracker = async (req, res) => {
   }
 };
 
+//* api call to get the details printed for certoficat
+export const getDetailsForCertificate = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const userId = req.user?._id;
 
+    
+
+    if (!courseId) {
+      return res.status(200).json({
+        success: false,
+        message: "Error: Missing courseId! Trying to access certificate page directly?",
+      });
+    }
+
+    if (!userId) {
+      return res.status(200).json({
+        success: false,
+        message: "Unable to authenticate user",
+      });
+    }
+
+    //* Fetch user with populated courses and seller
+    const user = await User.findById(userId).populate({
+      path: "enrolledCourses.course",
+      populate: {
+        path: "seller",
+      },
+    });
+
+    if (!user) {
+      return res.status(200).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    //* Find the specific enrolled course
+    /* const enrolledCourse = user.enrolledCourses.find(
+      (c) => c.course._id.toString() === courseId
+    ); */
+    
+    const enrolledCourse = user.enrolledCourses.find( item => item.course._id.toString() === courseId.toString())
+    
+    if (!enrolledCourse) {
+      return res.status(200).json({
+        success: false,
+        message: "User has not enrolled in this course",
+      });
+    }
+
+    //* Extract details
+    const userName = user.name;
+    const courseTitle = enrolledCourse.course.title;
+    const sellerName = enrolledCourse.course.seller?.name || "Unknown Seller";
+    const completionDate = enrolledCourse.completedDate || null;
+
+    const detailss = { userName, courseTitle, sellerName, completionDate };
+    res.status(200).json({
+      success: true,
+      detailss,
+    });
+  } catch (error) {
+    res.status(200).json({
+      success: false,
+      message: `Server error: ${error.message}`,
+    });
+  }
+};

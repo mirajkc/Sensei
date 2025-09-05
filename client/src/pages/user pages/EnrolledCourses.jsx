@@ -284,7 +284,7 @@ const EnrolledCourses = () => {
                   transition={{ delay: 0.3 }}
                 >
                   <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                    Completion Status
+                    Completion Status 
                   </label>
                   <select
                     value={completeStatus || ""}
@@ -413,9 +413,11 @@ const EnrolledCourses = () => {
                           initial={{ scale: 0, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           exit={{ scale: 0, opacity: 0 }}
-                          className="absolute top-4 right-4 bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg"
+                          onClick={()=>{navigate(`/certificate/${item.course._id}`)}
+                          }
+                          className="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-s text-xs font-semibold shadow-lg cursor-pointer"
                         >
-                          Completed
+                          Download Certificate
                         </motion.div>
                       )}
                     </AnimatePresence>

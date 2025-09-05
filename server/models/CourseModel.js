@@ -62,7 +62,7 @@ language: {
   updatedAt: { type: Date, default: Date.now } 
 });
 
-
+ 
 
 //* Middleware to auto-calculate fields
 courseSchema.pre("save", function(next) {

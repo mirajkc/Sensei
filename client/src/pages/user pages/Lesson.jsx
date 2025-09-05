@@ -95,16 +95,6 @@ const Lesson = () => {
               transition={{ delay: 0.1 }}
               className="p-4"
             >
-              {/* Course Progress */}
-              <div className="mb-6">
-                <h3 className="text-sm font-medium mb-3">Course Progress</h3>
-                <div className={`w-full rounded-full h-2 ${theme === "dark" ? 'bg-gray-700' : 'bg-gray-200'}`}>
-                  <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${courseDetails?.progress ?? 0}%` }}></div>
-                </div>
-                <p className={`text-xs mt-1 ${theme === "dark" ? 'text-gray-400' : 'text-gray-500'}`}>
-                  {Math.floor(courseDetails?.progress ?? 0)}% Complete
-                </p>
-              </div>
 
               {/* Lessons List */}
               <div className="mb-6">
@@ -151,7 +141,9 @@ const Lesson = () => {
                   })}
                 </div>
               </div>
-
+              <div>
+                {courseDetails?.completed }
+              </div>
               <div className="flex justify-center mb-6">
                 <h3
                   onClick={() => { navigate('/enrolledcourses'); navigate(0, 0) }}
