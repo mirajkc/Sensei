@@ -17,4 +17,6 @@ adminRouter.get('/verifyadmin' , verifyAdmin , (req,res)=>{
 
 adminRouter.get('/logoutseller' , verifyAdmin , adminLogout )
 
+
+
 export default  adminRouter
