@@ -637,3 +637,30 @@ export const getSingleCourseforUI = async(req , res ) => {
       })
   }
 }
+
+//* search the course id from the search bar
+export const searchForCourse = async(req,res) => {
+  try {
+
+    const {query} = req.query
+    if(!query){
+      return res.status(200).json({
+        success : false,
+        message  : "Search field cannot be empty"
+      })
+    }
+    const regex = new RegExp('^' + query , 'i')
+    const course = await Course.find({title: {$regex: regex}})
+
+    res.status(200).json({
+      success : true,
+      course
+    })
+    
+  } catch (error) {
+    res.status(500).json({
+      success : false,
+      message : `Server error ${error.message}`
+    })
+  }
+}

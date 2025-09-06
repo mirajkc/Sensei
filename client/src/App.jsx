@@ -28,6 +28,7 @@ import SellerDetail from './pages/SellerDetail'
 import EnrolledCourses from './pages/user pages/EnrolledCourses'
 import Lesson from './pages/user pages/Lesson'
 import Certificate from './components/Certificate'
+import SearchPage from './pages/SearchPage'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -67,6 +68,7 @@ const App = () => {
         <Route path='/discovercourses' element = {<DiscoverCourses />} />
         <Route path='/coursedetail/:courseId' element={<CourseDetailsPage />} />
         <Route path='/instructordetails/:sellerId' element={<SellerDetail />} />
+        <Route path='/search' element={<SearchPage />} />
 
         //*certificate generator 
         <Route path='certificate/:courseId' element={<Certificate />} />
