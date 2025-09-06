@@ -68,7 +68,7 @@ export const AppContextContainer = ({ children }) => {
       const {data} = await axios.get('/api/seller/authseller')
       if (data.success) {
         setIsSellerLoggedIn(true);
-        setSellerDetails(data.user);
+        setSellerDetails(data.seller);
         
       } else {
         setIsLoggedIn(false);

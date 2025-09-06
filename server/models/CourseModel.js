@@ -45,7 +45,7 @@ language: {
   required: true 
 },
   thumbnail: { type: String, required: true }, 
-  trailer: { type: String, required: true },
+  trailer: { type: String, required: true }, 
   description: { type: String, required: true },
   whatYouWillLearn :{type :String , required :true},
   lessons: [lessonSchema],

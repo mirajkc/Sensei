@@ -451,7 +451,7 @@ const SellerCoursesTable = () => {
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div className="flex space-x-2">
                                   <button
-                                    onClick={() => handleViewCourse(course._id)}
+                                    onClick={() => navigate(`/coursedetail/${course._id}`)}
                                     className={`${buttonClass} bg-green-600 hover:bg-green-700 text-white`}
                                   >
                                     <Eye className="w-4 h-4" />

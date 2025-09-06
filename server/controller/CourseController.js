@@ -222,7 +222,7 @@ export const getAllCourseForOneSeller = async (req, res) => {
   try {
     const sellerId = req.seller._id;
 
-    const courses = await Course.find({ seller: sellerId });
+    const courses = await Course.find({ seller: sellerId }).populate("seller");
 
     if (courses.length === 0) {
       return res.status(200).json({

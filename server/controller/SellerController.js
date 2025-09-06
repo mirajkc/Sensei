@@ -153,7 +153,7 @@ export const getSellerDetailsBySellerId = async (req, res) => {
     }
 
     // * Check if the seller exists in the database
-    const seller = await Seller.findById(sellerId)
+    const seller = await Seller.findById(sellerId) 
     if (!seller) {
       return res.status(200).json({
         success: false,

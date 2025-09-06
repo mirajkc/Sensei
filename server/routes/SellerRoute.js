@@ -14,7 +14,7 @@ sellerRouter.post('/login' , sellerLogin)
 sellerRouter.get('/authseller', verifySeller, (req, res) => {
   return res.status(200).json({
     success: true,
-    seller: req.seller 
+    seller: req?.seller 
   });
 });
 
