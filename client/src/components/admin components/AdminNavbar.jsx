@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronDown, User, BookOpen, Settings, LogOut, Menu, X, Home, ReceiptTurkishLira } from 'lucide-react'
+import {LogOut, Home, BadgePlus, Settings } from 'lucide-react'
 import useAppContext from '../../context/AppContext'
 import toast from 'react-hot-toast'
 import nav_logo from '../../assets/navbar_logo.png'
@@ -62,13 +62,6 @@ const AdminNavbar = () => {
 
           {/* Navigation Links (desktop) */}
           <div className="hidden lg:flex items-center space-x-8">
-            <button
-              className={`${linkBase} ${linkHover} flex items-center space-x-2`}
-              onClick={() => navigate('/admin')}
-            >
-              <Home className="w-4 h-4" />
-              <span>Home</span>
-            </button>
             <button
               className={`${linkBase} ${linkHover} flex items-center space-x-2`}
               onClick={logoutAdmin}

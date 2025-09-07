@@ -29,6 +29,9 @@ import EnrolledCourses from './pages/user pages/EnrolledCourses'
 import Lesson from './pages/user pages/Lesson'
 import Certificate from './components/Certificate'
 import SearchPage from './pages/SearchPage'
+import CreateBlog from './components/admin components/CreateBlog'
+import EditBlog from './components/admin components/EditBlog'
+import EditSingleBlog from './components/admin components/EditSingleBlog'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -44,6 +47,9 @@ const App = () => {
 
         //* all admin routes 
         <Route path='/admin' element={ isAdmin ? <AdminHome /> : <AdminLogin /> }/>
+        <Route path='/admin/addblog' element={<CreateBlog />} />
+        <Route path='/admin/editblogs' element={<EditBlog />} />
+        <Route path='/admin/editblog/:blogId' element={<EditSingleBlog />} />
 
         //* all seller routes 
         <Route path='/seller' element={   sellerLoggedIn ?   <SellerHomePage /> : <SellerLogin /> } />
