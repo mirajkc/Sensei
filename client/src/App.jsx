@@ -32,6 +32,8 @@ import SearchPage from './pages/SearchPage'
 import CreateBlog from './components/admin components/CreateBlog'
 import EditBlog from './components/admin components/EditBlog'
 import EditSingleBlog from './components/admin components/EditSingleBlog'
+import BlogLanding from './pages/blog page/BlogLanding'
+import BlogDetail from './pages/blog page/BlogDetail'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -50,6 +52,7 @@ const App = () => {
         <Route path='/admin/addblog' element={<CreateBlog />} />
         <Route path='/admin/editblogs' element={<EditBlog />} />
         <Route path='/admin/editblog/:blogId' element={<EditSingleBlog />} />
+
 
         //* all seller routes 
         <Route path='/seller' element={   sellerLoggedIn ?   <SellerHomePage /> : <SellerLogin /> } />
@@ -78,6 +81,10 @@ const App = () => {
 
         //*certificate generator 
         <Route path='certificate/:courseId' element={<Certificate />} />
+
+        //* all career and roadmaps router
+        <Route path='/career&roadmaps' element={<BlogLanding />} />
+        <Route path = '/roadmap/:blogId' element={<BlogDetail />} />
         
 
       </Routes>

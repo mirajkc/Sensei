@@ -211,7 +211,7 @@ const Navbar = () => {
               {[
                 { label: 'Home', path: '/home' },
                 { label: 'Discover Courses', path: '/discovercourses' },
-                { label: 'Careers & Roadmaps', path: '/community' },
+                { label: 'Careers & Roadmaps', path: '/career&roadmaps' },
                 { label: 'Teach on Sensei', path: '/seller' },
                 { label: 'Community', path: '/community' }
               ].map((item, index) => (
@@ -463,7 +463,7 @@ const Navbar = () => {
                   {[
                     { label: 'Home', path: '/home' },
                     { label: 'Discover Courses', path: '/discovercourses' },
-                    { label: 'Careers & Roadmaps', path: '/community' },
+                    { label: 'Careers & Roadmaps', path: '/career&roadmaps' },
                     { label: 'Teach on Sensei', path: '/seller' },
                     { label: 'Community', path: '/community' }
                   ].map((item, index) => (
