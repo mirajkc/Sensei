@@ -6,10 +6,11 @@ import { Heart, ThumbsDown, Star, Calendar, User, Tag, Clock, ChevronDown, Chevr
 import useAppContext from '../../context/AppContext.jsx'
 import { useNavigate, useParams } from 'react-router-dom'
 import gif from '../../assets/giphy.gif'
+import Commnet from '../../components/blog components/Commnet.jsx'
 
 const BlogDetail = () => {
   const [loading, setLoading] = useState(false)
-  const { theme } = useAppContext()
+  const { theme  , loggedIn} = useAppContext()
   const [blogData, setBlogData] = useState({})
   const [isLiking, setIsLiking] = useState(false)
   const [isDisliking, setIsDisliking] = useState(false)
@@ -83,7 +84,7 @@ const BlogDetail = () => {
     }
   }
 
-  // API call to get blog details
+  //* API call to get blog details
   const getBlogDetails = async () => {
     try {
       setLoading(true)
@@ -99,7 +100,7 @@ const BlogDetail = () => {
     }
   }
 
-  // API call to get all blogs
+  //* API call to get all blogs
   const getAllBlogs = async () => {
     try {
       const { data } = await axios.get('/api/blog/getallblog')
@@ -112,16 +113,21 @@ const BlogDetail = () => {
     }
   }
 
-  // Handle like functionality
+  //* Handle like functionality
   const handleLike = async () => {
+    if(!loggedIn){
+      navigate('/login')
+      scrollTo(0,0)
+      return
+    }
     try {
       setIsLiking(true)
-      const { data } = await axios.post(`/api/blog/like/${blogId}`)
+      const { data } = await axios.post(`/api/blog/likeblog/${blogId}`)
       if (!data.success) {
         return toast.error(data.message)
       }
-      setBlogData(data.blog)
-      toast.success('Blog liked!')
+      toast.success(data.message)
+      getBlogDetails()
     } catch (error) {
       toast.error(error.message || 'Failed to like blog')
     } finally {
@@ -129,16 +135,21 @@ const BlogDetail = () => {
     }
   }
 
-  // Handle dislike functionality
+  //* Handle dislike functionality
   const handleDislike = async () => {
+    if(!loggedIn){
+      navigate('/login')
+      scrollTo(0,0)
+      return
+    }
     try {
       setIsDisliking(true)
-      const { data } = await axios.post(`/api/blog/dislike/${blogId}`)
+      const { data } = await axios.post(`/api/blog/dislikeblog/${blogId}`)
       if (!data.success) {
         return toast.error(data.message)
       }
-      setBlogData(data.blog)
-      toast.success('Blog disliked!')
+      toast.success(data.message)
+      getBlogDetails()
     } catch (error) {
       toast.error(error.message || 'Failed to dislike blog')
     } finally {
@@ -146,7 +157,7 @@ const BlogDetail = () => {
     }
   }
 
-  // Format content for better display
+  //* Format content for better display
   const formatContent = (content) => {
     if (!content) return ''
     
@@ -157,7 +168,7 @@ const BlogDetail = () => {
       .join('\n\n')
   }
 
-  // Truncate content to first 1000 characters
+  //* Truncate content to first 1000 characters
   const getTruncatedContent = (content) => {
     if (!content) return ''
     const formatted = formatContent(content)
@@ -169,14 +180,14 @@ const BlogDetail = () => {
     return showFullContent ? formatted : formatted.substring(0, 1000) + '...'
   }
 
-
-
   useEffect(() => {
     getBlogDetails()
     getAllBlogs()
   }, [blogId])
 
-  // Loading state
+  const comments = blogData?.comments
+
+  //* Loading state
   if (loading) {
     return (
       <div className={`max-w-screen max-h-screen flex justify-center items-center ${themeClasses.loading}`}>
@@ -350,9 +361,7 @@ const BlogDetail = () => {
               <h2 className={`text-xl font-bold mb-4 ${themeClasses.text.primary}`}>
                 Comments
               </h2>
-              <p className={themeClasses.text.muted}>
-                Comment component will be mounted here
-              </p>
+              <Commnet comments={comments} blogId = {blogId} getBlogDetails={getBlogDetails} />
             </motion.section>
           </div>
 

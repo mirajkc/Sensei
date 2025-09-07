@@ -103,7 +103,10 @@ export const getSingleBlogById = async(req,res) => {
       })
     }
     //* get the blog data
-    const blog = await Blog.findById(blogId)
+    const blog = await Blog.findById(blogId).populate({
+      path : 'comments.user',
+      select : "name picture  "
+    })
     if(!blog){
       return res.status(200).json({
         success : false,
@@ -278,7 +281,7 @@ export const addNewComment = async (req, res) => {
       });
     }
 
-    blog.comments.push({ comment, userId });
+    blog.comments.push({ comment, user: userId });
     await blog.save();
 
     res.status(200).json({
