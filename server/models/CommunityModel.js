@@ -28,7 +28,7 @@ const commentSchema = new mongoose.Schema({
   dislikes : [{ user : {type : mongoose.Schema.Types.ObjectId , ref : "User"} }],
   tags : {type : String , req : true , enum : ['Question' , 'Discussion' , 'Project' , 'Announcement' , 'Other']},
   comments : [commentSchema]
- } , {timestamps : true})
+ } , {timestamps : true}) 
 
  const Post = mongoose.models.Post || mongoose.model("Post" , postSchema)
  

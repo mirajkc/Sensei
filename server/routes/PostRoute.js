@@ -15,8 +15,8 @@ postRouter.post('/addcomment/:postId' , verifyUser , commentOnPost)
 postRouter.post('/addlikeoncomment/:postId/:commentId' , verifyUser , likeComment )
 postRouter.post('/dislikecomment/:postId/:commentId', verifyUser , dislikeComment)
 postRouter.post('/replyoncomment/:postId/:commentId' , verifyUser , replyOnComment)
-postRouter.post('/likereply/:courseId/:commentId/:replyId', verifyUser , likeReply)
-postRouter.post('/dislikereply/:courseId/:commentId/:replyId' , verifyUser , dislikeReply)
+postRouter.post('/likereply/:postId/:commentId/:replyId', verifyUser , likeReply)
+postRouter.post('/dislikereply/:postId/:commentId/:replyId' , verifyUser , dislikeReply)
 
 
 

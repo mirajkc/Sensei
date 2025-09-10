@@ -122,9 +122,9 @@ export const editCommunityPost = async (req, res) => {
       });
     }
 
-    const { title, content, tags } = req.body;
+    const { title, content } = req.body;
 
-    if (!title || !content || !tags) {
+    if (!title || !content ) {
       return res.status(200).json({
         success: false,
         message: "All fields are required",
@@ -134,7 +134,6 @@ export const editCommunityPost = async (req, res) => {
     //* update post
     post.title = title;
     post.content = content;
-    post.tags = tags;
     post.edited = true; 
 
     await post.save();
@@ -353,9 +352,9 @@ export const dislikePost = async (req, res) => {
       });
     }
 
-    //* Check if user has already disliked the post
+    //* Check if user has already liked the post
     const isAlreadyDisliked = post.dislikes.some(
-      (user) => user.toString() === userId.toString()
+      (dislike) => dislike.user.toString() === userId.toString()
     );
     if (isAlreadyDisliked) {
       return res.status(200).json({
@@ -366,11 +365,11 @@ export const dislikePost = async (req, res) => {
 
     //* Check if user has liked -> remove like if present
     const isLiked = post.likes.some(
-      (user) => user.toString() === userId.toString()
+      (like) => like.user.toString() === userId.toString()
     );
     if (isLiked) {
       post.likes = post.likes.filter(
-        (user) => user.toString() !== userId.toString()
+        (like) => like.user.toString() !== userId.toString()
       );
     }
 
@@ -557,7 +556,7 @@ export const dislikeComment = async (req, res) => {
 
     //* Check if already disliked
     const isAlreadyDisliked = singleComment.dislikes.some(
-      (user) => user.toString() === userId.toString()
+      (dislike) => dislike.user.toString() === userId.toString()
     );
     if (isAlreadyDisliked) {
       return res.status(200).json({
@@ -568,11 +567,11 @@ export const dislikeComment = async (req, res) => {
 
     //* If liked → remove like
     const isAlreadyLiked = singleComment.likes.some(
-      (user) => user.toString() === userId.toString()
+      (like) => like.user.toString() === userId.toString()
     );
     if (isAlreadyLiked) {
       singleComment.likes = singleComment.likes.filter(
-        (user) => user.toString() !== userId.toString()
+        (like) => like.user.toString() !== userId.toString()
       );
     }
 

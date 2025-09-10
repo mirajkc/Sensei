@@ -34,6 +34,10 @@ import EditBlog from './components/admin components/EditBlog'
 import EditSingleBlog from './components/admin components/EditSingleBlog'
 import BlogLanding from './pages/blog page/BlogLanding'
 import BlogDetail from './pages/blog page/BlogDetail'
+import CommunityLanding from './pages/community_page/CommunityLanding'
+import CreatePost from './pages/community_page/CreatePost'
+import SinglePost from './pages/community_page/SinglePost'
+import EditPage from './pages/community_page/EditPage'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -85,6 +89,12 @@ const App = () => {
         //* all career and roadmaps router
         <Route path='/career&roadmaps' element={<BlogLanding />} />
         <Route path = '/roadmap/:blogId' element={<BlogDetail />} />
+
+        //* all community post routes 
+        <Route path='/community' element={<CommunityLanding />} />
+        <Route path='/createpost' element={<CreatePost />} />
+        <Route path='/singlepost/:postId' element={<SinglePost />} />
+        <Route path='/editpost/:postId' element={<EditPage/>} />
         
 
       </Routes>
