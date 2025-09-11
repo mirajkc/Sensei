@@ -13,7 +13,6 @@
 - [Project Structure](#project-structure)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
 
 ---
@@ -195,5 +194,5 @@ Please ensure your code follows the existing project structure and naming conven
 ## Contact
 
 **Author:** Miraj K.C.
-**GitHub:** [https://github.com/yourusername](https://github.com/yourusername)
+**GitHub:** [https://github.com/yourusername](https://github.com/mirajkc)
 
