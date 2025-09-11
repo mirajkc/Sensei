@@ -43,6 +43,9 @@ Sensei provides a variety of features to enhance the online learning experience:
 <img width="1885" height="907" alt="image" src="https://github.com/user-attachments/assets/75d18a06-ffc3-4830-a76f-912539106bff" />
 <img width="1885" height="907" alt="image" src="https://github.com/user-attachments/assets/20f174b5-2148-4d4c-8c12-2b98384c1402" />
 <img width="1897" height="904" alt="image" src="https://github.com/user-attachments/assets/b194ba01-d349-4462-b664-4ad1f7b70765" />
+<img width="1885" height="833" alt="image" src="https://github.com/user-attachments/assets/3acd7074-8b32-473a-a9d7-d9d2c02f0867" />
+<img width="1865" height="907" alt="image" src="https://github.com/user-attachments/assets/6ba8ac46-8bbe-4462-bd7d-b0c624a7eb43" />
+
 
 
 
