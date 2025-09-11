@@ -317,22 +317,21 @@ const Navbar = () => {
                       >
                         <div className="py-1">
                           {[
-                            { icon: User, label: 'Profile', href: '/userprofile' },
-                            { icon: BookOpen, label: 'My Courses', href: '/enrolledcourses' },
-                            { icon: ShoppingCart, label: 'My Cart', href: '/cart' },
-                            { icon: BookmarkPlus, label: 'My Wishlist', href: '/wishlists' },
-                            { icon: MessageCircleQuestionMark, label: 'About', href: '/about' }
+                             { icon: User, label: 'Profile', path: '/userprofile' },
+                             { icon: BookOpen, label: 'My Courses', path: '/enrolledcourses' },
+                             { icon: ShoppingCart, label: 'My Cart', path: '/cart' },
+                             { icon: BookmarkPlus, label: 'My Wishlist', path: '/wishlists' },
+                            { icon: MessageCircleQuestionMark, label: 'About', path: '/about' }
                           ].map((item, index) => (
-                            <motion.a
-                              key={item.label}
-                              href={item.href}
-                              className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover}`}
-                              whileHover={{ x: 4, backgroundColor: theme === 'dark' ? 'rgba(55, 65, 81, 0.5)' : 'rgba(243, 244, 246, 0.5)' }}
-                              transition={{ duration: 0.2 }}
-                            >
-                              <item.icon className="w-4 h-4" />
-                              <span>{item.label}</span>
-                            </motion.a>
+                             <Link
+    key={item.label}
+    to={item.path}
+    className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover}`}
+    onClick={() => setIsProfileOpen(false)}
+  >
+    <item.icon className="w-4 h-4" />
+    <span>{item.label}</span>
+  </Link>
                           ))}
                           
                           <hr className={`my-1 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`} />
