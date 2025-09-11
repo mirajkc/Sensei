@@ -24,7 +24,7 @@ app.use(cookieParser())
 
 // CORS
 const allowedOrigins = ["http://localhost:5173", "http://localhost:3000" , 'https://sensei-ts72.vercel.app',
-  'https://sensei-ts72-git-main-miraj-kcs-projects.vercel.app' , 'https://sensei-ts72-7ayl09ei4-miraj-kcs-projects.vercel.app'
+  'https://sensei-ts72-git-main-miraj-kcs-projects.vercel.app' , 'https://sensei-ts72-7ayl09ei4-miraj-kcs-projects.vercel.app' , 'https://sensei-tan.vercel.app'
 ];
 
 app.use(cors({
