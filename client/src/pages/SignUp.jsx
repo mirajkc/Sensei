@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import useAppContext from '../context/AppContext';
-import { useGoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 import toast from 'react-hot-toast';         
 import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import {motion} from 'framer-motion'
+import axios from 'axios'; 
+import { motion } from 'framer-motion';
 
 const SignUp = () => {
   const { theme } = useAppContext();
@@ -18,44 +18,13 @@ const SignUp = () => {
   const [password2, setPassword2] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
 
-  const googleSignup = useGoogleLogin({
-    flow: 'auth-code',
-    onSuccess: async (codeResponse) => {
-      const code = codeResponse?.code;
-      if (!code) {
-        toast.error('Google auth code missing. Please try again.');
-        return;
-      }
-      try {
-        setLoading(true);
-        const { data } = await axios.post(
-          '/api/user/signingoogle',
-          { code }
-        );
-
-        if (!data?.success) {
-          toast.error(data?.message || 'Google signup failed.');
-          return;
-        }
-        window.location.href = '/home';
-      } catch (error) {
-        toast.error(error?.response?.data?.message || error?.message || 'Google signup error.');
-      } finally {
-        setLoading(false);
-      }
-    },
-    onError: (error) => toast.error(`Error during Google signup${error?.message ? `: ${error.message}` : ''}`)
-  });
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         toast.error('Please select a valid image file');
         return;
       }
-      // Validate file size (5MB limit)
       if (file.size > 5 * 1024 * 1024) {
         toast.error('File size should be less than 5MB');
         return;
@@ -66,7 +35,6 @@ const SignUp = () => {
 
   const defaultSignup = async (e) => {
     e.preventDefault();
-
     if (loading) return; 
 
     const trimmedName = name.trim();
@@ -92,7 +60,6 @@ const SignUp = () => {
     try {
       setLoading(true);
 
-      
       const formData = new FormData();
       formData.append('name', trimmedName);
       formData.append('email', trimmedEmail);
@@ -105,9 +72,7 @@ const SignUp = () => {
         formData,
         { 
           withCredentials: true,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+          headers: { 'Content-Type': 'multipart/form-data' },
         }
       );
 
@@ -128,9 +93,9 @@ const SignUp = () => {
 
   return (
     <motion.div
-      initial={{opacity : 0 , y : 100}}
-      animate = {{ opacity : 1 , y : 0 }}
-      transition={{duration : 0.8}}
+      initial={{ opacity: 0, y: 100 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
       className={`min-h-screen flex items-center justify-center px-4 py-8
       ${theme === 'dark' ? 'bg-gray-900 text-gray-200' : 'bg-white text-slate-800'}`}
     >
@@ -140,13 +105,13 @@ const SignUp = () => {
       >
         <h1 className="text-2xl font-bold text-center">Join Sensei</h1>
 
+        {/* Default Signup Form */}
         <form onSubmit={defaultSignup} className="flex flex-col gap-4" aria-busy={loading}>
           {/* Name Field */}
           <div className="flex flex-col gap-2">
             <label className="font-medium" htmlFor="name">Full Name</label>
             <input
               id="name"
-              name="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -166,7 +131,6 @@ const SignUp = () => {
             <label className="font-medium" htmlFor="email">Email</label>
             <input
               id="email"
-              name="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -186,7 +150,6 @@ const SignUp = () => {
             <label className="font-medium" htmlFor="password">Password</label>
             <input
               id="password"
-              name="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -206,7 +169,6 @@ const SignUp = () => {
             <label className="font-medium" htmlFor="password2">Confirm Password</label>
             <input
               id="password2"
-              name="password2"
               type="password"
               value={password2}
               onChange={(e) => setPassword2(e.target.value)}
@@ -226,7 +188,6 @@ const SignUp = () => {
             <label className="font-medium" htmlFor="profilePicture">Profile Picture</label>
             <input
               id="profilePicture"
-              name="profilePicture"
               type="file"
               accept="image/*"
               onChange={handleFileChange}
@@ -278,19 +239,41 @@ const SignUp = () => {
         </div>
 
         {/* Google Signup */}
-        <button
-          type="button"
-          onClick={googleSignup}
-          disabled={loading}
-          className={`flex items-center justify-center gap-3 px-4 py-2 rounded-md border font-medium
-            hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed
-            ${theme === 'dark' 
-              ? 'bg-gray-700 border-gray-600 text-gray-200' 
-              : 'bg-white border-gray-300 text-slate-800'}`}
-        >
-          <FcGoogle className="text-xl" />
-          {loading ? 'Please wait…' : 'Sign up with Google'}
-        </button>
+        <div className="flex items-center justify-center">
+          <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              try {
+                const token = credentialResponse.credential;
+                if (!token) {
+                  toast.error("No Google token received");
+                  return;
+                }
+
+                const { data } = await axios.post(
+                  "/api/user/signingoogle",
+                  { token },
+                  { withCredentials: true }
+                );
+
+                if (data?.success) {
+                  toast.success("Google login successful!");
+                  window.location.href = "/home";
+                } else {
+                  toast.error(data?.message || "Google signup failed.");
+                }
+              } catch (error) {
+                toast.error(
+                  error?.response?.data?.message ||
+                    error.message ||
+                    "Google signup error."
+                );
+              }
+            }}
+            onError={() => {
+              toast.error("Google login failed");
+            }}
+          />
+        </div>
       </div>
     </motion.div>
   );

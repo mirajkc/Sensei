@@ -1,40 +1,19 @@
 import React, { useState } from 'react'
 import useAppContext from '../context/AppContext'
-import { useGoogleLogin } from '@react-oauth/google'
+import { GoogleLogin } from '@react-oauth/google'
 import { toast } from 'react-hot-toast'
 import { FcGoogle } from "react-icons/fc"
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import {motion} from 'framer-motion'
 
-const Login = () => {
+const Login = () => { 
   const { theme } = useAppContext()
   const navigate = useNavigate()
   const[loading, setLoading] = useState(false)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-const googleLogin = useGoogleLogin({
-  flow: 'auth-code',
-  onSuccess: async (coderesponse) => {
-    const code = coderesponse.code;
-    if (code) {
-      try {
-        setLoading(true);
-        const { data } = await axios.post('/api/user/logingoogle', { code });
-        if (!data.success) return toast.error(data.message);
-        window.location.href = '/home'
-      } catch (error) {
-        toast.error(error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-  },
-  onError: (error) => toast.error(`Error while Google login: ${error.message}`)
-});
-
 
   const defaultLogin = async(e) => {
     e.preventDefault()
@@ -131,17 +110,24 @@ const googleLogin = useGoogleLogin({
         </div>
 
         {/* Google Login */}
-        <button
-          onClick={googleLogin}
-          className={`flex items-center justify-center gap-3 px-4 py-2 rounded-md border font-medium
-            hover:opacity-90 transition 
-            ${theme === 'dark' 
-              ? 'bg-gray-700 border-gray-600 text-gray-200' 
-              : 'bg-white border-gray-300 text-slate-800'}`}
-        >
-          <FcGoogle className="text-xl" />
-          Login with Google
-        </button>
+        <GoogleLogin
+   onSuccess={async (credentialResponse) => {
+       const token = credentialResponse.credential;
+       try {
+           const { data } = await axios.post('/api/user/logingoogle', { token }, { withCredentials: true });
+           if (data?.success) {
+               toast.success('Google login successful!');
+               window.location.href = '/home';
+           } else {
+               toast.error(data?.message || 'Google login failed.');
+           }
+       } catch (err) {
+           toast.error(err?.response?.data?.message || err.message || 'Google login error.');
+       }
+   }}
+   onError={() => toast.error('Google login failed')}
+/>
+
       </div>
     </motion.div>
   ) 

@@ -324,14 +324,14 @@ const Navbar = () => {
                             { icon: MessageCircleQuestionMark, label: 'About', path: '/about' }
                           ].map((item, index) => (
                             <Link
-    key={item.label}
-    to={item.path}
-    className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover}`}
-    onClick={() => setIsProfileOpen(false)}
-  >
-    <item.icon className="w-4 h-4" />
-    <span>{item.label}</span>
-  </Link>
+                               key={item.label}
+                                 to={item.path}
+                                 className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover}`}
+                                  onClick={() => setIsProfileOpen(false)}
+                               >
+                                      <item.icon className="w-4 h-4" />
+                                       <span>{item.label}</span>
+                             </Link>
                           ))}
                           
                           <hr className={`my-1 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`} />

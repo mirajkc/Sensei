@@ -7,81 +7,49 @@ import cloudinary from 'cloudinary';
 import fs from 'fs';
 import Course from '../models/CourseModel.js';
 import mongoose from 'mongoose';
+import { OAuth2Client } from "google-auth-library";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 
 export const GoogleSignIn = async (req, res) => {
   try {
-    const { code } = req.body;
-    if (!code) {
-      return res.status(400).json({
-        success: false,
-        message: "Google signup error. Use email signup instead.",
-      });
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({ success: false, message: "No token provided" });
     }
 
-    // Get access token from Google
-    const tokenResponse = await axios.post(
-      'https://oauth2.googleapis.com/token',
-      new URLSearchParams({
-        code,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: process.env.GOOGLE_REDIRECT_URI,
-        grant_type: 'authorization_code',
-      }),
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-    );
-
-    const { access_token } = tokenResponse.data;
-    if (!access_token) {
-      return res.status(400).json({
-        success: false,
-        message: "Failed to get access token from Google",
-      });
-    }
-
-    // Get user info from Google
-    const userInfoResponse = await axios.get(
-      'https://www.googleapis.com/oauth2/v2/userinfo',
-      { headers: { Authorization: `Bearer ${access_token}` } }
-    );
-
-    const userInfo = userInfoResponse.data;
-
-    // Check if user exists, if not create
-    let user = await User.findOne({ email: userInfo.email });
-    if (!user) {
-      user = await User.create({
-        name: userInfo.name,
-        picture: userInfo.picture,
-        email: userInfo.email,
-        password : null,
-      });
-    }
-
-    // Create JWT token
-    const userToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '7d',
+   
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
 
-    // Send cookie
-    res.cookie('userToken', userToken, {
+    const payload = ticket.getPayload();
+    const { email, name, picture } = payload;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({ email, name, picture, password: null });
+    }
+
+    const userToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.cookie("userToken", userToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({
-      success: true,
-      message: "Logged in successfully",
-      user,
-    });
+    res.status(200).json({ success: true, message: "Logged in successfully", user });
   } catch (error) {
-    console.error(error);
+    console.error("Google login error:", error);
     res.status(500).json({
       success: false,
-      message: `Error occurred during login: ${error.message}`,
+      message: `Error verifying Google login: ${error.message}`,
     });
   }
 };
@@ -174,64 +142,42 @@ export const defaultServerSignUP = async (req, res) => {
 }; 
 
 
-//! login with google 
-
+//! login with google
 export const loginWithGoogle = async (req, res) => {
   try {
-    const { code } = req.body;
-    if (!code) {
+    const { token } = req.body;
+    if (!token) {
       return res.status(400).json({
         success: false,
-        message: "Unable to receive Google code",
+        message: "No Google token provided",
       });
     }
 
-    const tokenresponse = await axios.post(
-      'https://oauth2.googleapis.com/token',
-      new URLSearchParams({
-        code,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: process.env.GOOGLE_REDIRECT_URI,
-        grant_type: 'authorization_code',
-      }),
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-    );
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
 
-    const { access_token } = tokenresponse.data;
-    if (!access_token) {
-      return res.status(400).json({
-        success: false,
-        message: "Failed to get access token from Google",
-      });
-    }
+    const payload = ticket.getPayload();
+    const { email, name, picture } = payload;
 
-    const userInfoResponse = await axios.get(
-      'https://www.googleapis.com/oauth2/v2/userinfo',
-      { headers: { Authorization: `Bearer ${access_token}` } }
-    );
-    const userInfo = userInfoResponse.data;
-
-    let user = await User.findOne({ email: userInfo.email, password: null });
+    let user = await User.findOne({ email, password: null });
 
     if (!user) {
       user = await User.create({
-        name: userInfo.name,
-        picture: userInfo.picture,
-        email: userInfo.email,
+        name,
+        picture,
+        email,
         password: null,
       });
     }
-    const userToken = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+
+    const userToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
     res.cookie("userToken", userToken, {
       httpOnly: true,
-       secure: true,
-      sameSite: 'none',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -245,10 +191,10 @@ export const loginWithGoogle = async (req, res) => {
     console.error('Google login error:', error);
     res.status(500).json({
       success: false,
-      message: `Error occurred during Google login: ${error.message}`,
+      message: `Error during Google login: ${error.message}`,
     });
   }
-}
+};
 
 //! default server login 
 export const defaultServerLogin = async (req, res) => {

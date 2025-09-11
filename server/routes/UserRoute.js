@@ -8,7 +8,7 @@ const upload = multer({ dest: 'uploads/' })
 const userRouter = express.Router()
 
 //* Sign in user using Google
-userRouter.post('/signingoogle', GoogleSignIn)
+userRouter.post('/signingoogle', GoogleSignIn) 
 
 //* Sign in using default server login
 //* Multer expects field name "image"
