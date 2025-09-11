@@ -12,7 +12,6 @@
 - [Installation & Setup](#installation--setup)
 - [Project Structure](#project-structure)
 - [Usage](#usage)
-- [Contributing](#contributing)
 - [Contact](#contact)
 
 ---
@@ -166,35 +165,9 @@ sensei/
 - Admins can manage courses, users, and content via the admin panel.
 - Toggle between dark/light mode for improved usability.
 
----
-
-## Contributing
-
-Contributions are welcome! Follow these steps to contribute:
-
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature/your-feature
-   ```
-3. Make your changes.
-4. Commit your changes:
-   ```bash
-   git commit -m "Add your message"
-   ```
-5. Push to the branch:
-   ```bash
-   git push origin feature/your-feature
-   ```
-6. Open a Pull Request.
-
-Please ensure your code follows the existing project structure and naming conventions.
-
----
-
+--
 
 ## Contact
 
 **Author:** Miraj K.C.
-**GitHub:** [https://github.com/yourusername](https://github.com/mirajkc)
 
