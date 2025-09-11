@@ -38,7 +38,8 @@ import CreatePost from './pages/community_page/CreatePost'
 import SinglePost from './pages/community_page/SinglePost'
 import EditPage from './pages/community_page/EditPage'
 import AboutUs from './pages/AboutUs'
-import Wishlist from './pages/user pages/wishlist'
+import Wishlist from './pages/user pages/WishList.jsx'
+
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
