@@ -12,7 +12,7 @@ const courseRouter = express.Router()
 courseRouter.post('/addcourse', verifySeller, upload.single('image') , addCourse)
 courseRouter.get('/getcoursebyid/:courseId' , verifySeller , getCourseById )
 courseRouter.post('/updatecourse/:courseId', verifySeller , upload.single('thumbnail') , updateCourse )
-courseRouter.get('/getcoursebysellerid', verifySeller , getAllCourseForOneSeller) //!
+courseRouter.get('/getcoursebysellerid', verifySeller , getAllCourseForOneSeller) 
 courseRouter.delete('/deletecourse/:courseId' ,  verifySeller , deleteCourseById )
 courseRouter.post('/addnewlesson/:courseId' , verifySeller , addNewLesson )
 courseRouter.get('/getalllesson/manage/:courseId', verifySeller , getAllLessonByCourseIdForSeller)

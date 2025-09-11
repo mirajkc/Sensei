@@ -38,6 +38,7 @@ import CommunityLanding from './pages/community_page/CommunityLanding'
 import CreatePost from './pages/community_page/CreatePost'
 import SinglePost from './pages/community_page/SinglePost'
 import EditPage from './pages/community_page/EditPage'
+import AboutUs from './pages/AboutUs'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -82,6 +83,7 @@ const App = () => {
         <Route path='/coursedetail/:courseId' element={<CourseDetailsPage />} />
         <Route path='/instructordetails/:sellerId' element={<SellerDetail />} />
         <Route path='/search' element={<SearchPage />} />
+        <Route path='/about' element={<AboutUs />} />
 
         //*certificate generator 
         <Route path='certificate/:courseId' element={<Certificate />} />

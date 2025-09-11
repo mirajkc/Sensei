@@ -763,3 +763,57 @@ export const getDetailsForCertificate = async (req, res) => {
     });
   }
 };
+
+//* api call to get all the user information for home page
+export const greetUser = async (req, res) => {
+  try {
+    const userId = req.user?._id;
+
+    if (!userId) {
+      return res.status(200).json({
+        success: true,
+        isVisitor: true
+      });
+    }
+
+    const user = await User.findById(userId).populate([
+      {
+        path: "enrolledCourses.course",
+        select:
+          "title category skillLevel thumbnail price discountedPrice totalHours totalNumberOfLessons",
+        populate: {
+          path: "seller",
+          select: "name image bio specialization rating"
+        }
+      },
+      {
+        path: "wishlist",
+        select: "title category skillLevel thumbnail price discountedPrice",
+        populate: {
+          path: "seller",
+          select: "name image rating"
+        }
+      },
+      {
+        path: "cart",
+        select: "title category skillLevel thumbnail price discountedPrice",
+        populate: {
+          path: "seller",
+          select: "name image rating"
+        }
+      }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      isVisitor: false,
+      user
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Server error: ${error.message}`
+    });
+  }
+};
+

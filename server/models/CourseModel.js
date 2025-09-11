@@ -55,7 +55,7 @@ language: {
 
   //* Auto-calculated fields
   totalHours: { type: Number, default: 0 },
-  totalNumberOfLessons: { type: Number, default: 0 },
+  totalNumberOfLessons: { type: Number, default: 0 }, 
 
   seller: { type: mongoose.Schema.Types.ObjectId, ref: "Seller", required: true }, 
   createdAt: { type: Date, default: Date.now },

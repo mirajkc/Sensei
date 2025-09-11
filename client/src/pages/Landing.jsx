@@ -56,8 +56,8 @@ const Landing = () => {
     },
     {
       icon: <Target className="w-8 h-8" />,
-      title: "Personalized Paths",
-      description: "AI-powered learning paths tailored to your goals and learning style."
+      title: "Carrer Guide",
+      description: "Shape your future with Sensei’s career-focused learning paths."
     },
     {
       icon: <TrendingUp className="w-8 h-8" />,
@@ -134,7 +134,7 @@ const Landing = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/explore-courses')}
+                onClick={() => navigate('/discovercourses')}
                 className="hover:text-blue-600 transition-colors"
               >
                 Explore Courses
@@ -142,7 +142,7 @@ const Landing = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/career')}
+                onClick={() => navigate('/career&roadmaps')}
                 className="hover:text-blue-600 transition-colors"
               >
                 Career
@@ -180,7 +180,7 @@ const Landing = () => {
                     Courses
                   </motion.span>
                   <br />
-                  Education from.
+                  from Sensei.
                 </motion.h1>
                 <motion.p 
                   variants={itemVariants}
@@ -189,7 +189,7 @@ const Landing = () => {
                   }`}
                 >
                   Transform your career with our comprehensive learning platform. 
-                  Access world-class courses, expert instructors, and a supportive community.
+                  Access world-class courses, expert instructors, and a supportive community and guides.
                 </motion.p>
               </div>
               
@@ -200,6 +200,7 @@ const Landing = () => {
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={()=>navigate('/home')}
                   className="bg-blue-600 text-white px-8 xl:px-10 py-4 xl:py-5 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2 text-lg xl:text-xl font-semibold"
                 >
                   <span>Get Started</span>
@@ -208,14 +209,15 @@ const Landing = () => {
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={()=>navigate('/about')}
                   className={`px-8 xl:px-10 py-4 xl:py-5 rounded-lg border-2 transition-colors flex items-center justify-center space-x-2 text-lg xl:text-xl font-medium ${
                     theme === 'dark' 
                       ? 'border-gray-600 hover:border-white hover:bg-gray-800' 
                       : 'border-gray-300 hover:border-gray-900 hover:bg-gray-50'
                   }`}
                 >
-                  <Play className="w-5 h-5 xl:w-6 xl:h-6" />
-                  <span>Watch Demo</span>
+                  <Users className="w-5 h-5 xl:w-6 xl:h-6" />
+                  <span>About Us</span>
                 </motion.button>
               </motion.div>
 
@@ -230,7 +232,7 @@ const Landing = () => {
                     transition={{ delay: 1, duration: 0.5 }}
                     className="text-2xl xl:text-4xl font-bold text-blue-600"
                   >
-                    50K+
+                    5+
                   </motion.div>
                   <div className={`text-xs xl:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Students</div>
                 </motion.div>
@@ -241,7 +243,7 @@ const Landing = () => {
                     transition={{ delay: 1.2, duration: 0.5 }}
                     className="text-2xl xl:text-4xl font-bold text-blue-600"
                   >
-                    200+
+                    10+
                   </motion.div>
                   <div className={`text-xs xl:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Courses</div>
                 </motion.div>
@@ -294,9 +296,9 @@ const Landing = () => {
                       <GraduationCap className="w-5 h-5 xl:w-8 xl:h-8 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-base xl:text-lg">Complete Your Education</h3>
+                      <h3 className="font-semibold text-base xl:text-lg">Complete Your Education With Sensei</h3>
                       <p className={`text-xs xl:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                        Join thousands of successful graduates
+                        Join many of successful graduates
                       </p>
                     </div>
                   </motion.div>
@@ -457,9 +459,10 @@ const Landing = () => {
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={()=>navigate('/discovercourses')}
                   className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  Learn More
+                  Enroll Now
                 </motion.button>
               </div>
             </motion.div>
@@ -490,7 +493,7 @@ const Landing = () => {
                     theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
                   }`}
                 >
-                  Our comprehensive learning platform has helped thousands of students 
+                  Our comprehensive learning platform has helped many of students 
                   achieve their educational and career goals. With cutting-edge technology 
                   and expert instruction, we provide the tools you need to succeed.
                 </motion.p>
@@ -505,7 +508,7 @@ const Landing = () => {
               >
                 {[
                   { icon: Zap, value: '24/7', label: 'Support Available', color: 'blue' },
-                  { icon: Users, value: '500+', label: 'Expert Instructors', color: 'green' }
+                  { icon: Users, value: '10+', label: 'Expert Instructors', color: 'green' }
                 ].map((item, index) => (
                   <motion.div
                     key={index}
@@ -536,101 +539,7 @@ const Landing = () => {
         </div>
       </motion.section>
 
-      {/* Courses Section */}
-      <motion.section 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className={`py-20 ${
-          theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            initial={{ y: 50, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center space-y-4 mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold">
-              Complete About Students
-            </h2>
-            <h3 className="text-2xl md:text-3xl font-semibold text-blue-600">
-              Advance Course
-            </h3>
-          </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {courses.map((course, index) => (
-              <motion.div
-                key={index}
-                variants={cardVariants}
-                initial="hidden"
-                whileInView="visible"
-                whileHover="hover"
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className={`rounded-2xl overflow-hidden cursor-pointer ${
-                  theme === 'dark' ? 'bg-gray-900' : 'bg-white shadow-lg'
-                }`}
-              >
-                <motion.div 
-                  whileHover={{ scale: 1.1 }}
-                  className="h-48 bg-gradient-to-br from-blue-500 to-purple-600 relative overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-black/20"></div>
-                  <motion.div 
-                    initial={{ y: 50, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 + 0.5, duration: 0.6 }}
-                    className="absolute bottom-4 left-4 right-4"
-                  >
-                    <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-lg p-3">
-                      <h3 className="font-bold text-gray-900 dark:text-white">{course.title}</h3>
-                    </div>
-                  </motion.div>
-                </motion.div>
-                
-                <motion.div 
-                  initial={{ y: 20, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 + 0.7, duration: 0.6 }}
-                  className="p-6 space-y-4"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                      by {course.instructor}
-                    </span>
-                    <div className="flex items-center space-x-1">
-                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                      <span className="text-sm font-semibold">{course.rating}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between text-sm">
-                    <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
-                      {course.students.toLocaleString()} students
-                    </span>
-                    <span className="text-blue-600 font-semibold">{course.duration}</span>
-                  </div>
-                  
-                  <motion.button 
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    Enroll Now
-                  </motion.button>
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
 
       {/* CTA Section */}
       <motion.section 
@@ -657,7 +566,7 @@ const Landing = () => {
             transition={{ delay: 0.2, duration: 0.6 }}
             className={`text-xl mb-8 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}
           >
-            Join thousands of students who have transformed their careers with Sensei
+            Join many of students who have transformed their careers with Sensei
           </motion.p>
           <motion.button 
             initial={{ y: 30, opacity: 0 }}
@@ -666,6 +575,9 @@ const Landing = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={()=>{
+              navigate('/home') ; scrollTo(0,0)
+            }}
             className="bg-blue-600 text-white px-12 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors"
           >
             Get Started Today

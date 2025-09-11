@@ -1,5 +1,5 @@
 import express from 'express'
-import {  defaultServerLogin, defaultServerSignUP, getCourseEnrollmentCount, getDetailsForCertificate, getEnrolledCourses, getSingleEnrolledCourseDetails, getStudentDetails, GoogleSignIn, loginWithGoogle, progressTracker, updateStudentDetails, userLogOut } from '../controller/UserController.js'
+import {  defaultServerLogin, defaultServerSignUP, getCourseEnrollmentCount, getDetailsForCertificate, getEnrolledCourses, getSingleEnrolledCourseDetails, getStudentDetails, GoogleSignIn, greetUser, loginWithGoogle, progressTracker, updateStudentDetails, userLogOut } from '../controller/UserController.js'
 import multer from 'multer'
 import verifyUser from '../middleware/UserMiddleware.js'
 
@@ -23,6 +23,7 @@ userRouter.get('/getenrollmentcount/:courseId' , getCourseEnrollmentCount)
 userRouter.get('/getsingleenrollmentcourse/:courseId', verifyUser , getSingleEnrolledCourseDetails)
 userRouter.get('/trackuserprogress/:courseId/:lessonId' ,verifyUser , progressTracker )
 userRouter.get('/getdetailsforcertificate/:courseId' , verifyUser , getDetailsForCertificate)
+userRouter.get('/getuserdataforhome' , verifyUser , greetUser)
 userRouter.get( '/verifyUser' , verifyUser , (req,res)=>{
   res.status(200).json({
     success : true,

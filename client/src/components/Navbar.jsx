@@ -321,7 +321,7 @@ const Navbar = () => {
                             { icon: BookOpen, label: 'My Courses', href: '/enrolledcourses' },
                             { icon: ShoppingCart, label: 'My Cart', href: '/cart' },
                             { icon: BookmarkPlus, label: 'My Wishlist', href: '/wishlists' },
-                            { icon: MessageCircleQuestionMark, label: 'Support', href: '/#' }
+                            { icon: MessageCircleQuestionMark, label: 'About', href: '/about' }
                           ].map((item, index) => (
                             <motion.a
                               key={item.label}

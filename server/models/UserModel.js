@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   bio: { type: String },  
   link: { type: String },   //* portfolio or website  
 
-  //* Learning-related
+  //* Learning-related 
   enrolledCourses: [{
     course : {type : mongoose.Schema.Types.ObjectId , ref:"Course"},  
     createdAt:{type : Date , default : Date.now},

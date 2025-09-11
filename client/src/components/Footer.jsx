@@ -100,8 +100,8 @@ const Footer = () => {
   const iconItems = [
     { href: "/", icon: Home, label: "Home" },
     { href: "/about", icon: Info, label: "About" },
-    { href: "/maps", icon: MapPin, label: "Maps" },
-    { href: "/courses", icon: BookOpen, label: "Courses" }
+    { href: "/career&roadmaps", icon: MapPin, label: "Maps" },
+    { href: "/discovercourses", icon: BookOpen, label: "Courses" }
   ]
 
   return (
@@ -245,7 +245,7 @@ const Footer = () => {
             transition={{ duration: 0.6, delay: 0.7 }}
             viewport={{ once: true }}
           >
-            © 2024 PrebuiltUI. All rights reserved.
+            © 2025 Sensei. All rights reserved.
           </motion.p>
         </motion.div>
 
