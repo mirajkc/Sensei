@@ -323,7 +323,7 @@ const Navbar = () => {
                              { icon: BookmarkPlus, label: 'My Wishlist', path: '/wishlists' },
                             { icon: MessageCircleQuestionMark, label: 'About', path: '/about' }
                           ].map((item, index) => (
-                             <Link
+                            <Link
     key={item.label}
     to={item.path}
     className={`flex items-center space-x-2 px-4 py-2 text-sm ${linkHover}`}
