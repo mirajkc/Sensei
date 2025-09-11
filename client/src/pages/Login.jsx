@@ -8,7 +8,7 @@ import axios from 'axios'
 import {motion} from 'framer-motion'
 
 const Login = () => { 
-  const { theme } = useAppContext()
+  const { theme , authenticateUser } = useAppContext()
   const navigate = useNavigate()
   const[loading, setLoading] = useState(false)
 
@@ -29,13 +29,15 @@ const Login = () => {
         return toast.error( data.message )
       }else{
         if(data.success){
-          window.location.href = '/home'
+          authenticateUser()
+          navigate('/home')
+          screen(0,0)
         }
       }
     } catch (error) {
       toast.error(error.message)
     }finally{
-      setLoading(fasle)
+      setLoading(false)
     }
   }
 
@@ -117,7 +119,10 @@ const Login = () => {
            const { data } = await axios.post('/api/user/logingoogle', { token }, { withCredentials: true });
            if (data?.success) {
                toast.success('Google login successful!');
-               window.location.href = '/home';
+               authenticateUser()
+               navigate('/home')
+               scrollTo(0,0)
+               
            } else {
                toast.error(data?.message || 'Google login failed.');
            }

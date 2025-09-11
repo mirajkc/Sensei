@@ -175,7 +175,7 @@ const removeCartItem = async (courseId) => {
 
   const value = { theme, setTheme, loggedIn, setIsLoggedIn, userDetails , sellerLoggedIn ,setIsSellerLoggedIn
     ,sellerDetails,isAdmin , adminData ,loading, cartItemsDetails ,addCartItem,removeCartItem,getCartDetails ,  
-    buyNow
+    buyNow , authenticateSeller , authenticateUser
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
