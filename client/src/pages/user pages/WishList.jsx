@@ -557,7 +557,7 @@ const Wishlist = () => {
 </div>
 
                     {/* Action Buttons */}
-                    <div className="flex items-center space-x-3 pt-4">
+                    <div className="flex items-center space-x-3 pt-4"> 
                       <motion.button 
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}

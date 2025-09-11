@@ -21,7 +21,6 @@ import SellerSetting from './pages/seller pages/SellerSetting'
 import Footer from './components/Footer'
 import DiscoverCourses from './pages/DiscoverCourses'
 import UserProfile from './pages/user pages/UserProfile'
-import WishList from './pages/user pages/wishlist'
 import CourseDetailsPage from './pages/CourseDetailsPage'
 import Cart from './pages/user pages/Cart'
 import SellerDetail from './pages/SellerDetail'
@@ -39,6 +38,7 @@ import CreatePost from './pages/community_page/CreatePost'
 import SinglePost from './pages/community_page/SinglePost'
 import EditPage from './pages/community_page/EditPage'
 import AboutUs from './pages/AboutUs'
+import Wishlist from './pages/user pages/wishlist'
 
 const App = () => {
   const { isAdmin,sellerLoggedIn } = useAppContext()
@@ -71,7 +71,7 @@ const App = () => {
 
         //* all user routes
         <Route path='/userprofile' element={<UserProfile />} />
-        <Route path='/wishlists' element={<WishList />} />
+        <Route path='/wishlists' element={<Wishlist />} />
         <Route path='/cart' element={<Cart />} />
         <Route path='/enrolledcourses' element={<EnrolledCourses />} />
         <Route path='/learn/:courseId/:lessonId' element={<Lesson />} />
