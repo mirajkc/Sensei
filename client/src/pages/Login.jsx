@@ -14,7 +14,7 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  // Default server login
+
   const defaultLogin = async (e) => {
     e.preventDefault()
     if (!email || !password) {
@@ -27,7 +27,7 @@ const Login = () => {
       const { data } = await axios.post('/api/user/logindefault', { email, password }, { withCredentials: true })
       if (!data.success) return toast.error(data.message)
 
-      await authenticateUser() // fetch user after cookie is set
+      await authenticateUser() 
       toast.success('Login successful!')
       navigate('/home')
       scrollTo(0, 0)
@@ -39,7 +39,7 @@ const Login = () => {
     }
   }
 
-  // Google login
+
   const googleLogin = async (credentialResponse) => {
     if (!credentialResponse?.credential) {
       toast.error('No Google token received')
@@ -50,10 +50,9 @@ const Login = () => {
       setLoading(true)
       await axios.post('/api/user/logingoogle', 
         { token: credentialResponse.credential }, 
-        { withCredentials: true } // important for cookie
       )
 
-      await authenticateUser() // fetch user after cookie is set
+      await authenticateUser()
       toast.success('Google login successful!')
       navigate('/home')
       scrollTo(0, 0)

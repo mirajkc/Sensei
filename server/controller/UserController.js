@@ -164,12 +164,12 @@ export const loginWithGoogle = async (req, res) => {
 
     const userToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
-    // Set cookie properly for cross-origin deployment
     res.cookie('userToken', userToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // true on production
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      secure: true, 
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
+       path: "/"
     })
 
     res.status(200).json({ success: true, message: 'Successfully logged in with Google', user })
