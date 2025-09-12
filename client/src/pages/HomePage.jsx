@@ -386,7 +386,7 @@ const categories = [
                   </span>
                 </h1>
                 <p className="text-xl lg:text-2xl mb-12 opacity-80 max-w-4xl mx-auto leading-relaxed">
-                  Join over 50,000 professionals advancing their careers with our comprehensive, 
+                  Join over 10 professionals advancing their careers with our comprehensive, 
                   expert-led courses designed for real-world success.
                 </p>
               </motion.div>
