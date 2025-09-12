@@ -145,56 +145,40 @@ export const defaultServerSignUP = async (req, res) => {
 //! login with google
 export const loginWithGoogle = async (req, res) => {
   try {
-    const { token } = req.body;
-    if (!token) {
-      return res.status(400).json({
-        success: false,
-        message: "No Google token provided",
-      });
-    }
+    const { token } = req.body
+    if (!token) return res.status(400).json({ success: false, message: 'No Google token provided' })
 
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID
-    });
+    })
 
-    const payload = ticket.getPayload();
-    const { email, name, picture } = payload;
+    const payload = ticket.getPayload()
+    const { email, name, picture } = payload
 
-    let user = await User.findOne({ email, password: null });
+    let user = await User.findOne({ email, password: null })
 
     if (!user) {
-      user = await User.create({
-        name,
-        picture,
-        email,
-        password: null,
-      });
+      user = await User.create({ name, picture, email, password: null })
     }
 
-    const userToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const userToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
-    res.cookie("userToken", userToken, {
+    // Set cookie properly for cross-origin deployment
+    res.cookie('userToken', userToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production', // true on production
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    })
 
-    res.status(200).json({
-      success: true,
-      message: "Successfully logged in with Google",
-      user,
-    });
+    res.status(200).json({ success: true, message: 'Successfully logged in with Google', user })
 
   } catch (error) {
-    console.error('Google login error:', error);
-    res.status(500).json({
-      success: false,
-      message: `Error during Google login: ${error.message}`,
-    });
+    console.error('Google login error:', error)
+    res.status(500).json({ success: false, message: `Error during Google login: ${error.message}` })
   }
-};
+}
 
 //! default server login 
 export const defaultServerLogin = async (req, res) => {
