@@ -129,15 +129,15 @@ const Footer = () => {
         </motion.div>
 
         {/* Logo */}
-        <motion.div
+          <motion.div
           variants={logoVariants}
           initial="initial"
           whileHover="hover"
           whileTap="tap"
-          className='max-w-50 mb-6 relative z-10 cursor-pointer'
+          className='mb-6 relative z-10 cursor-pointer'
         >
           <motion.img 
-            className='w-max h-max' 
+            className='w-32 sm:w-40 md:w-48 h-auto object-contain' 
             src={nav_logo} 
             alt="Logo"
             initial={{ filter: "brightness(1)" }}
