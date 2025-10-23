@@ -163,7 +163,7 @@ const Navbar = () => {
               <img
                 src={nav_logo}
                 alt="Sensei Logo"
-                className="h-12 sm:h-16 md:h-20 lg:h-24 xl:h-28 w-auto object-contain transition-opacity duration-300"
+                className="h-16 sm:h-18 md:h-20 lg:h-24 xl:h-28 w-auto object-contain transition-opacity duration-300"
               />
             </motion.div>
 

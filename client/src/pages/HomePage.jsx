@@ -258,113 +258,275 @@ const categories = [
           
           {!isVisitor && userData ? (
             // Enhanced Logged-in user hero
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-              className="text-center lg:text-left"
-            >
-              <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-                <div>
-                  <motion.div variants={fadeInLeft}>
-                    <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-sm font-medium mb-6">
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Welcome back to your learning journey
-                    </div>
-                    <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-                      Hello,{' '}
-                      <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                        {userData.name}
-                      </span>
-                    </h1>
-                    <p className="text-xl lg:text-2xl mb-8 opacity-80 leading-relaxed">
-                      Continue building your future with personalized learning experiences
-                    </p>
-                  </motion.div>
+          <motion.div
+    initial="hidden"
+    animate="visible"
+    variants={staggerContainer}
+    className="w-full"
+  >
+    {/* Mobile Layout - Single Column */}
+    <div className="lg:hidden px-4 space-y-6">
+      <motion.div variants={fadeInUp} className="text-center">
+        {/* Welcome Badge */}
+        <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-300 text-xs font-medium mb-4">
+          <Sparkles className="w-3 h-3 mr-1.5 flex-shrink-0" />
+          <span>Welcome back!</span>
+        </div>
 
-                  <motion.div 
-                    variants={fadeInLeft}
-                    className="grid grid-cols-3 gap-6 mb-10"
-                  >
-                    <div className="text-center p-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
-                      <div className="text-3xl lg:text-4xl font-bold text-blue-600 mb-1">
-                        {userData.enrolledCourses?.length || 0}
-                      </div>
-                      <div className="text-sm font-medium opacity-70">Enrolled Courses</div>
-                    </div>
-                    <div className="text-center p-4 rounded-2xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
-                      <div className="text-3xl lg:text-4xl font-bold text-green-600 mb-1">
-                        {Math.round(userData.enrolledCourses?.reduce((acc, course) => 
-                          acc + (course.progress || 0), 0) / (userData.enrolledCourses?.length || 1)) || 0}%
-                      </div>
-                      <div className="text-sm font-medium opacity-70">Avg Progress</div>
-                    </div>
-                    <div className="text-center p-4 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
-                      <div className="text-3xl lg:text-4xl font-bold text-purple-600 mb-1">
-                        {userData.certificates?.length || 0}
-                      </div>
-                      <div className="text-sm font-medium opacity-70">Certificates</div>
-                    </div>
-                  </motion.div>
+        {/* Greeting */}
+        <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight">
+          Hello,{' '}
+          <span className="block mt-1 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            {userData.name.split(' ')[0]}
+          </span>
+        </h1>
 
-                  <motion.div variants={fadeInLeft} className="flex flex-col sm:flex-row gap-4">
-                    <button
-                      onClick={() => {
-                        navigate('/enrolledcourses')
-                        scrollTo(0,0)
-                      }}
-                      className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center transform hover:scale-105 hover:shadow-2xl"
-                    >
-                      <Play className="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform" />
-                      Continue Learning
-                    </button>
-                    <button
-                      onClick={() =>{
-                         navigate('/discovercourses')
-                         scrollTo(0,0)
-                      }}
-                      className={`group ${
-                        theme === 'dark' 
-                          ? 'bg-gray-800/80 hover:bg-gray-700 border-gray-600' 
-                          : 'bg-white/80 hover:bg-gray-50 border-gray-300'
-                      } backdrop-blur-sm border px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center hover:shadow-xl`}
-                    >
-                      Browse Courses
-                      <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </button>
-                  </motion.div>
+        {/* Description */}
+        <p className="text-sm sm:text-base mb-6 opacity-80 leading-relaxed px-2">
+          Continue building your future with personalized learning
+        </p>
+      </motion.div>
+
+      {/* Stats Cards */}
+      <motion.div 
+        variants={fadeInUp}
+        className="grid grid-cols-3 gap-3 px-2"
+      >
+        <div className="text-center p-3 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+          <div className="text-3xl font-bold text-blue-600 mb-1">
+            {userData.enrolledCourses?.length || 0}
+          </div>
+          <div className="text-xs font-medium opacity-70 leading-tight">
+            Enrolled Courses
+          </div>
+        </div>
+        <div className="text-center p-3 rounded-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
+          <div className="text-3xl font-bold text-green-600 mb-1">
+            {Math.round(userData.enrolledCourses?.reduce((acc, course) => 
+              acc + (course.progress || 0), 0) / (userData.enrolledCourses?.length || 1)) || 0}%
+          </div>
+          <div className="text-xs font-medium opacity-70 leading-tight">
+            Avg Progress
+          </div>
+        </div>
+        <div className="text-center p-3 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
+          <div className="text-3xl font-bold text-purple-600 mb-1">
+            {userData.certificates?.length || 0}
+          </div>
+          <div className="text-xs font-medium opacity-70 leading-tight">
+            Certificates
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Action Buttons */}
+      <motion.div variants={fadeInUp} className="flex flex-col gap-3">
+        <button
+          onClick={() => {
+            navigate('/enrolledcourses')
+            scrollTo(0,0)
+          }}
+          className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center shadow-lg"
+        >
+          <Play className="w-4 h-4 mr-2 flex-shrink-0" />
+          <span>Continue Learning</span>
+        </button>
+        <button
+          onClick={() =>{
+            navigate('/discovercourses')
+            scrollTo(0,0)
+          }}
+          className={`group ${
+            theme === 'dark' 
+              ? 'bg-gray-800/80 hover:bg-gray-700 border-gray-600' 
+              : 'bg-white/80 hover:bg-gray-50 border-gray-300'
+          } backdrop-blur-sm border px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center`}
+        >
+          <span>Browse Courses</span>
+          <ChevronRight className="w-4 h-4 ml-2 flex-shrink-0" />
+        </button>
+      </motion.div>
+
+      {/* Progress Section */}
+      <motion.div variants={fadeInUp} className="px-2">
+        <div className={`${
+          theme === 'dark' ? 'bg-gray-800/60' : 'bg-white/60'
+        } backdrop-blur-xl rounded-2xl p-5 border border-gray-200/20 shadow-xl`}>
+          <h3 className="text-xl font-bold mb-5">Your Progress</h3>
+          
+          {userData.enrolledCourses && userData.enrolledCourses.length > 0 ? (
+            <div className="space-y-4">
+              {userData.enrolledCourses.slice(0, 3).map((course, index) => (
+                <div 
+                  key={index} 
+                  className="group p-4 rounded-xl hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <BookMarked className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="font-semibold text-base flex-1 line-clamp-2 group-hover:text-blue-600 transition-colors leading-tight">
+                      {course.course?.title || 'Course Title'}
+                    </h4>
+                  </div>
+                  
+                  <div className="flex items-center gap-3 ml-[60px]">
+                    <div className={`flex-1 h-2.5 rounded-full overflow-hidden ${
+                      theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+                    }`}>
+                      <div 
+                        className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-700"
+                        style={{ width: `${course.progress || 0}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-sm font-bold text-blue-600 whitespace-nowrap min-w-[42px] text-right">
+                      {course.progress || 0}%
+                    </span>
+                  </div>
                 </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-30" />
+              <p className="text-sm opacity-70 mb-3">No enrolled courses yet</p>
+              <button
+                onClick={() => {
+                  navigate('/discovercourses')
+                  scrollTo(0,0)
+                }}
+                className="text-blue-600 hover:text-blue-700 font-semibold text-sm"
+              >
+                Browse Courses →
+              </button>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </div>
 
-                <motion.div variants={fadeInRight} className="mt-12 lg:mt-0">
-                  <div className={`${
-                    theme === 'dark' ? 'bg-gray-800/60' : 'bg-white/60'
-                  } backdrop-blur-xl rounded-3xl p-8 border border-gray-200/20 shadow-2xl`}>
-                    <h3 className="text-2xl font-bold mb-6">Your Progress So Far...</h3>
-                    <div className="space-y-6">
-                      {userData.enrolledCourses?.slice(0, 3).map((course, index) => (
-                        <div key={index} className="group flex items-center space-x-4 p-4 rounded-xl hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 cursor-pointer">
-                          <div className="w-14 h-14 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <BookMarked className="w-7 h-7 text-white" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-semibold text-lg mb-1 truncate group-hover:text-blue-600 transition-colors">{course.course?.title || 'Course Title'}</h4>
-                            <div className="flex items-center mt-2">
-                              <div className={`flex-1 h-3 rounded-full mr-4 overflow-hidden ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
-                                <div 
-                                  className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-700 ease-out"
-                                  style={{ width: `${course.progress || 0}%` }}
-                                ></div>
-                              </div>
-                              <span className="text-sm font-medium text-blue-600">{course.progress || 0}%</span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+    {/* Desktop Layout - Two Columns */}
+    <div className="hidden lg:grid lg:grid-cols-2 lg:gap-12 xl:gap-16 lg:items-center px-4 sm:px-0">
+      <div>
+        <motion.div variants={fadeInLeft}>
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium mb-6">
+            <Sparkles className="w-4 h-4 mr-2 flex-shrink-0" />
+            <span>Welcome back to your learning journey</span>
+          </div>
+          <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-tight">
+            Hello,{' '}
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent break-words">
+              {userData.name.split(' ')[0]}
+            </span>
+          </h1>
+          <p className="text-xl xl:text-2xl mb-8 opacity-80 leading-relaxed max-w-2xl">
+            Continue building your future with personalized learning
+          </p>
+        </motion.div>
+
+        <motion.div 
+          variants={fadeInLeft}
+          className="grid grid-cols-3 gap-6 mb-10"
+        >
+          <div className="text-center p-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+            <div className="text-4xl font-bold text-blue-600 mb-1">
+              {userData.enrolledCourses?.length || 0}
+            </div>
+            <div className="text-sm font-medium opacity-70">Enrolled Courses</div>
+          </div>
+          <div className="text-center p-4 rounded-2xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
+            <div className="text-4xl font-bold text-green-600 mb-1">
+              {Math.round(userData.enrolledCourses?.reduce((acc, course) => 
+                acc + (course.progress || 0), 0) / (userData.enrolledCourses?.length || 1)) || 0}%
+            </div>
+            <div className="text-sm font-medium opacity-70">Avg Progress</div>
+          </div>
+          <div className="text-center p-4 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
+            <div className="text-4xl font-bold text-purple-600 mb-1">
+              {userData.certificates?.length || 0}
+            </div>
+            <div className="text-sm font-medium opacity-70">Certificates</div>
+          </div>
+        </motion.div>
+
+        <motion.div variants={fadeInLeft} className="flex flex-col sm:flex-row gap-4">
+          <button
+            onClick={() => {
+              navigate('/enrolledcourses')
+              scrollTo(0,0)
+            }}
+            className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center transform hover:scale-105 hover:shadow-2xl"
+          >
+            <Play className="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform" />
+            Continue Learning
+          </button>
+          <button
+            onClick={() =>{
+              navigate('/discovercourses')
+              scrollTo(0,0)
+            }}
+            className={`group ${
+              theme === 'dark' 
+                ? 'bg-gray-800/80 hover:bg-gray-700 border-gray-600' 
+                : 'bg-white/80 hover:bg-gray-50 border-gray-300'
+            } backdrop-blur-sm border px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center hover:shadow-xl`}
+          >
+            Browse Courses
+            <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </motion.div>
+      </div>
+
+      <motion.div variants={fadeInRight}>
+        <div className={`${
+          theme === 'dark' ? 'bg-gray-800/60' : 'bg-white/60'
+        } backdrop-blur-xl rounded-3xl p-8 border border-gray-200/20 shadow-2xl`}>
+          <h3 className="text-2xl font-bold mb-6">Your Progress So Far...</h3>
+          <div className="space-y-6">
+            {userData.enrolledCourses && userData.enrolledCourses.length > 0 ? (
+              userData.enrolledCourses.slice(0, 3).map((course, index) => (
+                <div key={index} className="group flex items-center space-x-4 p-4 rounded-xl hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 cursor-pointer">
+                  <div className="w-14 h-14 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <BookMarked className="w-7 h-7 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-lg mb-1 truncate group-hover:text-blue-600 transition-colors">
+                      {course.course?.title || 'Course Title'}
+                    </h4>
+                    <div className="flex items-center mt-2">
+                      <div className={`flex-1 h-3 rounded-full mr-4 overflow-hidden ${
+                        theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+                      }`}>
+                        <div 
+                          className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-700 ease-out"
+                          style={{ width: `${course.progress || 0}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-sm font-medium text-blue-600">{course.progress || 0}%</span>
                     </div>
                   </div>
-                </motion.div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-12">
+                <BookOpen className="w-16 h-16 mx-auto mb-4 opacity-30" />
+                <p className="text-base opacity-70 mb-4">No enrolled courses yet</p>
+                <button
+                  onClick={() => {
+                    navigate('/discovercourses')
+                    scrollTo(0,0)
+                  }}
+                  className="text-blue-600 hover:text-blue-700 font-semibold"
+                >
+                  Browse Courses →
+                </button>
               </div>
-            </motion.div>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  </motion.div>
           ) : (
             // Enhanced Visitor hero
             <motion.div
