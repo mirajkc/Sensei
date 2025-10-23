@@ -149,9 +149,9 @@ const Navbar = () => {
             : 'bg-white text-slate-800 border-gray-200'
         }`}
       >
-        <div className="max-w-auto mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
+        <div className="max-w-auto mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="flex items-center justify-between h-16 gap-2">
+            {/* Logo - Fixed responsive sizing */}
             <motion.div
               variants={logoVariants}
               initial="initial"
@@ -163,13 +163,13 @@ const Navbar = () => {
               <img
                 src={nav_logo}
                 alt="Sensei Logo"
-                className="h-30 w-auto transition-opacity duration-300"
+                className="h-12 sm:h-16 md:h-20 lg:h-24 xl:h-28 w-auto object-contain transition-opacity duration-300"
               />
             </motion.div>
 
-            {/* Search (desktop) */}
+            {/* Search (desktop) - Better responsive widths */}
             <motion.div 
-              className="hidden md:block flex-1 max-w-md mx-8"
+              className="hidden md:block flex-1 max-w-xs lg:max-w-md mx-2 lg:mx-8"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.4 }}
@@ -180,11 +180,11 @@ const Navbar = () => {
                   initial="initial"
                   whileFocus="focus"
                   type="text"
-                  placeholder="Search for courses"
+                  placeholder="Search courses"
                   value={searchValue}
-                   onKeyDown={handleSearch}
+                  onKeyDown={handleSearch}
                   onChange={(e)=>setSearchValue(e.target.value)}
-                  className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
+                  className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
                     theme === 'dark'
                       ? 'bg-gray-800 border-gray-600 text-gray-200 placeholder-gray-400'
                       : 'bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500'
@@ -196,14 +196,14 @@ const Navbar = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5, duration: 0.3 }}
                 >
-                  <Search className="h-5 w-5 text-gray-400" />
+                  <Search className="h-4 w-4 text-gray-400" />
                 </motion.div>
               </div>
             </motion.div>
 
             {/* Links (desktop) */}
             <motion.div 
-              className="hidden lg:flex items-center space-x-8"
+              className="hidden xl:flex items-center space-x-4"
               variants={staggerContainer}
               initial="hidden"
               animate="visible"
@@ -220,7 +220,7 @@ const Navbar = () => {
                   variants={staggerItem}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`${linkBase} ${linkHover} group`}
+                  className={`${linkBase} ${linkHover} group whitespace-nowrap`}
                   onClick={() => navigate(item.path)}
                 >
                   <span className="relative z-10">{item.label}</span>
@@ -233,27 +233,27 @@ const Navbar = () => {
               ))}
             </motion.div>
 
-            {/* Auth section */}
+            {/* Auth section - Better mobile spacing */}
             <motion.div 
-              className="flex items-center space-x-4"
+              className="flex items-center space-x-1 sm:space-x-2 md:space-x-4"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4, duration: 0.5 }}
             >
-              {/* Shopping Cart - Always visible */}
+              {/* Shopping Cart - Responsive sizing */}
               <motion.button
                 variants={buttonVariants}
                 initial="initial"
                 whileHover="hover"
                 whileTap="tap"
                 onClick={() => navigate('/cart')}
-                className={`relative p-2 rounded-full transition-colors duration-200 ${
+                className={`relative p-1.5 sm:p-2 rounded-full transition-colors duration-200 ${
                   theme === 'dark'
                     ? 'hover:bg-gray-700 text-gray-200'
                     : 'hover:bg-gray-100 text-gray-800'
                 }`}
               >
-                <ShoppingCart className="w-6 h-6" />
+                <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
                 
                 {/* Cart Badge */}
                 {cartItemsCount > 0 && (
@@ -261,7 +261,7 @@ const Navbar = () => {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     whileHover={{ scale: 1.2 }}
-                    className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium"
+                    className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-medium"
                   >
                     {cartItemsCount > 9 ? '9+' : cartItemsCount}
                   </motion.span>
@@ -274,6 +274,7 @@ const Navbar = () => {
                   transition={{ duration: 0.2 }}
                 />
               </motion.button>
+
               {loggedIn ? (
                 <div className="relative">
                   <motion.button
@@ -282,7 +283,7 @@ const Navbar = () => {
                     whileHover="hover"
                     whileTap="tap"
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    className={`flex items-center space-x-2 p-2 rounded-full transition-colors duration-200 ${
+                    className={`flex items-center space-x-1 sm:space-x-2 p-1.5 sm:p-2 rounded-full transition-colors duration-200 ${
                       theme === 'dark'
                         ? 'hover:bg-gray-700'
                         : 'hover:bg-gray-100'
@@ -290,13 +291,14 @@ const Navbar = () => {
                   >
                     <motion.img 
                       src={userDetails.picture} 
-                      className='rounded-full w-10 h-10'
+                      className='rounded-full w-8 h-8 sm:w-10 sm:h-10 object-cover'
                       whileHover={{ scale: 1.1 }}
                       transition={{ duration: 0.2 }}
                     />
                     <motion.div
                       animate={{ rotate: isProfileOpen ? 180 : 0 }}
                       transition={{ duration: 0.2 }}
+                      className="hidden sm:block"
                     >
                       <ChevronDown className="w-4 h-4" />
                     </motion.div>
@@ -351,14 +353,14 @@ const Navbar = () => {
                   </AnimatePresence>
                 </div>
               ) : (
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
                   <motion.button
                     variants={buttonVariants}
                     initial="initial"
                     whileHover="hover"
                     whileTap="tap"
                     onClick={() => navigate('/login')}
-                    className={`${linkBase} ${linkHover}`}
+                    className={`${linkBase} ${linkHover} text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2`}
                   >
                     Log In
                   </motion.button>
@@ -368,7 +370,7 @@ const Navbar = () => {
                     whileHover="hover"
                     whileTap="tap"
                     onClick={() => navigate('/signup')}
-                    className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-300 relative overflow-hidden group"
+                    className="px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-300 relative overflow-hidden group"
                   >
                     <span className="relative z-10">Sign Up</span>
                     <motion.div
@@ -387,7 +389,7 @@ const Navbar = () => {
                 initial="initial"
                 whileHover="hover"
                 whileTap="tap"
-                className="lg:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="xl:hidden p-1.5 sm:p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 <AnimatePresence mode="wait">
@@ -399,7 +401,7 @@ const Navbar = () => {
                       exit={{ rotate: 90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <X className="w-6 h-6" />
+                      <X className="w-5 h-5 sm:w-6 sm:h-6" />
                     </motion.div>
                   ) : (
                     <motion.div
@@ -409,7 +411,7 @@ const Navbar = () => {
                       exit={{ rotate: -90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <Menu className="w-6 h-6" />
+                      <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -419,7 +421,7 @@ const Navbar = () => {
 
           {/* Search (mobile) */}
           <motion.div 
-            className="lg:hidden pb-4"
+            className="md:hidden pb-3"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.4 }}
@@ -430,14 +432,17 @@ const Navbar = () => {
                 initial="initial"
                 whileFocus="focus"
                 type="text"
-                placeholder="Search for courses"
-                className={`w-full px-4 py-2 pl-10 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
+                placeholder="Search courses"
+                value={searchValue}
+                onKeyDown={handleSearch}
+                onChange={(e)=>setSearchValue(e.target.value)}
+                className={`w-full px-4 py-2 pl-10 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
                   theme === 'dark'
                     ? 'bg-gray-800 border-gray-600 text-gray-200 placeholder-gray-400'
                     : 'bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500'
                 }`}
               />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             </div>
           </motion.div>
 
@@ -449,7 +454,7 @@ const Navbar = () => {
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
-                className={`lg:hidden border-t overflow-hidden ${
+                className={`xl:hidden border-t overflow-hidden ${
                   theme === 'dark' ? 'border-gray-700' : 'border-gray-200'
                 }`}
               >
